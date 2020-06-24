@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "cFcddzIZdHUZdk80aRJr+LQkc0TkBuJ1hVGDza5Zl+0QmQ6V6i/F9vKvoj+6LGkBfZCKSL9BAAkUZgJqtjWi2g==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Mile\\Desktop\\Avio_Car_Application\\AppBackend\\AvioCarBackend\\AvioCarBackend\\AvioCarBackend.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Mile\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
+  ],
+  "logs": []
+}
