@@ -78,6 +78,7 @@ namespace AvioCarBackend.Model
 
         // dodati
         // lista korisnika koji su rezervisali kola
+        public ICollection<RegisteredUserCar> RegisteredUserCar { get; set; }
     }
 
     public enum CarType { GASOLINE, DIESEL, GAS };

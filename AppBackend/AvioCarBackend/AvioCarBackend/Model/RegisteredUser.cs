@@ -65,7 +65,7 @@ namespace AvioCarBackend.Model
         public bool IsFirstReservation { get; set; }
 
         //dodati
-        /*public ICollection<Flight> Flights { get; set; }
-        public ICollection<Car> Cars { get; set; }*/
+        public ICollection<RegisteredUserFlight> RegisteredUserFlights { get; set; }
+        public ICollection<RegisteredUserCar> RegisteredUserCars { get; set; }
     }
 }

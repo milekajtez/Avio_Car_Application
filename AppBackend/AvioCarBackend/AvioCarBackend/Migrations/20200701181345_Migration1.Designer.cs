@@ -4,14 +4,16 @@ using AvioCarBackend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AvioCarBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200701181345_Migration1")]
+    partial class Migration1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -261,21 +263,6 @@ namespace AvioCarBackend.Migrations
                     b.HasKey("SenderJMBG", "RecieverJMBG");
 
                     b.ToTable("FriendshipRequests");
-                });
-
-            modelBuilder.Entity("AvioCarBackend.Model.RegisteredUserCar", b =>
-                {
-                    b.Property<string>("RegisteredUserID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("CarID")
-                        .HasColumnType("int");
-
-                    b.HasKey("RegisteredUserID", "CarID");
-
-                    b.HasIndex("CarID");
-
-                    b.ToTable("RegisteredUserCars");
                 });
 
             modelBuilder.Entity("AvioCarBackend.Model.RegisteredUserFlight", b =>
@@ -708,21 +695,6 @@ namespace AvioCarBackend.Migrations
                     b.HasOne("AvioCarBackend.Model.Airline", "Airline")
                         .WithMany("Flights")
                         .HasForeignKey("AirlineID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AvioCarBackend.Model.RegisteredUserCar", b =>
-                {
-                    b.HasOne("AvioCarBackend.Model.Car", "Car")
-                        .WithMany("RegisteredUserCar")
-                        .HasForeignKey("CarID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AvioCarBackend.Model.RegisteredUser", "RegisteredUser")
-                        .WithMany("RegisteredUserCars")
-                        .HasForeignKey("RegisteredUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
