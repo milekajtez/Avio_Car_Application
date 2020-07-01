@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,7 +15,8 @@ namespace AvioCarBackend.Model
     /// FirstLogin ----- identifikator prve prijave administratora (Pre prvog prijavljivanja ce biti false, 
     ///                  a posle true. Glavni administrator ce odmah imati vrednost true)
     /// </summary>
-    public class Administrator
+    [Table("Administrators")]
+    public class Administrator : IdentityUser
     {
         public long JMBG { get; set; }
         public string Username { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +17,7 @@ namespace AvioCarBackend.Model
     /// Cars ---------------------------------- kola koje servis poseduje
     /// BranchOffices ------------------------- filijale koje servis poseduje
     /// </summary>
+    [Table("RentACarServices")]
     public class RentACarService
     {
         public int CarServiceID { get; set; }

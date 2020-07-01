@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,6 +23,7 @@ namespace AvioCarBackend.Model
     /// Airline ------------------- aviokompanije kojoj let pripada tj aviokompanija koja organizuje let
     /// Tickets ------------------- lista karata leta (svaka karta ustvari predstavlja mesta u avionu koja se mogu rezervisati)
     /// </summary>
+    [Table("Flights")]
     public class Flight
     {
         public int FlightID { get; set; }

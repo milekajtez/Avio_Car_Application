@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace AvioCarBackend.Model
     /// Destinations ------------------ destinacije na kojima aviokompanija organizuje letove
     /// Flights ----------------------- letovi koje aviokopmanije organizuje
     /// </summary>
+    [Table("Airlines")]
     public class Airline
     {
         public int AirlineID { get; set; }

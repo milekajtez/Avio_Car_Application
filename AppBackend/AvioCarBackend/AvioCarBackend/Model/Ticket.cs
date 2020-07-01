@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace AvioCarBackend.Model
     /// IsQuickBooking ---------- da li jekartadodata u one koje su za brzu rezervaciju
     /// Flight ------------------ let kojem karta pripada
     /// </summary>
+    [Table("Tickets")]
     public class Ticket
     {
         public int TicketID { get; set; }

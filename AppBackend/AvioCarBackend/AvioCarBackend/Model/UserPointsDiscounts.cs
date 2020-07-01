@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,6 +21,7 @@ namespace AvioCarBackend.Model
     ///                                      Rezervacija kola = 40 poena
     ///                                      Rezervacija let+kola = 150 poena
     /// </summary>
+    [Table("UserPointsDiscountsTable")]
     public class UserPointsDiscounts
     {
         public long UserJMBG { get; set; }
