@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,20 +27,58 @@ namespace AvioCarBackend.Model
     [Table("Flights")]
     public class Flight
     {
+        [Key]
         public int FlightID { get; set; }
+
+        [Required]
         public DateTime StartTime { get; set; }
+
+        [Required]
         public DateTime EndTime { get; set; }
+
+        [Required]
+        [MinLength(5)]
+        [MaxLength(30)]
         public string StartLocation { get; set; }
+
+        [Required]
+        [MinLength(5)]
+        [MaxLength(30)]
         public string EndLocation { get; set; }
+
+        [Required]
         public double FlightTime { get; set; }
+
+        [Required]
         public double FlightLength { get; set; }
+
+        [Required]
         public double FlightRating { get; set; }
+
+        [Required]
+        [MinLength(5)]
+        [MaxLength(300)]
         public string AdditionalInformation { get; set; }
+
+        [Required]
         public int NumberOfTransfers { get; set; }
+
+        [Required]
+        [MinLength(1)]
         public string AllTransfers { get; set; }
+
+        [Required]
+        [MinLength(5)]
+        [MaxLength(30)]
         public string PlaneName { get; set; }
-        public string LugageWeight { get; set; }
+
+        [Required]
+        public double LugageWeight { get; set; }
+
+        [Required]
         public Airline Airline { get; set; }
+
+        [Required]
         public ICollection<Ticket> Tickets { get; set; }
        
         // dodati

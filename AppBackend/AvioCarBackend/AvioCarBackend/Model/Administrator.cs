@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,10 +19,22 @@ namespace AvioCarBackend.Model
     [Table("Administrators")]
     public class Administrator : IdentityUser
     {
-        public long JMBG { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
+        [Required]
+        public long AdminJMBG { get; set; }
+
+        [Required]
+        [MinLength(5)]
+        [MaxLength(30)]
+        public string AdminUsername { get; set; }
+
+        [Required]
+        [StringLength(13)]
+        public string AdminPassword { get; set; }
+
+        [Required]
         public AdminType AdminType { get; set; }
+
+        [Required]
         public bool FirstLogin { get; set; }
     }
 

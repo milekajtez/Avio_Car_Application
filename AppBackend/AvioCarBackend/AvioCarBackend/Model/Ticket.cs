@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,13 +20,27 @@ namespace AvioCarBackend.Model
     [Table("Tickets")]
     public class Ticket
     {
+        [Key]
         public int TicketID { get; set; }
+
+        [Required]
         public int TicketNumber { get; set; }
+
+        [Required]
         public double TicketPrice { get; set; }
+
+        [Required]
         public CardType CardType { get; set; }
+
         public DateTime TimeOfTicketPurchase { get; set; }      // moze biti null
+
+        [Required]
         public bool IsTicketPurchased { get; set; }
+
+        [Required]
         public bool IsQuickBooking { get; set; }
+
+        [Required]
         public Flight Flight { get; set; }
     }
 

@@ -1,4 +1,5 @@
 ﻿using AvioCarBackend.Model;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -26,5 +27,13 @@ namespace AvioCarBackend.Data
         public DbSet<RentACarService> RentACarServices { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<UserPointsDiscounts> UserPointsDiscounts { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<FriendshipRequest>().HasKey(o => new { o.SenderJMBG, o.RecieverJMBG });
+            builder.Entity<IdentityUserLogin<string>>().HasKey(o => o.UserId);
+        }
     }
 }

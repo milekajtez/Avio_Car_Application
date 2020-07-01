@@ -60,3 +60,14 @@ C:\Users\Mile\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBack
 C:\Users\Mile\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\Mile\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Mile\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\Mile\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\bin\Debug\netcoreapp3.1\AvioCarBackend.deps.json
+C:\Users\Mile\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\bin\Debug\netcoreapp3.1\AvioCarBackend.runtimeconfig.json
+C:\Users\Mile\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\bin\Debug\netcoreapp3.1\AvioCarBackend.runtimeconfig.dev.json
+C:\Users\Mile\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\bin\Debug\netcoreapp3.1\AvioCarBackend.dll
+C:\Users\Mile\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\bin\Debug\netcoreapp3.1\AvioCarBackend.pdb
+C:\Users\Mile\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.csproj.CoreCompileInputs.cache
+C:\Users\Mile\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Mile\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Mile\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.dll
+C:\Users\Mile\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.pdb
+C:\Users\Mile\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.genruntimeconfig.cache

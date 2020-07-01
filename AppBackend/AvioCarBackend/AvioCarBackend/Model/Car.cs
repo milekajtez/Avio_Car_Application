@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,20 +27,53 @@ namespace AvioCarBackend.Model
     [Table("Cars")]
     public class Car
     {
+        [Key]
         public int CarID { get; set; }
+
+        [Required]
+        [MinLength(5)]
+        [MaxLength(30)]
         public string CarName { get; set; }
+
+        [Required]
+        [MinLength(5)]
+        [MaxLength(30)]
         public string CarBrand { get; set; }
+
+        [Required]
+        [MinLength(5)]
+        [MaxLength(30)]
         public string CarModel { get; set; }
+
+        [Required]
         public int YearOdManufacture { get; set; }
+
+        [Required]
         public int NumberOfSeats { get; set; }
+
+        [Required]
         public CarType CarType { get; set; }
+
+        [Required]
         public double CarRating { get; set; }
+
+        [Required]
         public double LugageWeight { get; set; }
+
         public DateTime TimeOfCarPurchase { get; set; }      // moze biti null
+
+        [Required]
         public bool IsCarPurchased { get; set; }
+
+        [Required]
         public bool IsQuickBooking { get; set; }
+
+        [Required]
         public double CarPrice { get; set; }
+
         public Flight Flight { get; set; }                  // moze biti null
+
+        [Required]
         public RentACarService RentACarService { get; set; }
 
         // dodati

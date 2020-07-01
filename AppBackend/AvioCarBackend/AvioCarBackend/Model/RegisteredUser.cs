@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,15 +23,45 @@ namespace AvioCarBackend.Model
     [Table("Users")]
     public class RegisteredUser : IdentityUser
     {
-        public long JMBG { get; set; }
+        [Required]
+        public long UserJMBG { get; set; }
+
+        [Required]
         public int NumberOfPassport { get; set; }
-        public string Username { get; set; }
+
+        [Required]
+        [MinLength(5)]
+        [MaxLength(30)]
+        public string RegisteredUsername { get; set; }
+
+        [Required]
+        [MinLength(11)]
+        [MaxLength(55)]
         public string E_mail { get; set; }
+
+        [Required]
+        [StringLength(13)]
         public string Password { get; set; }            // minimalno 13 karaktera
+
+        [Required]
+        [MinLength(5)]
+        [MaxLength(30)]
         public string FirstName { get; set; }
+
+        [Required]
+        [MinLength(5)]
+        [MaxLength(30)]
         public string LastName { get; set; }
+
+        [Required]
+        [MinLength(5)]
+        [MaxLength(30)]
         public string City { get; set; }
+
+        [Required]
         public long TelephoneNumber { get; set; }
+
+        [Required]
         public bool IsFirstReservation { get; set; }
 
         //dodati

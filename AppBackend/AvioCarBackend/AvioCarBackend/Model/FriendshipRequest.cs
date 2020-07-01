@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace AvioCarBackend.Model
     {
         public long SenderJMBG { get; set; }
         public long RecieverJMBG { get; set; }
+
+        [Required]
         public bool RequestAccepted { get; set; }
     }
 }

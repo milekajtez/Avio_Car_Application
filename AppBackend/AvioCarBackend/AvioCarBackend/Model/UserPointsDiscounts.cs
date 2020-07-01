@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,10 +25,19 @@ namespace AvioCarBackend.Model
     [Table("UserPointsDiscountsTable")]
     public class UserPointsDiscounts
     {
+        [Key]
         public long UserJMBG { get; set; }
+
+        [Required]
         public double Points { get; set; }
+
+        [Required]
         public double QuickReservationDicounts { get; set; }
+
+        [Required]
         public double AvioPlusCarReservationDiscounts { get; set; }
+
+        [Required]
         public double NumberOfPointsDicounts { get; set; }
     }
 }
