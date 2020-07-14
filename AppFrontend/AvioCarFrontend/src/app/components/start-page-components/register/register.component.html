@@ -1,0 +1,74 @@
+<form [formGroup]="registerForm" (ngSubmit)="register()">
+    <h2 class="text-center text-primary">Sign Up</h2>
+    <hr>
+  
+    <div class="form-group">
+      <input type="text" class="form-control" id="username" formControlName="username" placeholder="Username" required name="username">
+      <div *ngIf="registerForm.controls.username.invalid" style="font-size: small;">
+        Please enter your username
+      </div>
+    </div>
+  
+    <div class="form-group">
+      <input type="email" class="form-control" id="email" formControlName="email" placeholder="E-mail" required name="email">
+      <div *ngIf="registerForm.controls.email.invalid" style="font-size: small;">
+        Please enter your email
+      </div>
+    </div>
+  
+    <div class="form-group">
+      <input type="password" class="form-control" id="password" formControlName="password" placeholder="Password" required name="password">
+      <div *ngIf="registerForm.controls.password.invalid" style="font-size: small;">
+        Please enter your password (minimum 13 caracters)
+      </div>
+    </div>
+  
+    <div class="form-group">
+      <input type="password" class="form-control" id="passworRepeat" formControlName="passworRepeat" placeholder="Repeat password" required name="passworRepeat">
+      <div *ngIf="registerForm.controls.passworRepeat.invalid" style="font-size: small;">
+        Please repeat your password (minimum 13 caracters)
+      </div>
+    </div>
+  
+    <div class="form-group">
+      <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="First name" required name="firstName">
+      <div *ngIf="registerForm.controls.firstName.invalid" style="font-size: small;">
+        Please enter your first name
+      </div>
+    </div>
+  
+    <div class="form-group">
+      <input type="text" class="form-control" id="secondName" formControlName="secondName" placeholder="Second name" required name="secondName">
+      <div *ngIf="registerForm.controls.secondName.invalid" style="font-size: small;">
+        Please enter your second name
+      </div>
+    </div>
+  
+    <div class="form-group">
+      <input type="text" class="form-control" id="jmbg" formControlName="jmbg" placeholder="JMBG" required name="jmbg">
+      <div *ngIf="registerForm.controls.jmbg.invalid" style="font-size: small;">
+        Please enter your JMBG (entered a 13-digit number)
+      </div>
+    </div>
+  
+    <div class="form-group">
+      <input type="text" class="form-control" id="city" formControlName="city" placeholder="City" required name="city">
+      <div *ngIf="registerForm.controls.city.invalid" style="font-size: small;">
+        Please enter city
+      </div>
+    </div>
+  
+    <div class="form-group">
+      <input type="text" class="form-control" id="telephone" formControlName="telephone" placeholder="Telephone number" required name="telephone">
+      <div *ngIf="registerForm.controls.telephone.invalid" style="font-size: small;">
+        Please enter your telephone number
+      </div>
+    </div>
+  
+  
+    <div class="form-group text-center">
+      <button [disabled]="!registerForm.valid" class="btn btn-success" type="submit">Register</button>
+      <button class="btn btn-default" type="button" (click)="cancel()" >Cancel</button>
+    </div>
+  
+  </form>
