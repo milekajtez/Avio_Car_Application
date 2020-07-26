@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './components/start-page-components/home/home.component';
 import { InfoComponent } from './components/start-page-components/info/info.component';
+import { RegistrationConfirmComponent } from './components/start-page-components/registration-confirm/registration-confirm.component';
 
 
 const routes: Routes = [
@@ -13,6 +14,10 @@ const routes: Routes = [
     path: "info",
     component: InfoComponent
   },
+  {
+    path: "registrationConfirm",
+    component: RegistrationConfirmComponent
+  }
 ];
 
 @NgModule({

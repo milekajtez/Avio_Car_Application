@@ -4,14 +4,16 @@ using AvioCarBackend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AvioCarBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200715153148_UsersMigration")]
+    partial class UsersMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -593,6 +595,21 @@ namespace AvioCarBackend.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("AvioCarBackend.Model.Administrator", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<int>("AdminType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("FirstLogin")
+                        .HasColumnType("bit");
+
+                    b.ToTable("Administrators");
+
+                    b.HasDiscriminator().HasValue("Administrator");
+                });
+
             modelBuilder.Entity("AvioCarBackend.Model.RegisteredUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -601,9 +618,6 @@ namespace AvioCarBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(30)")
                         .HasMaxLength(30);
-
-                    b.Property<bool>("FirstLogin")
-                        .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -619,9 +633,6 @@ namespace AvioCarBackend.Migrations
                         .HasMaxLength(30);
 
                     b.Property<int>("NumberOfPassport")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserType")
                         .HasColumnType("int");
 
                     b.ToTable("Users");

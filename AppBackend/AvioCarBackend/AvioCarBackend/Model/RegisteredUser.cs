@@ -23,25 +23,30 @@ namespace AvioCarBackend.Model
     [Table("Users")]
     public class RegisteredUser : IdentityUser
     {
-        [Required]
-        public long UserJMBG { get; set; }
+        /*[Required]
+        public long UserJMBG { get; set; }*/
 
         [Required]
         public int NumberOfPassport { get; set; }
 
         [Required]
+        public UserType UserType { get; set; }
+
+        [Required]
+        public bool FirstLogin { get; set; }
+        /*[Required]
         [MinLength(5)]
         [MaxLength(30)]
-        public string RegisteredUsername { get; set; }
+        public string RegisteredUsername { get; set; }*/
 
-        [Required]
+        /*[Required]
         [MinLength(11)]
         [MaxLength(55)]
-        public string E_mail { get; set; }
+        public string E_mail { get; set; }*/
 
-        [Required]
+        /*[Required]
         [StringLength(13)]
-        public string Password { get; set; }            // minimalno 13 karaktera
+        public string Password { get; set; }            // minimalno 13 karaktera*/
 
         [Required]
         [MinLength(5)]
@@ -58,8 +63,8 @@ namespace AvioCarBackend.Model
         [MaxLength(30)]
         public string City { get; set; }
 
-        [Required]
-        public long TelephoneNumber { get; set; }
+        /*[Required]
+        public long TelephoneNumber { get; set; }*/
 
         [Required]
         public bool IsFirstReservation { get; set; }
@@ -68,4 +73,5 @@ namespace AvioCarBackend.Model
         public ICollection<RegisteredUserFlight> RegisteredUserFlights { get; set; }
         public ICollection<RegisteredUserCar> RegisteredUserCars { get; set; }
     }
+    public enum UserType { MAIN_ADMIN, AVIO_ADMIN, CAR_ADMIN, REGULAR_USER };
 }

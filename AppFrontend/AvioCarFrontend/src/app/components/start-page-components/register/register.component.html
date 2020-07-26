@@ -1,74 +1,106 @@
-<form [formGroup]="registerForm" (ngSubmit)="register()">
-    <h2 class="text-center text-primary">Sign Up</h2>
-    <hr>
-  
+<form [formGroup]="service.formModel" autocomplete="off" (ngSubmit)="onSubmit()">
+  <h2 class="text-center text-primary">Sign Up</h2>
+  <hr>
+
+  <!--username-->
+  <div class="form-group">
+    <input type="text" class="form-control" id="username" formControlName="UserName" placeholder="UserName">
+    <label class="text-danger"
+      *ngIf="service.formModel.get('UserName').touched && service.formModel.get('UserName').errors?.required">This
+      field is mandatory.</label>
+  </div>
+
+  <!--email-->
+  <div class="form-group">
+    <input type="email" class="form-control" id="email" formControlName="Email" placeholder="Email">
+    <label class="text-danger"
+      *ngIf="service.formModel.get('Email').touched && service.formModel.get('Email').errors?.email">Invalid
+      email address.</label>
+    <label class="text-danger"
+      *ngIf="service.formModel.get('Email').touched && service.formModel.get('Email').errors?.required">This
+      field is mandatory.
+    </label>
+  </div>
+
+  <!--password and conform password-->
+  <div formGroupName="Passwords">
     <div class="form-group">
-      <input type="text" class="form-control" id="username" formControlName="username" placeholder="Username" required name="username">
-      <div *ngIf="registerForm.controls.username.invalid" style="font-size: small;">
-        Please enter your username
-      </div>
+      <input type="password" class="form-control" id="password" formControlName="Password" placeholder="Password">
+      <label class="text-danger"
+        *ngIf="service.formModel.get('Passwords.Password').touched && service.formModel.get('Passwords.Password').errors?.required">This
+        field is mandatory.
+      </label>
+      <label class="text-danger"
+        *ngIf="service.formModel.get('Passwords.Password').touched && service.formModel.get('Passwords.Password').errors?.minlength">Minimum
+        8 characters required.
+      </label>
     </div>
-  
     <div class="form-group">
-      <input type="email" class="form-control" id="email" formControlName="email" placeholder="E-mail" required name="email">
-      <div *ngIf="registerForm.controls.email.invalid" style="font-size: small;">
-        Please enter your email
-      </div>
+      <input type="password" class="form-control" id="confirmPassword" formControlName="ConfirmPassword"
+        placeholder="ConfirmPassword">
+      <label class="text-danger"
+        *ngIf="service.formModel.get('Passwords.ConfirmPassword').touched && service.formModel.get('Passwords.ConfirmPassword').errors?.required">This
+        field is mandatory.
+      </label>
+      <label class="text-danger"
+        *ngIf="service.formModel.get('Passwords.ConfirmPassword').touched && service.formModel.get('Passwords.ConfirmPassword').errors?.minlength">Minimum
+        8 characters required.
+      </label>
     </div>
-  
-    <div class="form-group">
-      <input type="password" class="form-control" id="password" formControlName="password" placeholder="Password" required name="password">
-      <div *ngIf="registerForm.controls.password.invalid" style="font-size: small;">
-        Please enter your password (minimum 13 caracters)
-      </div>
-    </div>
-  
-    <div class="form-group">
-      <input type="password" class="form-control" id="passworRepeat" formControlName="passworRepeat" placeholder="Repeat password" required name="passworRepeat">
-      <div *ngIf="registerForm.controls.passworRepeat.invalid" style="font-size: small;">
-        Please repeat your password (minimum 13 caracters)
-      </div>
-    </div>
-  
-    <div class="form-group">
-      <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="First name" required name="firstName">
-      <div *ngIf="registerForm.controls.firstName.invalid" style="font-size: small;">
-        Please enter your first name
-      </div>
-    </div>
-  
-    <div class="form-group">
-      <input type="text" class="form-control" id="secondName" formControlName="secondName" placeholder="Second name" required name="secondName">
-      <div *ngIf="registerForm.controls.secondName.invalid" style="font-size: small;">
-        Please enter your second name
-      </div>
-    </div>
-  
-    <div class="form-group">
-      <input type="text" class="form-control" id="jmbg" formControlName="jmbg" placeholder="JMBG" required name="jmbg">
-      <div *ngIf="registerForm.controls.jmbg.invalid" style="font-size: small;">
-        Please enter your JMBG (entered a 13-digit number)
-      </div>
-    </div>
-  
-    <div class="form-group">
-      <input type="text" class="form-control" id="city" formControlName="city" placeholder="City" required name="city">
-      <div *ngIf="registerForm.controls.city.invalid" style="font-size: small;">
-        Please enter city
-      </div>
-    </div>
-  
-    <div class="form-group">
-      <input type="text" class="form-control" id="telephone" formControlName="telephone" placeholder="Telephone number" required name="telephone">
-      <div *ngIf="registerForm.controls.telephone.invalid" style="font-size: small;">
-        Please enter your telephone number
-      </div>
-    </div>
-  
-  
-    <div class="form-group text-center">
-      <button [disabled]="!registerForm.valid" class="btn btn-success" type="submit">Register</button>
-      <button class="btn btn-default" type="button" (click)="cancel()" >Cancel</button>
-    </div>
-  
-  </form>
+  </div>
+
+  <!--first name-->
+  <div class="form-group">
+    <input type="text" class="form-control" id="firstName" formControlName="FirstName" placeholder="First name">
+    <label class="text-danger"
+      *ngIf="service.formModel.get('FirstName').touched && service.formModel.get('FirstName').errors?.required">This
+      field is mandatory.</label>
+  </div>
+
+  <!--second name-->
+  <div class="form-group">
+    <input type="text" class="form-control" id="lastName" formControlName="LastName" placeholder="Last name">
+    <label class="text-danger"
+      *ngIf="service.formModel.get('LastName').touched && service.formModel.get('LastName').errors?.required">This
+      field is mandatory.</label>
+  </div>
+
+  <!--jmbg-->
+  <div class="form-group">
+    <input type="text" class="form-control" id="jmbg" formControlName="Jmbg" placeholder="Jmbg">
+    <label class="text-danger"
+      *ngIf="service.formModel.get('Jmbg').touched && service.formModel.get('Jmbg').errors?.required">This
+      field is mandatory.</label>
+    <label class="text-danger"
+      *ngIf="service.formModel.get('Jmbg').touched && service.formModel.get('Jmbg').errors?.minlength && service.formModel.get('Jmbg').errors?.maxlength">
+      JMBG must have 13 caracters.
+    </label>
+  </div>
+
+  <!--city-->
+  <div class="form-group">
+    <input type="text" class="form-control" id="city" formControlName="City" placeholder="City">
+    <label class="text-danger"
+      *ngIf="service.formModel.get('City').touched && service.formModel.get('City').errors?.required">This
+      field is mandatory.</label>
+  </div>
+
+  <!--telephone-->
+  <div class="form-group">
+    <input type="text" class="form-control" id="telephone" formControlName="Telephone" placeholder="Telephone">
+    <label class="text-danger"
+      *ngIf="service.formModel.get('Telephone').touched && service.formModel.get('Telephone').errors?.required">This
+      field is mandatory.</label>
+    <label class="text-danger"
+      *ngIf="service.formModel.get('Telephone').touched && service.formModel.get('Telephone').errors?.minlength">
+      Minimum 9 characters required.</label>
+  </div>
+
+  <div class="form-group text-center">
+    <button [disabled]="!service.formModel.valid" class="btn btn-success" type="submit">Register</button>
+    <button class="btn btn-default" type="button" (click)="cancel()">Cancel</button>
+  </div>
+</form>
+<div style="text-align: center;">
+  <label style="color: red">{{registrationLabel}}</label>
+</div>

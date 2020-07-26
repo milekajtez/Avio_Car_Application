@@ -1,5 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { RegisterService } from 'src/app/services/register-and-login/register-service.service';
 
 @Component({
   selector: 'app-register',
@@ -8,41 +9,57 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class RegisterComponent implements OnInit {
   @Output() cancelRegister = new EventEmitter();
-  model: any = {};
-  registeredUsers: any[] = [];
-
-  registerForm: FormGroup;              //grupa u koju su ddata polja forme
+  registrationLabel : string;
+  /*model: any = {};
+  registeredUsers: any[] = [];*/
   
-  constructor() { }
-
-  ngOnInit(): void {
-    this.initForm();
+  
+  constructor(public service: RegisterService, private toastr: ToastrService) 
+  {
+    this.registrationLabel = "";
   }
 
-  register() {
-    /*this.registeredUsers.push(this.registerForm.value);
-    localStorage.setItem('sessionUser', JSON.stringify('USER'));
-    console.log(this.registerForm.value);*/
+  ngOnInit(): void {
+    this.service.formModel.reset();
+  }
+
+  onSubmit() {
+    console.log(this.service.formModel.value);        // test za klik na regrister button
+
+    this.service.register().subscribe(
+      (res: any) => {
+        if (res.succeeded) {
+          this.service.formModel.reset();
+          this.toastr.success('New user created!', 'Registration successful.');
+          this.cancelRegister.emit(false);
+        } else {
+          res.errors.forEach(element => {
+            switch (element.code) {
+              case 'DuplicateUserName':
+                this.toastr.error('Username is already taken','Registration failed.');
+                break;
+
+              default:
+              this.toastr.error(element.description,'Registration failed.');
+                break;
+            }
+          });
+        }
+      },
+      err => {
+        console.log(err);
+        console.log(err.error);
+        if(err.error === "Registration unsuccessfully. Please enter different jmbg."){
+          this.registrationLabel = "Registration unsuccessfully. Please enter different jmbg.";
+        }else{
+          this.registrationLabel = "";
+        }
+      }
+    );
   }
 
   cancel() {
     this.cancelRegister.emit(false);
-    /*console.log('cancelled');*/
-  }
-
-  //metoda za inicijalizaciju forme i autorizacije i tipa validacije svakog polja
-  private initForm() {
-    this.registerForm = new FormGroup({
-      'username': new FormControl('', Validators.required),
-      'email': new FormControl('', Validators.required),
-      'password': new FormControl('', [Validators.required, Validators.minLength(13)]),
-      'passworRepeat': new FormControl('', [Validators.required, Validators.minLength(13)]),
-      'firstName': new FormControl('', Validators.required),
-      'secondName': new FormControl('', Validators.required),
-      'jmbg': new FormControl('', [Validators.required, Validators.minLength(13), Validators.maxLength(13)]),
-      'city': new FormControl('', Validators.required),
-      'telephone': new FormControl('', Validators.required)
-    });
   }
 
 }

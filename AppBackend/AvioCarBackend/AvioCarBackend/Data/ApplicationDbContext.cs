@@ -17,7 +17,7 @@ namespace AvioCarBackend.Data
 
         }
 
-        public DbSet<Administrator> Administrators { get; set; }
+        //public DbSet<Administrator> Administrators { get; set; }
         public DbSet<Airline> Airlines { get; set; }
         public DbSet<BranchOffice> BranchOffices { get; set; }
         public DbSet<Car> Cars { get; set; }

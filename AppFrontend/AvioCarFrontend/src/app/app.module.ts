@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,6 +10,8 @@ import { MenuComponent } from './components/start-page-components/menu/menu.comp
 import { HomeComponent } from './components/start-page-components/home/home.component';
 import { InfoComponent } from './components/start-page-components/info/info.component';
 import { RegisterComponent } from './components/start-page-components/register/register.component';
+import { ToastrService, ToastrModule } from 'ngx-toastr';
+import { RegistrationConfirmComponent } from './components/start-page-components/registration-confirm/registration-confirm.component';
 
 @NgModule({
   declarations: [
@@ -15,13 +19,19 @@ import { RegisterComponent } from './components/start-page-components/register/r
     MenuComponent,
     HomeComponent,
     InfoComponent,
-    RegisterComponent
+    RegisterComponent,
+    RegistrationConfirmComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule,
+    ToastrModule.forRoot({
+      progressBar: true
+    }),
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
