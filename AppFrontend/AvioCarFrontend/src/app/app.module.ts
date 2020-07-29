@@ -10,8 +10,10 @@ import { MenuComponent } from './components/start-page-components/menu/menu.comp
 import { HomeComponent } from './components/start-page-components/home/home.component';
 import { InfoComponent } from './components/start-page-components/info/info.component';
 import { RegisterComponent } from './components/start-page-components/register/register.component';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
+import { ToastrModule } from 'ngx-toastr';
 import { RegistrationConfirmComponent } from './components/start-page-components/registration-confirm/registration-confirm.component';
+import { HomePageComponent } from './components/home-page-components/home-page/home-page.component';
+import { UserProfileComponent } from './components/home-page-components/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { RegistrationConfirmComponent } from './components/start-page-components
     HomeComponent,
     InfoComponent,
     RegisterComponent,
-    RegistrationConfirmComponent
+    RegistrationConfirmComponent,
+    HomePageComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,

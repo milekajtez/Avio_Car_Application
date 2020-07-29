@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './components/start-page-components/home/home.component';
 import { InfoComponent } from './components/start-page-components/info/info.component';
 import { RegistrationConfirmComponent } from './components/start-page-components/registration-confirm/registration-confirm.component';
+import { HomePageComponent } from './components/home-page-components/home-page/home-page.component';
 
 
 const routes: Routes = [
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: "registrationConfirm",
     component: RegistrationConfirmComponent
+  },
+  {
+    path: "home",
+    component: HomePageComponent
   }
 ];
 

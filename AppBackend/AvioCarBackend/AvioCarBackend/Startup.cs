@@ -39,11 +39,12 @@ namespace AvioCarBackend
             //Inject AppSettings
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
             //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));     // moze li ovo???
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
-            services.AddDefaultIdentity<RegisteredUser>().AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDefaultIdentity<RegisteredUser>().AddRoles<IdentityRole>().
+                AddEntityFrameworkStores<ApplicationDbContext>();
             //services.AddDefaultIdentity<Administrator>().AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.Configure<IdentityOptions>(options =>

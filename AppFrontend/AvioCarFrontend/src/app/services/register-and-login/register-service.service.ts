@@ -11,8 +11,7 @@ export class RegisterService {
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
-  
-
+  // forma za registraciju
   formModel = this.fb.group({
     UserName: ['', Validators.required],
     Email: ['', [Validators.required, Validators.email]],
@@ -25,8 +24,14 @@ export class RegisterService {
     Jmbg: ['', [Validators.required, Validators.pattern("^[0-9]{13,13}")]],
     City: ['', Validators.required],
     Telephone: ['', [Validators.required, Validators.pattern("^[0-9]{9,10}")]],
+    Passport: ['', Validators.pattern("^[0-9]{9}")]
   });
 
+  //frma za logovanje
+  formLoginModel = this.fb.group({
+    UserName: ['', Validators.required],
+    Password: ['', [Validators.required, Validators.minLength(8)]]
+  });
 
   // metoda za proveru identicnosti sifri
   comparePasswords(fb: FormGroup) {
@@ -51,14 +56,13 @@ export class RegisterService {
       LastName: this.formModel.value.LastName,
       Jmbg: this.formModel.value.Jmbg,
       City: this.formModel.value.City,
-      Telephone: this.formModel.value.Telephone
+      Telephone: this.formModel.value.Telephone,
+      Passport: this.formModel.value.Passport
     };
 
     // prvremeno stavljam u local storage korisnika koji se registruje
     localStorage.setItem('registration', body.Jmbg);
-    //console.log(localStorage.getItem('registration'));
     
-    //imeniti rutu u zavisnosti od toga sta imma na backendu
     return this.http.post(this.BaseURI + '/ApplicationUser/Register', body);
   }
 
@@ -72,9 +76,20 @@ export class RegisterService {
       LastName: null,
       Jmbg : localStorage.getItem('registration'),
       City: null,
-      Telephone: null
+      Telephone: null,
+      Passport: null
     }
 
     return this.http.post(this.BaseURI + '/ApplicationUser/RegisterConfirm', body);
+  }
+
+
+  login() {
+    var body = {
+      UserName: this.formLoginModel.value.UserName,
+      Password: this.formLoginModel.value.Password
+    }
+
+    return this.http.post(this.BaseURI + '/ApplicationUser/Login', body);
   }
 }

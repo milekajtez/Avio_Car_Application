@@ -10,6 +10,7 @@ import { RegisterService } from 'src/app/services/register-and-login/register-se
 export class RegisterComponent implements OnInit {
   @Output() cancelRegister = new EventEmitter();
   registrationLabel : string;
+  load : number;
   /*model: any = {};
   registeredUsers: any[] = [];*/
   
@@ -17,6 +18,8 @@ export class RegisterComponent implements OnInit {
   constructor(public service: RegisterService, private toastr: ToastrService) 
   {
     this.registrationLabel = "";
+
+    this.load = 0;
   }
 
   ngOnInit(): void {
@@ -24,6 +27,7 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
+    this.load = 1;
     console.log(this.service.formModel.value);        // test za klik na regrister button
 
     this.service.register().subscribe(
@@ -31,6 +35,8 @@ export class RegisterComponent implements OnInit {
         if (res.succeeded) {
           this.service.formModel.reset();
           this.toastr.success('New user created!', 'Registration successful.');
+          alert("Registration successful. Please go to your e-mail and confirm your registration.");
+          this.load = 0;
           this.cancelRegister.emit(false);
         } else {
           res.errors.forEach(element => {
@@ -49,6 +55,7 @@ export class RegisterComponent implements OnInit {
       err => {
         console.log(err);
         console.log(err.error);
+        this.load = 0;
         if(err.error === "Registration unsuccessfully. Please enter different jmbg."){
           this.registrationLabel = "Registration unsuccessfully. Please enter different jmbg.";
         }else{
@@ -60,6 +67,7 @@ export class RegisterComponent implements OnInit {
 
   cancel() {
     this.cancelRegister.emit(false);
+    this.load = 0;
   }
 
 }

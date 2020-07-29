@@ -96,6 +96,16 @@
       Minimum 9 characters required.</label>
   </div>
 
+  <!--number of passport-->
+  <div class="form-group">
+    <label>*this field isn't mandatory</label>
+    <input type="text" class="form-control" id="passport" formControlName="Passport" placeholder="Passport">
+    <label class="text-danger" 
+      *ngIf="service.formModel.get('Passport').touched && service.formModel.get('Passport').errors?.minlength">
+      Minimum 9 characters required.
+    </label>
+  </div>
+
   <div class="form-group text-center">
     <button [disabled]="!service.formModel.valid" class="btn btn-success" type="submit">Register</button>
     <button class="btn btn-default" type="button" (click)="cancel()">Cancel</button>
