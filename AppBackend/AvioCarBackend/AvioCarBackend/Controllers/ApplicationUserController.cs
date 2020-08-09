@@ -153,7 +153,7 @@ namespace AvioCarBackend.Controllers
         public async Task<IActionResult> Login(LoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password) && user.IsNewReservation == false)
             {
                 // ucitavanje svih claim-ove za trenutno korisnika koji se loguje
                 var claims = await _userManager.GetClaimsAsync(user);
@@ -171,7 +171,9 @@ namespace AvioCarBackend.Controllers
                 return Ok(new { token });
             }
             else
-                return BadRequest(new { message = "Username or password is incorrect." });
+            {
+                return BadRequest(new { message = "Username or password is incorrect or  user not confirmed registration with mail" });
+            }
         }
         #endregion
         #region 5 - Metoda za logovanje preko drustvene mreze

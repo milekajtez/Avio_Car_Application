@@ -3,7 +3,7 @@ import { RegisterService } from 'src/app/services/register-and-login/register-se
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService, GoogleLoginProvider } from 'angularx-social-login';
-import { jwt_decode } from 'jwt-decode';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-menu',
@@ -21,20 +21,24 @@ export class MenuComponent implements OnInit {
     this.service.login().subscribe(
       (res: any) => {
         localStorage.setItem('token', res.token);
-        var decoded = jwt_decode(res.token);
-        if(decoded === "regular_user")
+
+        // decode token and read role od client
+        const helper = new JwtHelperService();
+        const decodedToken = helper.decodeToken(res.token);
+
+        if(decodedToken.role === "regular_user")
         {
           this.router.navigateByUrl('/home');
         }
-        else if(decoded === "main_admin")
+        else if(decodedToken.role === "main_admin")
         {
-          // komponenta za glavnog admina
+          this.router.navigateByUrl('/mainAdminHomePage');
         }
-        else if(decoded === "avio_admin")
+        else if(decodedToken.role === "avio_admin")
         {
           // komponenta za avio admina
         }
-        else if(decoded === "car_admin")
+        else if(decodedToken.role === "car_admin")
         {
           // komponenta za car admina
         }

@@ -13,7 +13,7 @@
             <form  [formGroup]="service.formLoginModel" class="form-inline my-2 my-lg-0" autocomplete="off" (ngSubmit)="onSubmit()">
                 <input type="text" class="form-control mr-sm-2" id="username" formControlName="UserName" placeholder="UserName">
                 <input type="password" class="form-control mr-sm-2" id="password" formControlName="Password" placeholder="Password">
-                <button [disabled]="!service.formLoginModel.valid" class="btn btn-success my-2 my-sm-0" type="submit">Login</button>
+                <button [disabled]="!service.formLoginModel.valid" class="btn btn-success my-2 my-sm-0" type="submit" name="loginBtn">Login</button>
             </form>
         </div>
     </div>

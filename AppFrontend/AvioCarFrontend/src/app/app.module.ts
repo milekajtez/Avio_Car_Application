@@ -15,6 +15,7 @@ import { RegistrationConfirmComponent } from './components/start-page-components
 import { HomePageComponent } from './components/home-page-components/home-page/home-page.component';
 import { UserProfileComponent } from './components/home-page-components/user-profile/user-profile.component';
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, AuthService } from 'angularx-social-login';
+import { MainAdminHomePageComponent } from './components/home-page-components/main-admin-home-page/main-admin-home-page.component';
 
 let config = new AuthServiceConfig([
   {
@@ -36,7 +37,8 @@ export function provideConfig()
     RegisterComponent,
     RegistrationConfirmComponent,
     HomePageComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    MainAdminHomePageComponent
   ],
   imports: [
     BrowserModule,
