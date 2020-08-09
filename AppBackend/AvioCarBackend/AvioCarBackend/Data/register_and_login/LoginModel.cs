@@ -10,5 +10,6 @@ namespace AvioCarBackend.Data.register_and_login
         public string UserName { get; set; }
         public string Password { get; set; }
         public string IdToken { get; set; }
+        public string Id { get; set; }
     }
 }

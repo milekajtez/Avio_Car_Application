@@ -5,9 +5,10 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
+
+@Injectable()
 export class RegisterService {
   readonly BaseURI = 'http://localhost:57382/api';
-  
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
@@ -91,5 +92,9 @@ export class RegisterService {
     }
 
     return this.http.post(this.BaseURI + '/ApplicationUser/Login', body);
+  }
+
+  externalLogin(formData){
+    return this.http.post(this.BaseURI + '/ApplicationUser/SocialLogin', formData);
   }
 }

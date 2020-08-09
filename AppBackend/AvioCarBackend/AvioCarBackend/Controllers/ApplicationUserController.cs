@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
@@ -10,12 +11,15 @@ using System.Threading.Tasks;
 using AvioCarBackend.Data;
 using AvioCarBackend.Data.register_and_login;
 using AvioCarBackend.Model;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace AvioCarBackend.Controllers
 {
@@ -27,6 +31,7 @@ namespace AvioCarBackend.Controllers
         private readonly SignInManager<RegisteredUser> _signInManager;
         private readonly ApplicationSettings _appSettings;
         private readonly MailSettings _mailSettings;
+        private const string GoogleApiTokenInfoUrl = "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={0}";
 
         public ApplicationUserController(UserManager<RegisteredUser> userManager,
             SignInManager<RegisteredUser> signInManager, IOptions<ApplicationSettings> appSettings,
@@ -125,8 +130,8 @@ namespace AvioCarBackend.Controllers
                         kreirnja claim-ova se ponavlja.
                      */
 
-                    await _userManager.AddClaimAsync(resultFind, new Claim("Role", "regular_user"));
-                    await _userManager.AddClaimAsync(resultFind, new Claim("UserID", resultFind.Id));
+                    await _userManager.AddClaimAsync(resultFind, new Claim(ClaimTypes.Role, "regular_user"));
+                    await _userManager.AddClaimAsync(resultFind, new Claim(ClaimTypes.PrimarySid, resultFind.Id));
 
                     await _userManager.AddToRoleAsync(resultFind, "regular_user");
 
@@ -167,6 +172,65 @@ namespace AvioCarBackend.Controllers
             }
             else
                 return BadRequest(new { message = "Username or password is incorrect." });
+        }
+        #endregion
+        #region 5 - Metoda za logovanje preko drustvene mreze
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("SocialLogin")]
+        public IActionResult SocialLogin([FromBody] LoginModel loginModel)
+        {
+            var test = _appSettings.JWT_Secret;
+
+            if (VerifyToken(loginModel.IdToken))
+            {
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Expires = DateTime.UtcNow.AddMinutes(30),
+                    //Key min: 16 characters
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT_Secret)), SecurityAlgorithms.HmacSha256Signature),
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
+                        new Claim(ClaimTypes.Role, "regular_user"),
+                        new Claim(ClaimTypes.PrimarySid, loginModel.Id)
+                    }),
+                };
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var securityToken = tokenHandler.CreateToken(tokenDescriptor);
+                var token = tokenHandler.WriteToken(securityToken);
+
+                return Ok(new { token });
+            }
+
+            return Ok();
+        }
+        #endregion
+        #region 6 - Metoda za validaciju tokena
+        public bool VerifyToken(string providerToken) 
+        {
+            var httpClient = new HttpClient();
+            var requestUri = new Uri(string.Format(GoogleApiTokenInfoUrl, providerToken));
+
+            HttpResponseMessage httpResponseMessage;
+
+            try
+            {
+                httpResponseMessage = httpClient.GetAsync(requestUri).Result;
+            }
+            catch 
+            {
+                return false;
+            }
+
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                return false;
+            }
+
+            var response = httpResponseMessage.Content.ReadAsStringAsync().Result;
+            var googleApiTokenInfo = JsonConvert.DeserializeObject<GoogleApiTokenInfo>(response);
+
+            return true;
         }
         #endregion
     }
