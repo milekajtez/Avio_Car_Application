@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class RegisterService {
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
-  // forma za registraciju
+  // forma za registraciju obicnog korisnika
   formModel = this.fb.group({
     UserName: ['', Validators.required],
     Email: ['', [Validators.required, Validators.email]],
@@ -26,6 +26,19 @@ export class RegisterService {
     City: ['', Validators.required],
     Telephone: ['', [Validators.required, Validators.pattern("^[0-9]{9,10}")]],
     Passport: ['', Validators.pattern("^[0-9]{9}")]
+  });
+
+  // forma za registraciju administratora
+  regAdminForm = this.fb.group({
+    UserName: ['', Validators.required],
+    Email: ['', [Validators.required, Validators.email]],
+    Passwords: this.fb.group({
+      Password: ['', [Validators.required, Validators.minLength(8)]],
+      ConfirmPassword: ['', [Validators.required, Validators.minLength(8)]]
+    }, { validator: this.comparePasswords }),
+    Jmbg: ['', [Validators.required, Validators.pattern("^[0-9]{13,13}")]],
+    Telephone: ['', [Validators.required, Validators.pattern("^[0-9]{9,10}")]],
+    AdminType: ['', Validators.required]
   });
 
   //frma za logovanje
@@ -61,7 +74,7 @@ export class RegisterService {
       Passport: this.formModel.value.Passport
     };
 
-    // prvremeno stavljam u local storage korisnika koji se registruje
+    // privremeno stavljam u local storage korisnika koji se registruje
     localStorage.setItem('registration', body.Jmbg);
     
     return this.http.post(this.BaseURI + '/ApplicationUser/Register', body);
@@ -84,7 +97,7 @@ export class RegisterService {
     return this.http.post(this.BaseURI + '/ApplicationUser/RegisterConfirm', body);
   }
 
-
+  // obicno logovanje
   login() {
     var body = {
       UserName: this.formLoginModel.value.UserName,
@@ -94,7 +107,28 @@ export class RegisterService {
     return this.http.post(this.BaseURI + '/ApplicationUser/Login', body);
   }
 
+  // logovanje preko mreze
   externalLogin(formData){
     return this.http.post(this.BaseURI + '/ApplicationUser/SocialLogin', formData);
   }
+
+  // registracija administratora
+  adminRegister() {
+    var body = {
+      UserName: this.regAdminForm.value.UserName,
+      Email: this.regAdminForm.value.Email,
+      Password: this.regAdminForm.value.Passwords.Password,
+      Jmbg: this.regAdminForm.value.Jmbg,
+      Telephone: this.regAdminForm.value.Telephone,
+      AdminType: this.regAdminForm.value.AdminType
+    }
+
+    return this.http.post(this.BaseURI + '/ApplicationUser/AdminRegistration', body);
+  }
+
+  // metoda za izmenu sifre pri prvom logovanju administratora
+  changePasswordFirstLogin(body) {
+    return this.http.post(this.BaseURI + '/ApplicationUser/ChangeAdminPassword', body);
+  }
+  
 }

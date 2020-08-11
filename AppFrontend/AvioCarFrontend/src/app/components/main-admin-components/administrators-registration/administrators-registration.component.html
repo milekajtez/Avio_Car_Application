@@ -1,0 +1,98 @@
+<!--<app-main-menu></app-main-menu>-->
+<div style="background-color: powderblue; height: 100%; width: 100%;">
+    <div class="text-block">
+        <h2>ADMINISTRATORS REGISTRATION</h2>
+    </div>
+    <form [formGroup]="service.regAdminForm" (ngSubmit)="onSubmit()" style="margin-left: 35%; margin-right: 35%; margin-top: 2%;">
+        
+        <!--username-->
+        <div class="form-group">
+          <input type="text" class="form-control" id="username" formControlName="UserName" placeholder="UserName">
+          <label class="text-danger"
+            *ngIf="service.regAdminForm.get('UserName').touched && service.regAdminForm.get('UserName').errors?.required">This
+            field is mandatory.</label>
+        </div>
+      
+        <!--email-->
+        <div class="form-group">
+          <input type="email" class="form-control" id="email" formControlName="Email" placeholder="Email">
+          <label class="text-danger"
+            *ngIf="service.regAdminForm.get('Email').touched && service.regAdminForm.get('Email').errors?.email">Invalid
+            email address.</label>
+          <label class="text-danger"
+            *ngIf="service.regAdminForm.get('Email').touched && service.regAdminForm.get('Email').errors?.required">This
+            field is mandatory.
+          </label>
+        </div>
+      
+        <!--password and conform password-->
+        <div formGroupName="Passwords">
+          <div class="form-group">
+            <input type="password" class="form-control" id="password" formControlName="Password" placeholder="Password">
+            <label class="text-danger"
+              *ngIf="service.regAdminForm.get('Passwords.Password').touched && service.regAdminForm.get('Passwords.Password').errors?.required">This
+              field is mandatory.
+            </label>
+            <label class="text-danger"
+              *ngIf="service.regAdminForm.get('Passwords.Password').touched && service.regAdminForm.get('Passwords.Password').errors?.minlength">Minimum
+              8 characters required.
+            </label>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" id="confirmPassword" formControlName="ConfirmPassword"
+              placeholder="ConfirmPassword">
+            <label class="text-danger"
+              *ngIf="service.regAdminForm.get('Passwords.ConfirmPassword').touched && service.regAdminForm.get('Passwords.ConfirmPassword').errors?.required">This
+              field is mandatory.
+            </label>
+            <label class="text-danger"
+              *ngIf="service.regAdminForm.get('Passwords.ConfirmPassword').touched && service.regAdminForm.get('Passwords.ConfirmPassword').errors?.minlength">Minimum
+              8 characters required.
+            </label>
+          </div>
+        </div>
+      
+        <!--jmbg-->
+        <div class="form-group">
+          <input type="text" class="form-control" id="jmbg" formControlName="Jmbg" placeholder="Jmbg">
+          <label class="text-danger"
+            *ngIf="service.regAdminForm.get('Jmbg').touched && service.regAdminForm.get('Jmbg').errors?.required">This
+            field is mandatory.</label>
+          <label class="text-danger"
+            *ngIf="service.regAdminForm.get('Jmbg').touched && service.regAdminForm.get('Jmbg').errors?.minlength && service.regAdminForm.get('Jmbg').errors?.maxlength">
+            JMBG must have 13 caracters.
+          </label>
+        </div>
+      
+        <!--telephone-->
+        <div class="form-group">
+          <input type="text" class="form-control" id="telephone" formControlName="Telephone" placeholder="Telephone">
+          <label class="text-danger"
+            *ngIf="service.regAdminForm.get('Telephone').touched && service.regAdminForm.get('Telephone').errors?.required">This
+            field is mandatory.</label>
+          <label class="text-danger"
+            *ngIf="service.regAdminForm.get('Telephone').touched && service.regAdminForm.get('Telephone').errors?.minlength">
+            Minimum 9 characters required.</label>
+        </div>
+
+        <!--admin type-->
+        <div class="form-group">
+            <label>Type of administrator</label>
+            <select name="admins" id="admins" class="form-control" formControlName="AdminType">
+                <option value="avio">Avio administrator</option>
+                <option value="car">Rent-a-car administrator</option>
+            </select>
+            <label class="text-danger"
+            *ngIf="service.regAdminForm.get('AdminType').touched && service.regAdminForm.get('AdminType').errors?.required">This
+            field is mandatory.</label>
+        </div>
+      
+        <div class="form-group text-center">
+          <button [disabled]="!service.regAdminForm.valid" class="btn btn-success" type="submit">Register</button>
+          <p>&nbsp;</p>
+        </div>
+      </form>
+</div>
+<div style="text-align: center;">
+    <label style="color: red">{{registrationLabel}}</label>
+  </div>

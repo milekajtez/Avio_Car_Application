@@ -10,12 +10,17 @@ import { MenuComponent } from './components/start-page-components/menu/menu.comp
 import { HomeComponent } from './components/start-page-components/home/home.component';
 import { InfoComponent } from './components/start-page-components/info/info.component';
 import { RegisterComponent } from './components/start-page-components/register/register.component';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
+import { ToastrModule } from 'ngx-toastr';
 import { RegistrationConfirmComponent } from './components/start-page-components/registration-confirm/registration-confirm.component';
-import { HomePageComponent } from './components/home-page-components/home-page/home-page.component';
-import { UserProfileComponent } from './components/home-page-components/user-profile/user-profile.component';
-import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, AuthService } from 'angularx-social-login';
-import { MainAdminHomePageComponent } from './components/home-page-components/main-admin-home-page/main-admin-home-page.component';
+import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'angularx-social-login';
+import { AirlineRegistrationComponent } from './components/main-admin-components/airline-registration/airline-registration.component';
+import { RentACarRegistrationComponent } from './components/main-admin-components/rent-a-car-registration/rent-a-car-registration.component';
+import { MainMenuComponent } from './components/main-admin-components/main-menu/main-menu.component';
+import { AdministratorsRegistrationComponent } from './components/main-admin-components/administrators-registration/administrators-registration.component';
+import { DiscountSettingsComponent } from './components/main-admin-components/discount-settings/discount-settings.component';
+import { RegularMenuComponent } from './components/regular-user-components/regular-menu/regular-menu.component';
+import { AvioMenuComponent } from './components/avio-admin-components/avio-menu/avio-menu.component';
+import { CarMenuComponent } from './components/car-admin-components/car-menu/car-menu.component';
 
 let config = new AuthServiceConfig([
   {
@@ -36,9 +41,14 @@ export function provideConfig()
     InfoComponent,
     RegisterComponent,
     RegistrationConfirmComponent,
-    HomePageComponent,
-    UserProfileComponent,
-    MainAdminHomePageComponent
+    AirlineRegistrationComponent,
+    RentACarRegistrationComponent,
+    MainMenuComponent,
+    AdministratorsRegistrationComponent,
+    DiscountSettingsComponent,
+    RegularMenuComponent,
+    AvioMenuComponent,
+    CarMenuComponent,
   ],
   imports: [
     BrowserModule,

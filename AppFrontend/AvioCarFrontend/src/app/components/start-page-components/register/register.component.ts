@@ -11,14 +11,10 @@ export class RegisterComponent implements OnInit {
   @Output() cancelRegister = new EventEmitter();
   registrationLabel : string;
   load : number;
-  /*model: any = {};
-  registeredUsers: any[] = [];*/
-  
   
   constructor(public service: RegisterService, private toastr: ToastrService) 
   {
     this.registrationLabel = "";
-
     this.load = 0;
   }
 
@@ -38,27 +34,17 @@ export class RegisterComponent implements OnInit {
           alert("Registration successful. Please go to your e-mail and confirm your registration.");
           this.load = 0;
           this.cancelRegister.emit(false);
-        } else {
-          res.errors.forEach(element => {
-            switch (element.code) {
-              case 'DuplicateUserName':
-                this.toastr.error('Username is already taken','Registration failed.');
-                break;
-
-              default:
-              this.toastr.error(element.description,'Registration failed.');
-                break;
-            }
-          });
         }
       },
       err => {
-        console.log(err);
-        console.log(err.error);
         this.load = 0;
-        if(err.error === "Registration unsuccessfully. Please enter different jmbg."){
-          this.registrationLabel = "Registration unsuccessfully. Please enter different jmbg.";
-        }else{
+        if(err.error === "Registration unsuccessfully. Please enter different jmbg.") {
+          this.registrationLabel = err.error;
+        }
+        else if(err.error === "Username is incorrect or has already been reserved.") {
+          this.registrationLabel = err.error;
+        }
+        else {
           this.registrationLabel = "";
         }
       }

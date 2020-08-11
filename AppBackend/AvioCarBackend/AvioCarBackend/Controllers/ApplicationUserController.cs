@@ -42,13 +42,21 @@ namespace AvioCarBackend.Controllers
             _appSettings = appSettings.Value;
             _mailSettings = mailSettings.Value;
         }
-
+        
         #region 1 - Metoda za registraciju novog korisnika
         [HttpPost]
         [Route("Register")]
         //POST : /api/ApplicationUser/Register
         public async Task<Object> PostApplicationUser(RegisteredUserModel model)
         {
+            // provera da korisnik ne unese username glavnog admina i sprecim da imam vise korisnika sa istim username-om
+            if (model.UserName.Equals("mainAdmin") || await _userManager.FindByNameAsync(model.UserName) != null) 
+            {
+                // jedinstveni identifikator korisnika je jmbg, ali ce mi biti dosta zgodnije da web aplikacija podrzava
+                // korisnike koji svi imaju razlicit username
+                return BadRequest(new { message = "Username is incorrect or has already been reserved." });
+            }
+
             var resultFind = await _userManager.FindByIdAsync(model.Jmbg.ToString());
             if (resultFind == null) 
             {
@@ -78,7 +86,7 @@ namespace AvioCarBackend.Controllers
             }
             else
             {
-                return NotFound("Registration unsuccessfully. Please enter different jmbg.");
+                return BadRequest(new { message = "Registration unsuccessfully. Please enter different jmbg." });
             }
         }
         #endregion
@@ -158,6 +166,9 @@ namespace AvioCarBackend.Controllers
                 // ucitavanje svih claim-ove za trenutno korisnika koji se loguje
                 var claims = await _userManager.GetClaimsAsync(user);
 
+                // dodavanje claima koji ce sluziti kao informacija da li se administrator vec prvi put ulogovao
+                claims.Add(new Claim("FirstLogin", user.FirstLogin.ToString()));
+
                 //pravimo tooke i dodeljujemo ga korisniku
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -172,7 +183,7 @@ namespace AvioCarBackend.Controllers
             }
             else
             {
-                return BadRequest(new { message = "Username or password is incorrect or  user not confirmed registration with mail" });
+                return BadRequest(new { message = "Username or password is incorrect or user not confirmed registration with mail" });
             }
         }
         #endregion
@@ -233,6 +244,86 @@ namespace AvioCarBackend.Controllers
             var googleApiTokenInfo = JsonConvert.DeserializeObject<GoogleApiTokenInfo>(response);
 
             return true;
+        }
+        #endregion
+        #region 7 - Metoda za registraciju administratora
+        [HttpPost]
+        [Route("AdminRegistration")]
+        //POST : /api/ApplicationUser/AdminRegistration
+        public async Task<Object> PostRegistrationOfAdministrator(AdminModel model) 
+        {
+            // provera da korisnik ne unese username glavnog admina i sprecim da imam vise korisnika sa istim username-om
+            if (model.Username.Equals("mainAdmin") || await _userManager.FindByNameAsync(model.Username) != null)
+            {
+                // jedinstveni identifikator korisnika je jmbg, ali ce mi biti dosta zgodnije da web aplikacija podrzava
+                // korisnike koji svi imaju razlicit username
+                return BadRequest(new { message = "Username is incorrect or has already been reserved" });
+            }
+
+            var resultFind = await _userManager.FindByIdAsync(model.Jmbg.ToString());
+            if (resultFind == null) 
+            {
+                var registeredUser = new RegisteredUser()
+                {
+                    UserName = model.Username,
+                    Email = model.Email,
+                    Id = model.Jmbg,
+                    PhoneNumber = model.Telephone,
+                    FirstLogin = true,
+                    IsNewReservation = false
+                };
+
+                var result = await _userManager.CreateAsync(registeredUser, model.Password);
+
+                if (model.AdminType.Equals("avio"))
+                {
+                    await _userManager.AddClaimAsync(registeredUser, new Claim(ClaimTypes.Role, "avio_admin"));
+                    await _userManager.AddClaimAsync(registeredUser, new Claim(ClaimTypes.PrimarySid, registeredUser.Id));
+
+                    await _userManager.AddToRoleAsync(registeredUser, "avio_admin");
+                }
+                else
+                {
+                    await _userManager.AddClaimAsync(registeredUser, new Claim(ClaimTypes.Role, "car_admin"));
+                    await _userManager.AddClaimAsync(registeredUser, new Claim(ClaimTypes.PrimarySid, registeredUser.Id));
+
+                    await _userManager.AddToRoleAsync(registeredUser, "car_admin");
+                }
+
+                return Ok(result);
+            }
+            else
+            {
+                return NotFound("Registration unsuccessfully. Please enter different jmbg.");
+            }
+        }
+        #endregion
+        #region 8 - Metoda za izmenu FirstLogin-a i sifre pri prvom logovanju administratora
+        [HttpPost]
+        [Route("ChangeAdminPassword")]
+        //POST : /api/ApplicationUser/ChangeAdminPassword
+        public async Task<Object> PostFirstLoginChangePass(LoginModel model) 
+        {
+            var resultFind = await _userManager.FindByIdAsync(model.Id);
+            if (resultFind != null)
+            {
+                resultFind.FirstLogin = false;
+                var code = await _userManager.GeneratePasswordResetTokenAsync(resultFind);
+                try
+                {
+                    var result = await _userManager.ResetPasswordAsync(resultFind, code, model.Password);
+                    await _userManager.UpdateAsync(resultFind);
+                    return Ok(result);
+                }
+                catch (Exception e) 
+                {
+                    throw e;
+                }
+            }
+            else 
+            {
+                return BadRequest(new { message = "Server didn't find the logged admin." });
+            }
         }
         #endregion
     }
