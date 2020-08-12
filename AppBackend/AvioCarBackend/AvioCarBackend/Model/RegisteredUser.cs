@@ -40,6 +40,9 @@ namespace AvioCarBackend.Model
 
         public bool IsNewReservation { get; set; }
 
+        [Required]
+        public double Points { get; set; }
+
  
         public ICollection<RegisteredUserFlight> RegisteredUserFlights { get; set; }
         public ICollection<RegisteredUserCar> RegisteredUserCars { get; set; }

@@ -70,7 +70,8 @@ namespace AvioCarBackend.Controllers
                     City = model.City,
                     PhoneNumber = model.Telephone,
                     NumberOfPassport = model.Passport,
-                    IsNewReservation = true
+                    IsNewReservation = true,
+                    Points = 0
                 };
 
                 try
@@ -270,7 +271,8 @@ namespace AvioCarBackend.Controllers
                     Id = model.Jmbg,
                     PhoneNumber = model.Telephone,
                     FirstLogin = true,
-                    IsNewReservation = false
+                    IsNewReservation = false,
+                    Points = 0
                 };
 
                 var result = await _userManager.CreateAsync(registeredUser, model.Password);

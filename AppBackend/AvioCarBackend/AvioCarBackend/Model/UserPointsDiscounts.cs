@@ -8,36 +8,29 @@ using System.Threading.Tasks;
 namespace AvioCarBackend.Model
 {
     /// <summary>
-    /// UserJMBG --------------------------- identifikator korinika koji ima odredjen popust
-    /// Points ----------------------------- trenutni broj poena koje korisnik poseduje
-    /// QuickReservationDicounts ----------- procenat za koji se smanjuje cena leta (avionske karte) i cena vozila ukoliko se 
-    ///                                      odabere brza rezervacija
-    /// AvioPlusCarReservationDiscounts ---- procena za koji se smanjuje cena automobila ako se prethodno rezervise let
-    /// NumberOfPointsDicounts ------------- u zavisnosti od broja poena koje korisnik osvoji, prethodnim rezervacijama,
-    ///                                      ostvaruje sledece popuste:
-    ///                                         Points >= 300 ---------- 5% na sve registracije
-    ///                                         Points >= 600 ---------- 10% na sve registracije
-    ///                                         Points >= 1200 ---------- 20% na sve registracije
-    ///                                      Rezervacija leta = 70 poena
-    ///                                      Rezervacija kola = 40 poena
-    ///                                      Rezervacija let+kola = 150 poena
+    /// Ova tabela ce imati samo jedan red, koji daje informaciju o procentima popusta
+    /// DicountID --------------------------- identifikator popusta 
+    /// AvioPlusCarReservationDiscounts ----- procenat za koji se smanjuje cena automobila ako se prethodno rezervise let
+    /// Dicount300 -------------------------- procenat koji korisnik ostvaruje kada ima izmedju 300 i 600 poena
+    /// Dicount600 -------------------------- procenat koji korisnik ostvaruje kada ima izmedju 600 i 1200 poena
+    /// Dicount1200 ------------------------- procenat koji korisnik ostvaruje kada ima vise od 1200 poena                                     
     /// </summary>
     [Table("UserPointsDiscountsTable")]
     public class UserPointsDiscounts
     {
         [Key]
-        public long UserJMBG { get; set; }
-
-        [Required]
-        public double Points { get; set; }
-
-        [Required]
-        public double QuickReservationDicounts { get; set; }
+        public string DicountID { get; set; }
 
         [Required]
         public double AvioPlusCarReservationDiscounts { get; set; }
 
         [Required]
-        public double NumberOfPointsDicounts { get; set; }
+        public double Dicount300 { get; set; }
+
+        [Required]
+        public double Dicount600 { get; set; }
+
+        [Required]
+        public double Dicount1200 { get; set; }
     }
 }
