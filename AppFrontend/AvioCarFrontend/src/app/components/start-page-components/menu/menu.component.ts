@@ -21,11 +21,11 @@ export class MenuComponent implements OnInit {
     this.service.login().subscribe(
       (res: any) => {
         localStorage.setItem('token', res.token);
-
+        //console.log("Ulazzzz");
         // decode token and read role od client
         const helper = new JwtHelperService();
         const decodedToken = helper.decodeToken(res.token);
-
+        //console.log(decodedToken);
         if(decodedToken.role === "regular_user") {
           this.router.navigateByUrl('/regularUserHomePage');
         }
@@ -95,10 +95,18 @@ export class MenuComponent implements OnInit {
         }
       },
       err => {
-        if (err.status == 400)
-          this.toastr.error('Incorrect username or password.', 'Authentication failed.');
-        else
-          console.log(err);
+        if(err.error.message == "Username is incorrect."){
+          alert("Username is incorrect.");
+        }
+        else if(err.error.message == "Password is incorrect."){
+          alert("Password is incorrect.");
+        }
+        else if(err.error.message == "Please go to your mail accont and confirm you registration."){
+          alert("Please go to your mail accont and confirm you registration.");
+        }
+        else{
+          alert("Unknown error.");
+        }
       }
     );
   }

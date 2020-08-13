@@ -35,9 +35,9 @@
       </div>
       <div>&nbsp;</div>
       <div style="display: flex; justify-content: center;">
-        <span style="margin: 1.5%; font-size: large;">
+        <span style="margin: 1.25%; font-size: large;">
             <b>CHANGE "AIRLINE + CAR" DISCOUNT</b>
-            <form [formGroup]="service.form1" (ngSubmit)="onSubmit1()" style="margin: 2%;">
+            <form [formGroup]="service.form1" (ngSubmit)="onSubmit('plus')" style="margin: 2%;">
                 <div class="form-group">
                     <select name="percents" id="percents" class="form-control" formControlName="AirlinePlusCar">
                         <option value="5">5%</option>
@@ -61,9 +61,9 @@
                 </div>
             </form>
         </span>
-        <span style="margin: 1.5%; font-size: large;">
+        <span style="margin: 1.25%; font-size: large;">
             <b>CHANGE "300 - 600 POINTS" DISCOUNT</b>
-            <form [formGroup]="service.form2" (ngSubmit)="onSubmit2()" style="margin: 2%;">
+            <form [formGroup]="service.form2" (ngSubmit)="onSubmit('p300')" style="margin: 2%;">
                 <div class="form-group">
                     <select name="percents" id="percents" class="form-control" formControlName="Points300">
                         <option value="5">5%</option>
@@ -85,9 +85,9 @@
                 </div>
             </form>
         </span>
-        <span style="margin: 1.5%; font-size: large;">
+        <span style="margin: 1.25%; font-size: large;">
             <b>CHANGE "600 - 1200 POINTS" DISCOUNT</b>
-            <form [formGroup]="service.form3" (ngSubmit)="onSubmit3()" style="margin: 2%;">
+            <form [formGroup]="service.form3" (ngSubmit)="onSubmit('p600')" style="margin: 2%;">
                 <div class="form-group">
                     <select name="percents" id="percents" class="form-control" formControlName="Points600">
                         <option value="5">5%</option>
@@ -110,9 +110,9 @@
                 </div>
             </form>
         </span>
-        <span style="margin: 1.5%; font-size: large;">
+        <span style="margin: 1.25%; font-size: large;">
             <b>CHANGE "> 1200 POINTS" DISCOUNT</b>
-            <form [formGroup]="service.form4" (ngSubmit)="onSubmit4()" style="margin: 2%;">
+            <form [formGroup]="service.form4" (ngSubmit)="onSubmit('p1200')" style="margin: 2%;">
                 <div class="form-group">
                     <select name="percents" id="percents" class="form-control" formControlName="Points1200">
                         <option value="5">5%</option>

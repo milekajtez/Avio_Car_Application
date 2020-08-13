@@ -162,7 +162,20 @@ namespace AvioCarBackend.Controllers
         public async Task<IActionResult> Login(LoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password) && user.IsNewReservation == false)
+
+            if (user == null)
+            {
+                return BadRequest(new { message = "Username is incorrect." });
+            }
+            else if (await _userManager.CheckPasswordAsync(user, model.Password) == false)
+            {
+                return BadRequest(new { message = "Password is incorrect." });
+            }
+            else if (user.IsNewReservation == true)
+            {
+                return BadRequest(new { message = "Please go to your mail accont and confirm you registration." });
+            }
+            else 
             {
                 // ucitavanje svih claim-ove za trenutno korisnika koji se loguje
                 var claims = await _userManager.GetClaimsAsync(user);
@@ -181,10 +194,6 @@ namespace AvioCarBackend.Controllers
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(securityToken);
                 return Ok(new { token });
-            }
-            else
-            {
-                return BadRequest(new { message = "Username or password is incorrect or user not confirmed registration with mail" });
             }
         }
         #endregion

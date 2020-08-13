@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { LoadDataService } from 'src/app/services/load-data/load-data.service';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-discount-settings',
@@ -13,8 +14,7 @@ export class DiscountSettingsComponent implements OnInit {
   dics600: number;
   disc1200: number;
 
-  constructor(public service: LoadDataService, private toastr: ToastrService) {
-   }
+  constructor(public service: LoadDataService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.initializeData();
@@ -35,20 +35,49 @@ export class DiscountSettingsComponent implements OnInit {
     );
   }
 
-  onSubmit1() : void {
+  onSubmit(discountType) : void {
+    var newValue;
+    if(discountType === "plus"){
+      newValue = this.service.form1.value.AirlinePlusCar;
+    }
+    else if(discountType === "p300"){
+      newValue = this.service.form2.value.Points300;
+    }
+    else if(discountType === "p600"){
+      newValue = this.service.form3.value.Points600;
+    }
+    else{
+      newValue = this.service.form4.value.Points1200;
+    }
 
+    console.log(discountType);
+    var body = {
+      Value: newValue,
+      Type: discountType
+    }
+
+    this.service.changeDiscount(body).subscribe(
+      (res) => {
+        alert("Dicount changed successfully.");
+        this.initializeData();
+
+      },
+      err => {
+        console.log(err);
+
+        if(err.error === "Value of 'Percent 300 points' must be smaller than 'Percent 600 points'"){
+          alert("Value of 'Percent 300 points' must be smaller than 'Percent 600 points'");
+        }
+        else if(err.error === "Value of 'Percent 600 points' must be beetwen 'Percent 300 points' and 'Percent 1200 points'"){
+          alert("Value of 'Percent 600 points' must be beetwen 'Percent 300 points' and 'Percent 1200 points'");
+        }
+        else if(err.error === "Value of 'Percent 1200 points' must be bigger 'Percent 600 points'"){
+          alert("Value of 'Percent 1200 points' must be bigger 'Percent 600 points'");
+        }
+        else{
+          alert("Unknown error.");
+        }
+      }
+    );
   }
-
-  onSubmit2() : void {
-
-  }
-
-  onSubmit3() : void {
-
-  }
-
-  onSubmit4() : void {
-
-  }
-
 }

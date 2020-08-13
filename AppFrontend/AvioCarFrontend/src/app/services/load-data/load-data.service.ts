@@ -29,4 +29,8 @@ export class LoadDataService {
   loadDiscounts() {
     return this.http.get(this.BaseURI + '/LoadData/GetDiscounts');
   }
+
+  changeDiscount(body){
+    return this.http.put(this.BaseURI + '/LoadData/ChangeDiscount', body);
+  }
 }
