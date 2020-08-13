@@ -28,8 +28,8 @@
               "src/styles.css"
             ],
             "scripts": [
-                "node_modules/jquery/dist/jquery.min.js",
-                "node_modules/bootstrap/dist/js/bootstrap.min.js"
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ]
           },
           "configurations": {
@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "AvioCarFrontend"
+    }
+  },
+  "defaultProject": "AvioCarFrontend",
+  "cli": {
+    "analytics": "e17030e0-9b2c-4796-9d5c-6b06af2c0587"
+  }
 }

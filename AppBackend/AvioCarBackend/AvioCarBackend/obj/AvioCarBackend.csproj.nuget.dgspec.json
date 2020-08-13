@@ -1,23 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mile\\Desktop\\Avio_Car_Application\\AppBackend\\AvioCarBackend\\AvioCarBackend\\AvioCarBackend.csproj": {}
+    "C:\\Users\\milek\\OneDrive\\Desktop\\Avio_Car_Application\\AppBackend\\AvioCarBackend\\AvioCarBackend\\AvioCarBackend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mile\\Desktop\\Avio_Car_Application\\AppBackend\\AvioCarBackend\\AvioCarBackend\\AvioCarBackend.csproj": {
+    "C:\\Users\\milek\\OneDrive\\Desktop\\Avio_Car_Application\\AppBackend\\AvioCarBackend\\AvioCarBackend\\AvioCarBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mile\\Desktop\\Avio_Car_Application\\AppBackend\\AvioCarBackend\\AvioCarBackend\\AvioCarBackend.csproj",
+        "projectUniqueName": "C:\\Users\\milek\\OneDrive\\Desktop\\Avio_Car_Application\\AppBackend\\AvioCarBackend\\AvioCarBackend\\AvioCarBackend.csproj",
         "projectName": "AvioCarBackend",
-        "projectPath": "C:\\Users\\Mile\\Desktop\\Avio_Car_Application\\AppBackend\\AvioCarBackend\\AvioCarBackend\\AvioCarBackend.csproj",
-        "packagesPath": "C:\\Users\\Mile\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mile\\Desktop\\Avio_Car_Application\\AppBackend\\AvioCarBackend\\AvioCarBackend\\obj\\",
+        "projectPath": "C:\\Users\\milek\\OneDrive\\Desktop\\Avio_Car_Application\\AppBackend\\AvioCarBackend\\AvioCarBackend\\AvioCarBackend.csproj",
+        "packagesPath": "C:\\Users\\milek\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\milek\\OneDrive\\Desktop\\Avio_Car_Application\\AppBackend\\AvioCarBackend\\AvioCarBackend\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Mile\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\milek\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -25,7 +22,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\Microsoft SDKs\\Azure\\.NET SDK\\v2.9\\packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -103,12 +99,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[3.1.2, 3.1.2]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -117,7 +107,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
