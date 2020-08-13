@@ -4,14 +4,16 @@ using AvioCarBackend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AvioCarBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200813184240_ChangeRatingFields")]
+    partial class ChangeRatingFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,8 +23,10 @@ namespace AvioCarBackend.Migrations
 
             modelBuilder.Entity("AvioCarBackend.Model.Airline", b =>
                 {
-                    b.Property<string>("AirlineID")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("AirlineID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AirlineAddress")
                         .IsRequired()
@@ -161,9 +165,8 @@ namespace AvioCarBackend.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AirlineID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("AirlineID")
+                        .HasColumnType("int");
 
                     b.Property<string>("AirportName")
                         .IsRequired()
@@ -199,9 +202,8 @@ namespace AvioCarBackend.Migrations
                         .HasColumnType("nvarchar(300)")
                         .HasMaxLength(300);
 
-                    b.Property<string>("AirlineID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("AirlineID")
+                        .HasColumnType("int");
 
                     b.Property<string>("AllTransfers")
                         .IsRequired()

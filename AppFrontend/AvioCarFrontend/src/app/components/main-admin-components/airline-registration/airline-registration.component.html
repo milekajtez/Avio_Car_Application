@@ -1,6 +1,46 @@
-<!--<app-main-menu></app-main-menu>-->
 <div style="background-color: powderblue; height: 100%; width: 100%;">
     <div class="text-block">
         <h2>AIRLINE RESERVATION</h2>
     </div>
+
+
+    <form [formGroup]="service.regAirlineForm" (ngSubmit)="onSubmit()" style="margin-left: 35%; margin-right: 35%; margin-top: 2%;">
+        
+        <!--airline name-->
+        <div class="form-group">
+            <input type="text" class="form-control" id="airlinename" formControlName="AirlineName" placeholder="AirlineName">
+            <label class="text-danger"
+              *ngIf="service.regAirlineForm.get('AirlineName').touched && service.regAirlineForm.get('AirlineName').errors?.required">This
+              field is mandatory.</label>
+        </div>
+
+        <!--airline address-->
+        <div class="form-group">
+            <input type="text" class="form-control" id="airlineaddress" formControlName="AirlineAddress" placeholder="AirlineAddress">
+            <label class="text-danger"
+              *ngIf="service.regAirlineForm.get('AirlineAddress').touched && service.regAirlineForm.get('AirlineAddress').errors?.required">This
+              field is mandatory.</label>
+        </div>
+
+        <!--promotivni opis-->
+        <div class="form-group">
+            <textarea class="form-control" id="airlinepromotiondescription" formControlName="AirlinePromotionDescription" placeholder="AirlinePromotionDescription" rows="5" cols="50"></textarea>
+            <label class="text-danger"
+              *ngIf="service.regAirlineForm.get('AirlinePromotionDescription').touched && service.regAirlineForm.get('AirlinePromotionDescription').errors?.required">This
+              field is mandatory.</label>
+        </div>
+
+        <!--cenovnik-->
+        <div class="form-group">
+            <textarea class="form-control" id="airlinepricelist" formControlName="AirlinePriceList" placeholder="AirlinePriceList" rows="5" cols="50"></textarea>
+            <label class="text-danger"
+              *ngIf="service.regAirlineForm.get('AirlinePriceList').touched && service.regAirlineForm.get('AirlinePriceList').errors?.required">This
+              field is mandatory.</label>
+        </div>
+
+        <div class="form-group text-center">
+            <button [disabled]="!service.regAirlineForm.valid" class="btn btn-success" type="submit">Register New Airline</button>
+            <p>&nbsp;</p>
+          </div>
+    </form>
 </div>

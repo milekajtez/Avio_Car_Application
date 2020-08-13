@@ -41,10 +41,18 @@ export class RegisterService {
     AdminType: ['', Validators.required]
   });
 
-  //frma za logovanje
+  //forma za logovanje
   formLoginModel = this.fb.group({
     UserName: ['', Validators.required],
     Password: ['', [Validators.required, Validators.minLength(8)]]
+  });
+
+  //forma za registraciju avio komapnije
+  regAirlineForm = this.fb.group({
+    AirlineName: ['', Validators.required],
+    AirlineAddress: ['', Validators.required],
+    AirlinePromotionDescription: ['', Validators.required],
+    AirlinePriceList: ['', Validators.required]
   });
 
   // metoda za proveru identicnosti sifri
@@ -130,5 +138,17 @@ export class RegisterService {
   changePasswordFirstLogin(body) {
     return this.http.post(this.BaseURI + '/ApplicationUser/ChangeAdminPassword', body);
   }
-  
+
+  // metoda za registraciju nove aviokompanije
+  airlineRegister() {
+    var body = {
+      AirlineName: this.regAirlineForm.value.AirlineName,
+      AirlineAddress: this.regAirlineForm.value.AirlineAddress,
+      AirlinePromotionDescription: this.regAirlineForm.value.AirlinePromotionDescription,
+      AirlinePriceList: this.regAirlineForm.value.AirlinePriceList
+    }
+    
+    return this.http.post(this.BaseURI + '/ApplicationUser/AirlineRegistration', body)
+  }
+
 }

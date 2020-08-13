@@ -13,7 +13,8 @@ namespace AvioCarBackend.Model
     /// AirlineName ------------------- ime aviokomapnije
     /// AirlineAddress ---------------- adresa avikompanije
     /// AirlinePromotionDescription --- promotivni opis aviokompanije
-    /// AirlineRating ----------------- ocena aviokompanije
+    /// AirlinePrice ------------------ zbir vrednosti svih datih ocena
+    /// NumberOfAirlineGrades --------- broj ocena koje su date avikompaniji (rating = AirlinePrice / NumberOfAirlineGrades)
     /// PriceList --------------------- cenovnik
     /// NumberOfSoldTickets ----------- broj prodatih karata
     /// Destinations ------------------ destinacije na kojima aviokompanija organizuje letove
@@ -41,7 +42,10 @@ namespace AvioCarBackend.Model
         public string AirlinePromotionDescription { get; set; }
 
         [Required]
-        public double AirlineRating { get; set; }
+        public double AirlinePrice { get; set; }
+
+        [Required]
+        public double NumberOfAirlineGrades { get; set; }
 
         [Required]
         [MinLength(5)]

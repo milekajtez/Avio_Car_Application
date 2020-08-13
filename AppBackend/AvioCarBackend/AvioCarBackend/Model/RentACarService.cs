@@ -12,7 +12,8 @@ namespace AvioCarBackend.Model
     /// CarServiceName ------------------------ ime
     /// CarServiceAddress --------------------- adresa
     /// CarServicePromotionDescription -------- promotivni opis
-    /// CarServiceRating ---------------------- ocena rent-a-car servisa
+    /// CarServicePrice ----------------------- zbir svih ocena rent-a-car servisa koje su date
+    /// NumberOfCarServiceGrades -------------- broj ocenjivanja rent-a-car servisa
     /// PriceList ----------------------------- cenovnik
     /// ServiceEarnings ----------------------- ukupni prihodi rent-a-car servisa
     /// Cars ---------------------------------- kola koje servis poseduje
@@ -40,7 +41,10 @@ namespace AvioCarBackend.Model
         public string CarServicePromotionDescription { get; set; }
 
         [Required]
-        public double CarServiceRating { get; set; }
+        public double CarServicePrice { get; set; }
+
+        [Required]
+        public double NumberOfCarServiceGrades { get; set; }
 
         [Required]
         [MinLength(5)]

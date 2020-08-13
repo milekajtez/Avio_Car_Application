@@ -32,15 +32,17 @@ namespace AvioCarBackend.Controllers
         private readonly ApplicationSettings _appSettings;
         private readonly MailSettings _mailSettings;
         private const string GoogleApiTokenInfoUrl = "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={0}";
+        private readonly ApplicationDbContext _context;
 
         public ApplicationUserController(UserManager<RegisteredUser> userManager,
             SignInManager<RegisteredUser> signInManager, IOptions<ApplicationSettings> appSettings,
-            IOptions<MailSettings> mailSettings)
+            IOptions<MailSettings> mailSettings, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _appSettings = appSettings.Value;
             _mailSettings = mailSettings.Value;
+            _context = context;
         }
         
         #region 1 - Metoda za registraciju novog korisnika
@@ -336,6 +338,48 @@ namespace AvioCarBackend.Controllers
                 return BadRequest(new { message = "Server didn't find the logged admin." });
             }
         }
+        #endregion
+        #region 9 - Metoda za registraciju nove avikompanije
+        [HttpPost]
+        [Route("AirlineRegistration")]
+        //POST : /api/ApplicationUser/AirlineRegistration
+        public async Task<Object> AirlineRegistration(NewAirlineModel model) 
+        {
+            var airlines = _context.Airlines;
+            foreach (var air in airlines) 
+            {
+                if (model.AirlineName.Equals(air.AirlineName)) 
+                {
+                    return BadRequest("Please enter a different airline name.");
+                }
+            }
+
+            Airline airline = new Airline()
+            {
+                AirlineName = model.AirlineName,
+                AirlineAddress = model.AirlineAddress,
+                AirlinePromotionDescription = model.AirlinePromotionDescription,
+                AirlinePriceList = model.AirlinePriceList,
+                AirlinePrice = 0,
+                NumberOfAirlineGrades = 0,
+                NumberOfSoldTickets = 0
+            };
+
+            try
+            {
+                await _context.Airlines.AddAsync(airline);
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception e) 
+            {
+                throw e;
+            }
+        }
+        #endregion
+
+
+        #region 10 - Metoda za registraciju novog rent-a-car servisa
         #endregion
     }
 }
