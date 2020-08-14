@@ -50,9 +50,17 @@ export class RegisterService {
   //forma za registraciju avio komapnije
   regAirlineForm = this.fb.group({
     AirlineName: ['', Validators.required],
-    AirlineAddress: ['', Validators.required],
+    AirlineAddress: ['', [Validators.required, Validators.pattern("[a-z A-Z]+,\[0-9]+,\[a-z A-Z]+,\[a-z A-Z]+")]],
     AirlinePromotionDescription: ['', Validators.required],
     AirlinePriceList: ['', Validators.required]
+  });
+
+  //forma za registraciju arent-a-car servisa
+  regRentACarForm = this.fb.group({
+    RentACarName: ['', Validators.required],
+    RentACarAddress: ['', [Validators.required, Validators.pattern("[a-z A-Z]+,\[0-9]+,\[a-z A-Z]+,\[a-z A-Z]+")]],
+    RentACarPromotionDescription: ['', Validators.required],
+    RentACarPriceList: ['', Validators.required]
   });
 
   // metoda za proveru identicnosti sifri
@@ -142,13 +150,25 @@ export class RegisterService {
   // metoda za registraciju nove aviokompanije
   airlineRegister() {
     var body = {
-      AirlineName: this.regAirlineForm.value.AirlineName,
-      AirlineAddress: this.regAirlineForm.value.AirlineAddress,
-      AirlinePromotionDescription: this.regAirlineForm.value.AirlinePromotionDescription,
-      AirlinePriceList: this.regAirlineForm.value.AirlinePriceList
+      Name: this.regAirlineForm.value.AirlineName,
+      Address: this.regAirlineForm.value.AirlineAddress,
+      PromotionDescription: this.regAirlineForm.value.AirlinePromotionDescription,
+      PriceList: this.regAirlineForm.value.AirlinePriceList
     }
     
-    return this.http.post(this.BaseURI + '/ApplicationUser/AirlineRegistration', body)
+    return this.http.post(this.BaseURI + '/ApplicationUser/AirlineRegistration', body);
+  }
+
+  // metoda za registraciju novog rent-a-car servisa
+  rentACarRegister() {
+    var body = {
+      Name: this.regRentACarForm.value.RentACarName,
+      Address: this.regRentACarForm.value.RentACarAddress,
+      PromotionDescription: this.regRentACarForm.value.RentACarPromotionDescription,
+      PriceList: this.regRentACarForm.value.RentACarPriceList
+    }
+    
+    return this.http.post(this.BaseURI + '/ApplicationUser/RentACarRegistration', body);
   }
 
 }

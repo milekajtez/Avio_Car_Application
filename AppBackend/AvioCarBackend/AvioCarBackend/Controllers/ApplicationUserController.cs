@@ -343,12 +343,12 @@ namespace AvioCarBackend.Controllers
         [HttpPost]
         [Route("AirlineRegistration")]
         //POST : /api/ApplicationUser/AirlineRegistration
-        public async Task<Object> AirlineRegistration(NewAirlineModel model) 
+        public async Task<Object> AirlineRegistration(NewModel model) 
         {
             var airlines = _context.Airlines;
             foreach (var air in airlines) 
             {
-                if (model.AirlineName.Equals(air.AirlineName)) 
+                if (model.Name.Equals(air.AirlineName)) 
                 {
                     return BadRequest("Please enter a different airline name.");
                 }
@@ -356,10 +356,10 @@ namespace AvioCarBackend.Controllers
 
             Airline airline = new Airline()
             {
-                AirlineName = model.AirlineName,
-                AirlineAddress = model.AirlineAddress,
-                AirlinePromotionDescription = model.AirlinePromotionDescription,
-                AirlinePriceList = model.AirlinePriceList,
+                AirlineName = model.Name,
+                AirlineAddress = model.Address,
+                AirlinePromotionDescription = model.PromotionDescription,
+                AirlinePriceList = model.PriceList,
                 AirlinePrice = 0,
                 NumberOfAirlineGrades = 0,
                 NumberOfSoldTickets = 0
@@ -377,9 +377,43 @@ namespace AvioCarBackend.Controllers
             }
         }
         #endregion
-
-
         #region 10 - Metoda za registraciju novog rent-a-car servisa
+        [HttpPost]
+        [Route("RentACarRegistration")]
+        //POST : /api/ApplicationUser/RentACarRegistration
+        public async Task<Object> RentACarRegistration(NewModel model) 
+        {
+            var carServices = _context.RentACarServices;
+            foreach (var service in carServices)
+            {
+                if (model.Name.Equals(service.CarServiceName))
+                {
+                    return BadRequest("Please enter a different rent-a-car name.");
+                }
+            }
+
+            RentACarService rentACarService = new RentACarService() 
+            {
+                CarServiceName = model.Name,
+                CarServiceAddress = model.Address,
+                CarServicePromotionDescription = model.PromotionDescription,
+                CarServicePrice = 0,
+                NumberOfCarServiceGrades = 0,
+                ServicePriceList = model.PriceList,
+                ServiceEarnings = 0
+            };
+
+            try
+            {
+                await _context.RentACarServices.AddAsync(rentACarService);
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         #endregion
     }
 }

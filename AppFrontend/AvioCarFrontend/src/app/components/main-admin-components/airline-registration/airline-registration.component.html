@@ -2,8 +2,6 @@
     <div class="text-block">
         <h2>AIRLINE RESERVATION</h2>
     </div>
-
-
     <form [formGroup]="service.regAirlineForm" (ngSubmit)="onSubmit()" style="margin-left: 35%; margin-right: 35%; margin-top: 2%;">
         
         <!--airline name-->
@@ -17,6 +15,7 @@
         <!--airline address-->
         <div class="form-group">
             <input type="text" class="form-control" id="airlineaddress" formControlName="AirlineAddress" placeholder="AirlineAddress">
+            <label>*example: Djordja Isakova,33,Kac,Serbia</label><br>
             <label class="text-danger"
               *ngIf="service.regAirlineForm.get('AirlineAddress').touched && service.regAirlineForm.get('AirlineAddress').errors?.required">This
               field is mandatory.</label>
