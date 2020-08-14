@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -26,11 +26,54 @@ export class LoadDataService {
     Points1200: ['', Validators.required]
   });
 
+  changeAdmin = this.fb.group({
+    UserName: [''],
+    Email: ['', Validators.email],
+    PhoneNumber: [''],
+    FirstName: [''],
+    LastName: [''],
+    City: ['']
+  });
+
+  changeAdminPassword = this.fb.group({
+    CurrentPassword: ['', [Validators.required, Validators.minLength(8)]],
+    Passwords: this.fb.group({
+      Password: ['', [Validators.required, Validators.minLength(8)]],
+      ConfirmPassword: ['', [Validators.required, Validators.minLength(8)]]
+    }, { validator: this.compareNewPasswords })
+  });
+
+
+  // metoda za proveru identicnosti sifri
+  compareNewPasswords(fb: FormGroup) {
+    let confirmPswrdCtrl = fb.get('ConfirmPassword');
+    //passwordMismatch
+    //confirmPswrdCtrl.errors={passwordMismatch:true}
+    if (confirmPswrdCtrl.errors == null || 'passwordMismatch' in confirmPswrdCtrl.errors) {
+      if (fb.get('Password').value != confirmPswrdCtrl.value)
+        confirmPswrdCtrl.setErrors({ passwordMismatch: true });
+      else
+        confirmPswrdCtrl.setErrors(null);
+    }
+  }
+
   loadDiscounts() {
     return this.http.get(this.BaseURI + '/LoadData/GetDiscounts');
   }
 
   changeDiscount(body){
     return this.http.put(this.BaseURI + '/LoadData/ChangeDiscount', body);
+  }
+
+  loadAvioAdmin(username: string){
+    return this.http.get(this.BaseURI + '/LoadData/GetAvioAdmin/' + username);
+  }
+
+  changeAdminProfile(){
+    // TO DO: pozvati backend da promeni admina
+  }
+
+  changdeAdminPassword(){
+    // TO DO: pozvati backend da promeni sifru
   }
 }

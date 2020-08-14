@@ -18,10 +18,12 @@ namespace AvioCarBackend.Controllers
     public class LoadDataController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<RegisteredUser> _userManager;
 
-        public LoadDataController(ApplicationDbContext context) 
+        public LoadDataController(ApplicationDbContext context, UserManager<RegisteredUser> userManager) 
         {
             _context = context;
+            _userManager = userManager;
         }
 
         #region 1 - Metoda za ucitavanje popusta
@@ -106,6 +108,29 @@ namespace AvioCarBackend.Controllers
                 return BadRequest("Unknown error");
             }
         }
+        #endregion
+        #region 3 - Metoda za ucitavanjem trenutnog korisnika u zavisnosti od username-a
+        [HttpGet]
+        [Route("GetAvioAdmin/{username}")]
+        public async Task<ActionResult<RegisteredUser>> GetAvioAdmin(string username) 
+        {
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null) 
+            {
+                return NotFound("Korisnik nije pronadjen.");
+            }
+
+            return user;
+        }
+        #endregion
+
+        #region 4 - Metoda za menjanje podataka administratora na onsovu username-a
+        // TO DO
+        #endregion
+
+        #region 5 - Metoda za menjanje sifre administratora na osnovu username-a
+        // TO DO
         #endregion
     }
 }

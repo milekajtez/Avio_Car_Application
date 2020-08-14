@@ -21,6 +21,10 @@ import { DiscountSettingsComponent } from './components/main-admin-components/di
 import { RegularMenuComponent } from './components/regular-user-components/regular-menu/regular-menu.component';
 import { AvioMenuComponent } from './components/avio-admin-components/avio-menu/avio-menu.component';
 import { CarMenuComponent } from './components/car-admin-components/car-menu/car-menu.component';
+import { AddDestinationComponent } from './components/avio-admin-components/add-destination/add-destination.component';
+import { AddFlightComponent } from './components/avio-admin-components/add-flight/add-flight.component';
+import { ViewAirlinesComponent } from './components/avio-admin-components/view-airlines/view-airlines.component';
+import { AvioProfileComponent } from './components/avio-admin-components/avio-profile/avio-profile.component';
 
 let config = new AuthServiceConfig([
   {
@@ -49,6 +53,10 @@ export function provideConfig()
     RegularMenuComponent,
     AvioMenuComponent,
     CarMenuComponent,
+    AddDestinationComponent,
+    AddFlightComponent,
+    ViewAirlinesComponent,
+    AvioProfileComponent,
   ],
   imports: [
     BrowserModule,

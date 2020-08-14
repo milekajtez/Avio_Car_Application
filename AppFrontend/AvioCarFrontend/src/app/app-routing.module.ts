@@ -11,6 +11,10 @@ import { AdministratorsRegistrationComponent } from './components/main-admin-com
 import { DiscountSettingsComponent } from './components/main-admin-components/discount-settings/discount-settings.component';
 import { AvioMenuComponent } from './components/avio-admin-components/avio-menu/avio-menu.component';
 import { CarMenuComponent } from './components/car-admin-components/car-menu/car-menu.component';
+import { AddDestinationComponent } from './components/avio-admin-components/add-destination/add-destination.component';
+import { AddFlightComponent } from './components/avio-admin-components/add-flight/add-flight.component';
+import { ViewAirlinesComponent } from './components/avio-admin-components/view-airlines/view-airlines.component';
+import { AvioProfileComponent } from './components/avio-admin-components/avio-profile/avio-profile.component';
 
 const routes: Routes = [
   {
@@ -27,13 +31,7 @@ const routes: Routes = [
   },
   {
     path: "mainAdminHomePage/:UserName",
-    children: [
-      { path: "", component: MainMenuComponent },
-      { path: "airlineRegistration", component: AirlineRegistrationComponent },
-      { path: "rentACarRegistration", component: RentACarRegistrationComponent },
-      { path: "administratorsRegistration", component: AdministratorsRegistrationComponent },
-      { path: "discountSettings", component: DiscountSettingsComponent }
-    ]
+    component: MainMenuComponent
   },
   {
     path: "regularUserHomePage/:UserName",
