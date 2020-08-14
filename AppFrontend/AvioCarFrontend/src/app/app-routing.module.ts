@@ -26,7 +26,7 @@ const routes: Routes = [
     component: RegistrationConfirmComponent
   },
   {
-    path: "mainAdminHomePage",
+    path: "mainAdminHomePage/:UserName",
     children: [
       { path: "", component: MainMenuComponent },
       { path: "airlineRegistration", component: AirlineRegistrationComponent },
@@ -36,15 +36,15 @@ const routes: Routes = [
     ]
   },
   {
-    path: "regularUserHomePage",
+    path: "regularUserHomePage/:UserName",
     component: RegularMenuComponent
   },
   {
-    path: "avioAdminHomePage",
+    path: "avioAdminHomePage/:UserName",
     component: AvioMenuComponent
   },
   {
-    path: "carAdminHomePage",
+    path: "carAdminHomePage/:UserName",
     component: CarMenuComponent
   }
 ];

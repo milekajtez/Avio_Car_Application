@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-main-menu',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainMenuComponent implements OnInit {
   defaultComponent = 0;
-  constructor() 
+  username: string;
+  constructor(private route: ActivatedRoute) 
   {
     this.defaultComponent = 1;
+    route.params.subscribe(params => {
+      this.username = params['UserName'];
+    });
   }
 
   ngOnInit(): void {
@@ -29,6 +34,10 @@ export class MainMenuComponent implements OnInit {
 
   methodOption4(): void {
     this.defaultComponent = 4;
+  }
+
+  logout(): void {
+    localStorage.removeItem("token");
   }
 
 }

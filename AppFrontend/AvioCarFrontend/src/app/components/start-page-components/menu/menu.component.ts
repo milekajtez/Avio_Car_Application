@@ -25,12 +25,12 @@ export class MenuComponent implements OnInit {
         // decode token and read role od client
         const helper = new JwtHelperService();
         const decodedToken = helper.decodeToken(res.token);
-        //console.log(decodedToken);
+
         if(decodedToken.role === "regular_user") {
-          this.router.navigateByUrl('/regularUserHomePage');
+          this.router.navigateByUrl('/regularUserHomePage/' + this.service.formLoginModel.value.UserName);
         }
         else if(decodedToken.role === "main_admin") {
-          this.router.navigateByUrl('/mainAdminHomePage');
+          this.router.navigateByUrl('/mainAdminHomePage/' + this.service.formLoginModel.value.UserName);
         }
         else if(decodedToken.role === "avio_admin") {
           if(decodedToken.FirstLogin === "True") {
@@ -46,7 +46,7 @@ export class MenuComponent implements OnInit {
                 (res: any) => {
                   if (res.succeeded) {
                     alert("Changing password succesfully.");
-                    this.router.navigateByUrl('/avioAdminHomePage');
+                    this.router.navigateByUrl('/avioAdminHomePage/' + this.service.formLoginModel.value.UserName);
                   }
                 },
                 err => {
@@ -59,7 +59,7 @@ export class MenuComponent implements OnInit {
           }
           else
           {
-            this.router.navigateByUrl('/avioAdminHomePage');
+            this.router.navigateByUrl('/avioAdminHomePage/' + this.service.formLoginModel.value.UserName);
           }
         }
         else if(decodedToken.role === "car_admin") {
@@ -77,7 +77,7 @@ export class MenuComponent implements OnInit {
                 (res: any) => {
                   if (res.succeeded) {
                     alert("Changing password succesfully.");
-                    this.router.navigateByUrl('/carAdminHomePage');
+                    this.router.navigateByUrl('/carAdminHomePage/' + this.service.formLoginModel.value.UserName);
                   }
                 },
                 err => {
@@ -90,7 +90,7 @@ export class MenuComponent implements OnInit {
           }
           else
           {
-            this.router.navigateByUrl('/carAdminHomePage');
+            this.router.navigateByUrl('/carAdminHomePage/' + this.service.formLoginModel.value.UserName);
           }
         }
       },
@@ -116,7 +116,7 @@ export class MenuComponent implements OnInit {
     this.authService.signIn(socialPlatformProvider).then(socialusers => {
       this.service.externalLogin(socialusers).subscribe((res: any) => {
         localStorage.setItem('token', res.token);
-        this.router.navigateByUrl('/regularUserHomePage');
+        this.router.navigateByUrl('/regularUserHomePage/' + this.service.formLoginModel.value.UserName);
       });
       console.log(socialusers);
     });
