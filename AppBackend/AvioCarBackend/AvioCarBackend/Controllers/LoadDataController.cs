@@ -5,6 +5,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using AvioCarBackend.Data;
 using AvioCarBackend.Data.discounts;
+using AvioCarBackend.Data.profile;
 using AvioCarBackend.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -124,10 +125,50 @@ namespace AvioCarBackend.Controllers
             return user;
         }
         #endregion
-
         #region 4 - Metoda za menjanje podataka administratora na onsovu username-a
         // TO DO
+        //ChangeAdminProfile
+        [HttpPut]
+        [Route("ChangeAdminProfile")]
+        public async Task<Object> ChangeAdminProfile(AvioAdminProfileModel model) 
+        {
+            var resultFind = await _userManager.FindByNameAsync(model.CurrentUsername);
+
+            if (resultFind == null) 
+            {
+                return NotFound("Change unsucessfully. User is not registred.");
+            }
+
+            if (model.UserName == null && model.Email == null && model.PhoneNumber == null && model.FirstName == null &&
+                model.LastName == null && model.City == null) 
+            {
+                return BadRequest("Change unsucessfully.You must enter new data in form.");
+            }
+
+            if (model.UserName != null && await _userManager.FindByNameAsync(model.UserName) != null && !model.UserName.Trim().Equals("")) 
+            {
+                return BadRequest("Change unsucessfully.Please input different username.");
+            }
+
+            resultFind.UserName = model.UserName.Equals("") || model.UserName.Trim().Equals("") ? resultFind.UserName : model.UserName;
+            resultFind.Email = model.Email.Equals("") || model.Email.Trim().Equals("") ? resultFind.Email : model.Email;
+            resultFind.PhoneNumber = model.PhoneNumber.Equals("") || model.PhoneNumber.Trim().Equals("") ? resultFind.PhoneNumber : model.PhoneNumber;
+            resultFind.FirstName = model.FirstName.Equals("") || model.FirstName.Trim().Equals("") ? resultFind.FirstName : model.FirstName;
+            resultFind.LastName = model.LastName.Equals("") || model.LastName.Trim().Equals("") ? resultFind.LastName : model.LastName;
+            resultFind.City = model.City.Equals("") || model.City.Trim().Equals("") ? resultFind.City: model.City;
+
+            try
+            {
+                await _userManager.UpdateAsync(resultFind);
+                return Ok();
+            }
+            catch (Exception e) 
+            {
+                throw e;
+            }
+        }
         #endregion
+
 
         #region 5 - Metoda za menjanje sifre administratora na osnovu username-a
         // TO DO

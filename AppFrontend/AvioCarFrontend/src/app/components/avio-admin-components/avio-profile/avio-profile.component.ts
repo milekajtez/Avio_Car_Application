@@ -30,8 +30,8 @@ export class AvioProfileComponent implements OnInit {
   initializeAvioAdminData() : void {
     this.service.loadAvioAdmin(this.username).subscribe(
       (res: any) => {
-        // imacu u html-u mesta (npr tabela) i tu cu stavljati podatke
         console.log(res);
+        this.username = res.userName;
         this.email = res.email;
         this.phonenumber = res.phoneNumber;
         this.firstname = res.firstName;
@@ -45,7 +45,28 @@ export class AvioProfileComponent implements OnInit {
   }
 
   onSubmit() : void {
-    // TO DO: obraditi odgovor i pozvati ponovno ucitavanje azuriranih podataka
+    this.service.changeAdminProfile(this.username).subscribe(
+      (res: any) => {
+        this.service.changeAdmin.reset();
+        this.initializeAvioAdminData();
+        alert("Change profile data successfully.");
+      },
+      err => {
+        console.log(err);
+        if(err.error === "Change unsucessfully. User is not registred."){
+          alert("Change unsucessfully. User is not registred.");
+        }
+        else if(err.error === "Change unsucessfully.You must enter new data in form."){
+          alert("Change unsucessfully.You must enter new data in form.");
+        }
+        else if(err.error === "Change unsucessfully.Please input different username."){
+          alert("Change unsucessfully.Please enter different username.");
+        }
+        else{
+          alert("Unknown error");
+        }
+      }
+    );
   }
 
   changePassword(): void {

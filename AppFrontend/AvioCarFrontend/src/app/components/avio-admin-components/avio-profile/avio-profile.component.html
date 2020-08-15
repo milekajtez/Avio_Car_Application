@@ -24,6 +24,7 @@
                 <div class="tab-pane active" style="margin-left: 2%; margin-right: 5%;">
                     <form [formGroup]="service.changeAdmin" autocomplete="off" (ngSubmit)="onSubmit()">
 
+                        <!--username-->
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <label for="first_name"><h6>User name</h6></label>
@@ -31,7 +32,7 @@
                             </div>
                         </div>
 
-                        
+                        <!--email-->
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <label for="email"><h6>Email</h6></label>
@@ -41,15 +42,17 @@
                             </div>
                         </div>
 
-                        
+                        <!--phone number-->
                         <div class="form-group">
                             <div class="col-xs-6">
-                            <label for="mobile"><h6>Mobile</h6></label>
+                                <label for="mobile"><h6>Mobile</h6></label>
                                 <input type="text" class="form-control" id="phonenumber" placeholder="PhoneNumber" formControlName="PhoneNumber">
+                                <label class="text-danger"
+                                    *ngIf="service.changeAdmin.get('PhoneNumber').errors?.pattern">Minimum 9 characters required.</label>
                             </div>
                         </div>
 
-                        
+                        <!--first name-->
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <label for="first_name"><h6>First name</h6></label>
@@ -57,7 +60,7 @@
                             </div>
                         </div>
 
-                        
+                        <!--last name-->
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <label for="last_name"><h6>Last name</h6></label>
@@ -65,7 +68,7 @@
                             </div>
                         </div>
 
-                        
+                        <!--city-->
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <label for="first_name"><h6>City</h6></label>
@@ -86,6 +89,8 @@
             <div><b><h4 style="margin-left: 2%;">CHANGE PASSWORD</h4></b>
                 <div class="tab-content">
                     <form [formGroup]="service.changeAdminPassword" autocomplete="off" (ngSubmit)="changePassword()">
+
+                        <!--current password-->
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <label for="password"><h6>Current password</h6></label>
@@ -96,6 +101,7 @@
                             </div>
                         </div>
 
+                        <!--new password and confirm new password-->
                         <div formGroupName="Passwords">
                             <div class="form-group">
                                 <div class="col-xs-6">

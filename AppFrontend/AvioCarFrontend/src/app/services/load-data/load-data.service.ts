@@ -29,7 +29,7 @@ export class LoadDataService {
   changeAdmin = this.fb.group({
     UserName: [''],
     Email: ['', Validators.email],
-    PhoneNumber: [''],
+    PhoneNumber: ['',Validators.pattern("^[0-9]{9,10}")],
     FirstName: [''],
     LastName: [''],
     City: ['']
@@ -69,8 +69,19 @@ export class LoadDataService {
     return this.http.get(this.BaseURI + '/LoadData/GetAvioAdmin/' + username);
   }
 
-  changeAdminProfile(){
+  changeAdminProfile(username: string){
     // TO DO: pozvati backend da promeni admina
+    var body = {
+      CurrentUsername: username,
+      UserName: this.changeAdmin.value.UserName,
+      Email: this.changeAdmin.value.Email,
+      PhoneNumber: this.changeAdmin.value.PhoneNumber,
+      FirstName: this.changeAdmin.value.FirstName,
+      LastName: this.changeAdmin.value.LastName,
+      City: this.changeAdmin.value.City
+    }
+
+    return this.http.put(this.BaseURI + '/LoadData/ChangeAdminProfile', body)
   }
 
   changdeAdminPassword(){
