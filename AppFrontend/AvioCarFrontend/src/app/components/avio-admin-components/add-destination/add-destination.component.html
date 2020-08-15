@@ -1,1 +1,51 @@
-<p>add-destination works!</p>
+<div style="background-color: powderblue;">
+    <div class="text-block">
+        <h2>ADD DESTINATION</h2>
+    </div>
+
+    <form [formGroup]="service.destinationForm" (ngSubmit)="onSubmit()" style="margin-left: 35%; margin-right: 35%; margin-top: 2%;">
+        
+        <!--airline-->
+        <div class="form-group">
+            <label>Airline</label>
+            <select name="airlines" id="airlines" class="form-control" formControlName="Airline">
+                <option *ngFor="let airline of airlines" value="{{airline.airlineID}}">{{airline.airlineName}}<b>/</b>{{airline.airlineAddress}}</option>
+            </select>
+            <label class="text-danger"
+            *ngIf="service.destinationForm.get('Airline').touched && service.destinationForm.get('Airline').errors?.required">
+            This field is mandatory.</label>
+        </div>
+
+        <!--airport name-->
+        <div class="form-group">
+            <input type="text" class="form-control" id="airportname" formControlName="AirportName" placeholder="AirportName">
+            <label class="text-danger"
+              *ngIf="service.destinationForm.get('AirportName').touched && service.destinationForm.get('AirportName').errors?.required">
+              This field is mandatory.
+            </label>
+        </div>
+
+        <!--city-->
+        <div class="form-group">
+            <input type="text" class="form-control" id="city" formControlName="City" placeholder="City">
+            <label class="text-danger"
+              *ngIf="service.destinationForm.get('City').touched && service.destinationForm.get('City').errors?.required">
+              This field is mandatory.
+            </label>
+        </div>
+
+        <!--country-->
+        <div class="form-group">
+            <input type="text" class="form-control" id="country" formControlName="Country" placeholder="Country">
+            <label class="text-danger"
+              *ngIf="service.destinationForm.get('Country').touched && service.destinationForm.get('Country').errors?.required">
+              This field is mandatory.
+            </label>
+        </div>
+
+        <div class="form-group text-center">
+            <button [disabled]="!service.destinationForm.valid" class="btn btn-success" type="submit">Add Destination</button>
+            <p>&nbsp;</p>
+        </div>
+    </form>
+</div>

@@ -44,6 +44,14 @@ export class LoadDataService {
   });
 
 
+  destinationForm = this.fb.group({
+    Airline: ['', Validators.required],
+    AirportName: ['', Validators.required],
+    City: ['',Validators.required],
+    Country: ['', Validators.required]
+  });
+
+
   // metoda za proveru identicnosti sifri
   compareNewPasswords(fb: FormGroup) {
     let confirmPswrdCtrl = fb.get('ConfirmPassword');
@@ -70,7 +78,6 @@ export class LoadDataService {
   }
 
   changeAdminProfile(username: string){
-    // TO DO: pozvati backend da promeni admina
     var body = {
       CurrentUsername: username,
       UserName: this.changeAdmin.value.UserName,
@@ -92,5 +99,19 @@ export class LoadDataService {
     }
 
     return this.http.put(this.BaseURI + '/LoadData/ChangePassword', body);
+  }
+
+  loadAirlines() {
+    return this.http.get(this.BaseURI + '/LoadData/GetAirlines');
+  }
+
+  addNewDestination() {
+    var body = {
+      AirlineID: this.destinationForm.value.Airline,
+      AirportName: this.destinationForm.value.AirportName,
+      City: this.destinationForm.value.City,
+      Country: this.destinationForm.value.Country
+    }
+    return this.http.post(this.BaseURI + '/LoadData/AddDestination', body);
   }
 }
