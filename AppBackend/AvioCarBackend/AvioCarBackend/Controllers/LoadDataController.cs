@@ -150,17 +150,17 @@ namespace AvioCarBackend.Controllers
                 return BadRequest("Change unsucessfully.Please input different username.");
             }
 
-            resultFind.UserName = model.UserName.Equals("") || model.UserName.Trim().Equals("") ? resultFind.UserName : model.UserName;
-            resultFind.Email = model.Email.Equals("") || model.Email.Trim().Equals("") ? resultFind.Email : model.Email;
-            resultFind.PhoneNumber = model.PhoneNumber.Equals("") || model.PhoneNumber.Trim().Equals("") ? resultFind.PhoneNumber : model.PhoneNumber;
-            resultFind.FirstName = model.FirstName.Equals("") || model.FirstName.Trim().Equals("") ? resultFind.FirstName : model.FirstName;
-            resultFind.LastName = model.LastName.Equals("") || model.LastName.Trim().Equals("") ? resultFind.LastName : model.LastName;
-            resultFind.City = model.City.Equals("") || model.City.Trim().Equals("") ? resultFind.City: model.City;
+            resultFind.UserName = model.UserName == null || model.UserName.Trim().Equals("") ? resultFind.UserName : model.UserName;
+            resultFind.Email = model.Email == null || model.Email.Trim().Equals("") ? resultFind.Email : model.Email;
+            resultFind.PhoneNumber = model.PhoneNumber == null || model.PhoneNumber.Trim().Equals("") ? resultFind.PhoneNumber : model.PhoneNumber;
+            resultFind.FirstName = model.FirstName == null || model.FirstName.Trim().Equals("") ? resultFind.FirstName : model.FirstName;
+            resultFind.LastName = model.LastName == null || model.LastName.Trim().Equals("") ? resultFind.LastName : model.LastName;
+            resultFind.City = model.City == null || model.City.Trim().Equals("") ? resultFind.City: model.City;
 
             try
             {
                 await _userManager.UpdateAsync(resultFind);
-                return Ok();
+                return Ok(new { message = resultFind.UserName });
             }
             catch (Exception e) 
             {
@@ -168,10 +168,39 @@ namespace AvioCarBackend.Controllers
             }
         }
         #endregion
-
-
         #region 5 - Metoda za menjanje sifre administratora na osnovu username-a
-        // TO DO
+        [HttpPut]
+        [Route("ChangePassword")]
+        public async Task<Object> ChangePassword(ChangePasswordModel model)
+        {
+            var resultFind = await _userManager.FindByNameAsync(model.Username);
+            if (resultFind != null)
+            {
+                if (await _userManager.CheckPasswordAsync(resultFind, model.CurrentPassword))
+                {
+                    var code = await _userManager.GeneratePasswordResetTokenAsync(resultFind);
+                    try
+                    {
+                        var result = await _userManager.ResetPasswordAsync(resultFind, code, model.NewPassword);
+                        await _userManager.UpdateAsync(resultFind);
+                        return Ok();
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+
+                }
+                else 
+                {
+                    return BadRequest("Changing password is unsuccessfully. Please enter correct current password.");
+                }
+            }
+            else 
+            {
+                return BadRequest("Server didn't find the username. Changing password is unsuccessfully.");
+            }
+        }
         #endregion
     }
 }

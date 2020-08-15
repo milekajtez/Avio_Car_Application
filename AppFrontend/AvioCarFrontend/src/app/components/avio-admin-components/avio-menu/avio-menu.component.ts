@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { SharedDataService } from 'src/app/services/shared/shared-data.service';
 
 @Component({
   selector: 'app-avio-menu',
@@ -10,15 +11,18 @@ export class AvioMenuComponent implements OnInit {
   defaultComponent = 0;
   username: string;
 
-  constructor(private route: ActivatedRoute) 
+  constructor(private route: ActivatedRoute, private data: SharedDataService) 
   {
     this.defaultComponent = 1;
-    route.params.subscribe(params => {
-      this.username = params['UserName'];
-    });
   }
 
   ngOnInit(): void {
+    this.data.currentMessage.subscribe(message => this.username = message);
+    if(this.username === "default message"){
+      this.route.params.subscribe(params => {
+        this.username = params['UserName'];
+      });
+    }
   }
 
   methodOption1(): void {
@@ -40,5 +44,4 @@ export class AvioMenuComponent implements OnInit {
   logout(): void {
     localStorage.removeItem("token");
   }
-
 }

@@ -81,10 +81,16 @@ export class LoadDataService {
       City: this.changeAdmin.value.City
     }
 
-    return this.http.put(this.BaseURI + '/LoadData/ChangeAdminProfile', body)
+    return this.http.put(this.BaseURI + '/LoadData/ChangeAdminProfile', body);
   }
 
-  changdeAdminPassword(){
-    // TO DO: pozvati backend da promeni sifru
+  changePassword(username : string){
+    var body = {
+      Username: username,
+      CurrentPassword: this.changeAdminPassword.value.CurrentPassword,
+      NewPassword:  this.changeAdminPassword.value.Passwords.Password
+    }
+
+    return this.http.put(this.BaseURI + '/LoadData/ChangePassword', body);
   }
 }
