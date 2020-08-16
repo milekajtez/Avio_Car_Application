@@ -4,14 +4,16 @@ using AvioCarBackend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AvioCarBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200816094450_TimeSpanMigration")]
+    partial class TimeSpanMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -221,9 +223,6 @@ namespace AvioCarBackend.Migrations
                     b.Property<double>("FlightRating")
                         .HasColumnType("float");
 
-                    b.Property<double>("FlightTime")
-                        .HasColumnType("float");
-
                     b.Property<double>("LugageWeight")
                         .HasColumnType("float");
 
@@ -242,6 +241,9 @@ namespace AvioCarBackend.Migrations
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("TimeOfFlight")
+                        .HasColumnType("time");
 
                     b.HasKey("FlightID");
 

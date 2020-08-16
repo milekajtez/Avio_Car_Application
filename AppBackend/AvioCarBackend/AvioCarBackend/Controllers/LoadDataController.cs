@@ -226,7 +226,7 @@ namespace AvioCarBackend.Controllers
         #region 7 - Metoda za dodavanje nove destinacije
         [HttpPost]
         [Route("AddDestination")]
-        //POST : /api/ApplicationUser/AddDestination
+        //POST : /api/LoadData/AddDestination
         public async Task<Object> AddDestination(DestinationModel model)
         {
             var airline = await _context.Airlines.FindAsync(int.Parse(model.AirlineID));
@@ -256,7 +256,65 @@ namespace AvioCarBackend.Controllers
                 return BadRequest("Add destination is unsuccessffully.Server not found selected airline.");
             }
         }
+        #endregion
+        #region 8 - Metoda za dodavanje novog leta
+        [HttpPost]
+        [Route("AddFlight")]
+        //POST : /api/LoadData/AddFlight
+        public async Task<Object> AddFlight(FlightModel model) 
+        {
+            var airline = await _context.Airlines.FindAsync(int.Parse(model.AirlineID));
+            if (airline != null)
+            {
+                DateTime start = DateTime.Parse(model.StartTime);
+                DateTime end = DateTime.Parse(model.EndTime);
+                int resultTime = DateTime.Compare(start, end);
+
+                if (resultTime == 0)
+                {
+                    return BadRequest("Add flight is unsuccessffully. You entered same time for start and end od flight.");
+                }
+                else if (resultTime > 0)
+                {
+                    return BadRequest("Add flight is unsuccessffully. Time of flight end is earlier than time of flight start.");
+                }
+                else 
+                {
+                    Flight flight = new Flight()
+                    {
+                        StartTime = DateTime.Parse(model.StartTime),
+                        EndTime = DateTime.Parse(model.EndTime),
+                        StartLocation = model.StartLocation,
+                        EndLocation = model.EndLocation,
+                        FlightTime = DateTime.Parse(model.EndTime).Subtract(DateTime.Parse(model.StartTime)).TotalHours,
+                        FlightLength = double.Parse(model.FlightLength),
+                        FlightRating = 0,
+                        AdditionalInformation = model.AdditionalInformation,
+                        NumberOfTransfers = int.Parse(model.NumberOfTransfers),
+                        AllTransfers = model.AllTransfers,
+                        PlaneName = model.PlaneName,
+                        LugageWeight = double.Parse(model.LugageWeight),
+                        Airline = airline
+                    };
+
+                    try
+                    {
+                        var result = await _context.Flights.AddAsync(flight);
+                        _context.SaveChanges();
+                        return Ok();
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                }
+            }
+            else 
+            {
+                return BadRequest("Add flight is unsuccessffully.Server not found selected airline.");
+            }
+        }
+        #endregion
     }
-    #endregion
 }
 
