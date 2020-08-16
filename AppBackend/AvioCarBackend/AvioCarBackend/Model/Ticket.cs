@@ -14,7 +14,7 @@ namespace AvioCarBackend.Model
     /// CardType ---------------- tip karte (po ovim se misli i tip mesta.Karta ustvarii predstavlja mesto u avionu)
     /// TimeOfTicketPurchase ---- datum i vreme rezervacije tj kupovine karte
     /// IsTicketPurchased ------- da li je karta rezervisana
-    /// IsQuickBooking ---------- da li jekartadodata u one koje su za brzu rezervaciju
+    /// IsQuickBooking ---------- da li je karta dodata u one koje su za brzu rezervaciju
     /// Flight ------------------ let kojem karta pripada
     /// </summary>
     [Table("Tickets")]

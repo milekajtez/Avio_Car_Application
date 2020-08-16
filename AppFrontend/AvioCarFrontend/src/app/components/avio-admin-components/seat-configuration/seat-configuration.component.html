@@ -1,0 +1,102 @@
+<div style="background-color: powderblue;">
+    <div class="text-block">
+        <h2>SEAT CONFIGURATION</h2>
+    </div>
+
+    <form [formGroup]="service.aircraftSeatForm" (ngSubmit)="onSubmit()" style="margin-left: 35%; margin-right: 35%; margin-top: 2%;">
+        
+        <!--airline-->
+        <div class="form-group">
+            <label>Flight</label>
+            <select name="flights" id="flights" class="form-control" formControlName="Flight">
+                <option *ngFor="let flight of flights" value="{{flight.flightID}}">{{flight.flightID}}/{{flight.planeName}}/{{flight.startLocation}}-->{{flight.endLocation}}</option>
+            </select>
+            <label class="text-danger"
+            *ngIf="service.aircraftSeatForm.get('Flight').touched && service.aircraftSeatForm.get('Flight').errors?.required">
+            This field is mandatory.</label>
+        </div>
+
+        <!--broj ekonomskih sedista(karata)-->
+        <div class="form-group">
+            <input type="text" class="form-control" id="numberofeconomicseats" formControlName="NumberOfEconomicSeats" placeholder="NumberOfEconomicSeats">
+            <label class="text-danger"
+                *ngIf="service.aircraftSeatForm.get('NumberOfEconomicSeats').touched && service.aircraftSeatForm.get('NumberOfEconomicSeats').errors?.required">
+                This field is mandatory.
+            </label>
+            <label class="text-danger"
+                *ngIf="service.aircraftSeatForm.get('NumberOfEconomicSeats').touched && service.aircraftSeatForm.get('NumberOfEconomicSeats').errors?.minlength">
+                Please insert a valid number.
+            </label>
+        </div>
+
+        <!--cena ekonomske karte-->
+        <div class="form-group">
+            <input type="text" class="form-control" id="economicclassprice" formControlName="EconomicClassPrice" placeholder="EconomicClassPrice(&euro;)">
+            <label class="text-danger"
+                *ngIf="service.aircraftSeatForm.get('EconomicClassPrice').touched && service.aircraftSeatForm.get('EconomicClassPrice').errors?.required">
+                This field is mandatory.
+            </label>
+            <label class="text-danger"
+                *ngIf="service.aircraftSeatForm.get('EconomicClassPrice').touched && service.aircraftSeatForm.get('EconomicClassPrice').errors?.minlength">
+                Please insert a valid number.
+            </label>
+        </div>
+
+        <!--broj prve klase sedista(karata)-->
+        <div class="form-group">
+            <input type="text" class="form-control" id="numberoffirstseats" formControlName="NumberOfFirstSeats" placeholder="NumberOfFirstSeats">
+            <label class="text-danger"
+                *ngIf="service.aircraftSeatForm.get('NumberOfFirstSeats').touched && service.aircraftSeatForm.get('NumberOfFirstSeats').errors?.required">
+                This field is mandatory.
+            </label>
+            <label class="text-danger"
+                *ngIf="service.aircraftSeatForm.get('NumberOfFirstSeats').touched && service.aircraftSeatForm.get('NumberOfFirstSeats').errors?.minlength">
+                Please insert a valid number.
+            </label>
+        </div>
+
+        <!--cena prve klase karte-->
+        <div class="form-group">
+            <input type="text" class="form-control" id="firstclassprice" formControlName="FirstClassPrice" placeholder="FirstClassPrice(&euro;)">
+            <label class="text-danger"
+                *ngIf="service.aircraftSeatForm.get('FirstClassPrice').touched && service.aircraftSeatForm.get('FirstClassPrice').errors?.required">
+                This field is mandatory.
+            </label>
+            <label class="text-danger"
+                *ngIf="service.aircraftSeatForm.get('FirstClassPrice').touched && service.aircraftSeatForm.get('FirstClassPrice').errors?.minlength">
+                Please insert a valid number.
+            </label>
+        </div>
+
+        <!--broj biznis sedista(karata)-->
+        <div class="form-group">
+            <input type="text" class="form-control" id="numberofbusinessseats" formControlName="NumberOfBusinessSeats" placeholder="NumberOfBusinessSeats">
+            <label class="text-danger"
+                *ngIf="service.aircraftSeatForm.get('NumberOfBusinessSeats').touched && service.aircraftSeatForm.get('NumberOfBusinessSeats').errors?.required">
+                This field is mandatory.
+            </label>
+            <label class="text-danger"
+                *ngIf="service.aircraftSeatForm.get('NumberOfBusinessSeats').touched && service.aircraftSeatForm.get('NumberOfBusinessSeats').errors?.minlength">
+                Please insert a valid number.
+            </label>
+        </div>
+
+        <!--cena biznis karte-->
+        <div class="form-group">
+            <input type="text" class="form-control" id="businessclassprice" formControlName="BusinessClassPrice" placeholder="BusinessClassPrice(&euro;)">
+            <label class="text-danger"
+                *ngIf="service.aircraftSeatForm.get('BusinessClassPrice').touched && service.aircraftSeatForm.get('BusinessClassPrice').errors?.required">
+                This field is mandatory.
+            </label>
+            <label class="text-danger"
+                *ngIf="service.aircraftSeatForm.get('BusinessClassPrice').touched && service.aircraftSeatForm.get('BusinessClassPrice').errors?.minlength">
+                Please insert a valid number.
+            </label>
+        </div>
+
+        <div class="form-group text-center">
+            <button [disabled]="!service.aircraftSeatForm.valid" class="btn btn-success" type="submit">Add Seat Configuration</button>
+            <p>&nbsp;</p>
+        </div>
+    </form>
+</div>

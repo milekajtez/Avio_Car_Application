@@ -24,6 +24,16 @@ export class FlightService {
     Airline: ['', Validators.required]
   });
 
+  aircraftSeatForm = this.fb.group({
+    Flight: ['', Validators.required],
+    NumberOfEconomicSeats: ['', [Validators.required, Validators.pattern("[0-9]+")]],
+    EconomicClassPrice: ['', [Validators.required, Validators.pattern("[0-9]+")]],
+    NumberOfFirstSeats: ['', [Validators.required, Validators.pattern("[0-9]+")]],
+    FirstClassPrice: ['', [Validators.required, Validators.pattern("[0-9]+")]],
+    NumberOfBusinessSeats: ['', [Validators.required, Validators.pattern("[0-9]+")]],
+    BusinessClassPrice: ['', [Validators.required, Validators.pattern("[0-9]+")]]
+  });
+
   addNewFlight() {
     var body = {
       StartTime: this.newFlightForm.value.StartTime,
@@ -40,5 +50,19 @@ export class FlightService {
     }
 
     return this.http.post(this.BaseURI + '/LoadData/AddFlight', body);
+  }
+
+  addNewSeatsConfiguration() {
+    var body = {
+      Flight: this.aircraftSeatForm.value.Flight,
+      NumberOfEconomicSeats: this.aircraftSeatForm.value.NumberOfEconomicSeats,
+      EconomicClassPrice: this.aircraftSeatForm.value.EconomicClassPrice,
+      NumberOfFirstSeats: this.aircraftSeatForm.value.NumberOfFirstSeats,
+      FirstClassPrice: this.aircraftSeatForm.value.FirstClassPrice,
+      NumberOfBusinessSeats: this.aircraftSeatForm.value.NumberOfBusinessSeats,
+      BusinessClassPrice: this.aircraftSeatForm.value.BusinessClassPrice
+    }
+
+    return this.http.post(this.BaseURI + '/LoadData/AddSeatsConfiguration', body);
   }
 }

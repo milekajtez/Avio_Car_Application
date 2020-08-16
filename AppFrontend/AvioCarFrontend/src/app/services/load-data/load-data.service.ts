@@ -65,18 +65,22 @@ export class LoadDataService {
     }
   }
 
+  // metoda za ucitavanje popusta
   loadDiscounts() {
     return this.http.get(this.BaseURI + '/LoadData/GetDiscounts');
   }
 
+  // metoda za izmenu popusta
   changeDiscount(body){
     return this.http.put(this.BaseURI + '/LoadData/ChangeDiscount', body);
   }
 
+  // metoda za ucitavanje avio admina 
   loadAvioAdmin(username: string){
     return this.http.get(this.BaseURI + '/LoadData/GetAvioAdmin/' + username);
   }
 
+  // metoda za promeni podataka admina
   changeAdminProfile(username: string){
     var body = {
       CurrentUsername: username,
@@ -91,6 +95,7 @@ export class LoadDataService {
     return this.http.put(this.BaseURI + '/LoadData/ChangeAdminProfile', body);
   }
 
+  // metoda za promenu sifre
   changePassword(username : string){
     var body = {
       Username: username,
@@ -101,10 +106,12 @@ export class LoadDataService {
     return this.http.put(this.BaseURI + '/LoadData/ChangePassword', body);
   }
 
+  // etoda za ucitavanje avio kompanija
   loadAirlines() {
     return this.http.get(this.BaseURI + '/LoadData/GetAirlines');
   }
 
+  // metoda za dodavanje nove destinacije
   addNewDestination() {
     var body = {
       AirlineID: this.destinationForm.value.Airline,
@@ -113,5 +120,10 @@ export class LoadDataService {
       Country: this.destinationForm.value.Country
     }
     return this.http.post(this.BaseURI + '/LoadData/AddDestination', body);
+  }
+
+  // metoda za ucitavanje letova
+  loadFlights() {
+    return this.http.get(this.BaseURI + '/LoadData/GetFlights');
   }
 }

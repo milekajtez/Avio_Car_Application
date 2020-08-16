@@ -315,6 +315,91 @@ namespace AvioCarBackend.Controllers
             }
         }
         #endregion
+        #region 9 - Metoda za ucitavanje letova
+        [HttpGet]
+        [Route("GetFlights")]
+        public IActionResult GetFlights()
+        {
+            try
+            {
+                var flights = _context.Flights;
+                if (flights == null)
+                {
+                    return NotFound();
+                }
+                return Ok(flights);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        #endregion
+        #region 10 - Metoda za dodavanje kongiguracije sedista za avion tj let
+        //AddSeatsConfiguration
+        [HttpPost]
+        [Route("AddSeatsConfiguration")]
+        //POST : /api/LoadData/AddSeatsConfiguration
+        public async Task<Object> AddSeatsConfiguration(SeatModel model) 
+        {
+            var flight = await _context.Flights.FindAsync(int.Parse(model.Flight));
+            if (flight != null)
+            {
+                int firstNum = int.Parse(model.NumberOfFirstSeats);
+                int businessNum = int.Parse(model.NumberOfBusinessSeats);
+                int economicNum = int.Parse(model.NumberOfEconomicSeats);
+                int numberOfAllSeats = firstNum + businessNum + economicNum;
+
+                for (int i = 0; i < numberOfAllSeats; i++) 
+                {
+                    // initial
+                    Ticket newTicket = new Ticket()
+                    {
+                        TicketNumber = i + 1,
+                        IsTicketPurchased = false,
+                        IsQuickBooking = false,
+                        Flight = flight
+                    };
+
+                    if (i <= firstNum - 1)
+                    {
+                        // add first class
+                        newTicket.CardType = CardType.FIRST_CLASS;
+                        newTicket.TicketPrice = double.Parse(model.FirstClassPrice);
+
+                    }
+                    else if (i <= firstNum + businessNum - 1)
+                    {
+                        // add business class
+                        newTicket.CardType = CardType.BUSINESS_CLASS;
+                        newTicket.TicketPrice = double.Parse(model.BusinessClassPrice);
+                    }
+                    else 
+                    {
+                        // add economic class
+                        newTicket.CardType = CardType.ECONOMIC_CLASS;
+                        newTicket.TicketPrice = double.Parse(model.EconomicClassPrice);
+                    }
+
+                    try
+                    {
+                        var result = await _context.Tickets.AddAsync(newTicket);
+                        _context.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                }
+
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("Add seact configuration is unsuccessffully.Server not found selected flight.");
+            }
+        }
+        #endregion
     }
 }
 
