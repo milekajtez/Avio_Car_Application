@@ -122,8 +122,18 @@ export class LoadDataService {
     return this.http.post(this.BaseURI + '/LoadData/AddDestination', body);
   }
 
-  // metoda za ucitavanje letova
+  // metoda za ucitavanje svih letova
   loadFlights() {
     return this.http.get(this.BaseURI + '/LoadData/GetFlights');
+  }
+
+  // metoda za ucitavanje destinacija
+  loadDestinations(airlineID: string){
+    return this.http.get(this.BaseURI + '/LoadData/GetDestinations/' + airlineID);
+  }
+
+  // metoda za ucitavanje letova odredjene aviokompanije
+  loadAirlineFlights(airlineID: string){
+    return this.http.get(this.BaseURI + '/LoadData/GetAirlineFlights/' + airlineID);
   }
 }

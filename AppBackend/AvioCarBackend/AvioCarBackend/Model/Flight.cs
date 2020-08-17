@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace AvioCarBackend.Model
@@ -15,7 +16,8 @@ namespace AvioCarBackend.Model
     /// EndLocation --------------- lokacija dolaska
     /// FlightTime ---------------- vreme putovanja
     /// FlightLength -------------- duzina putovanja
-    /// FlightRating -------------- ocena leta
+    /// FlightPrice --------------- ukupna vrednost svih ocena leta
+    /// NumberOfFlightGrades ------ broj ocena koje su date letu
     /// AdditionalInformation ----- dodatne informacije o letu (da li postoji usluga ishrane, imena pilota i stujerdesa,...)
     /// NumberOfTransfers --------- broj presedanja
     /// AllTransfers -------------- mesta presedanja (na primer Berlin|Bec|Beograd|Istambul|Ankara)
@@ -53,7 +55,10 @@ namespace AvioCarBackend.Model
         public double FlightLength { get; set; }
 
         [Required]
-        public double FlightRating { get; set; }
+        public int FlightPrice { get; set; }
+
+        [Required]
+        public int NumberOfFlightGrades { get; set; }
 
         [Required]
         [MinLength(5)]
@@ -76,6 +81,7 @@ namespace AvioCarBackend.Model
         public double LugageWeight { get; set; }
 
         [Required]
+        [JsonIgnore]
         public Airline Airline { get; set; }
 
         [Required]

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.V3.Pages.Internal.Account.Manage;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AvioCarBackend.Controllers
 {
@@ -261,7 +262,7 @@ namespace AvioCarBackend.Controllers
         [HttpPost]
         [Route("AddFlight")]
         //POST : /api/LoadData/AddFlight
-        public async Task<Object> AddFlight(FlightModel model) 
+        public async Task<Object> AddFlight(FlightModel model)
         {
             var airline = await _context.Airlines.FindAsync(int.Parse(model.AirlineID));
             if (airline != null)
@@ -278,7 +279,7 @@ namespace AvioCarBackend.Controllers
                 {
                     return BadRequest("Add flight is unsuccessffully. Time of flight end is earlier than time of flight start.");
                 }
-                else 
+                else
                 {
                     Flight flight = new Flight()
                     {
@@ -288,7 +289,8 @@ namespace AvioCarBackend.Controllers
                         EndLocation = model.EndLocation,
                         FlightTime = DateTime.Parse(model.EndTime).Subtract(DateTime.Parse(model.StartTime)).TotalHours,
                         FlightLength = double.Parse(model.FlightLength),
-                        FlightRating = 0,
+                        FlightPrice = 0,
+                        NumberOfFlightGrades = 0,
                         AdditionalInformation = model.AdditionalInformation,
                         NumberOfTransfers = int.Parse(model.NumberOfTransfers),
                         AllTransfers = model.AllTransfers,
@@ -309,7 +311,7 @@ namespace AvioCarBackend.Controllers
                     }
                 }
             }
-            else 
+            else
             {
                 return BadRequest("Add flight is unsuccessffully.Server not found selected airline.");
             }
@@ -340,7 +342,7 @@ namespace AvioCarBackend.Controllers
         [HttpPost]
         [Route("AddSeatsConfiguration")]
         //POST : /api/LoadData/AddSeatsConfiguration
-        public async Task<Object> AddSeatsConfiguration(SeatModel model) 
+        public async Task<Object> AddSeatsConfiguration(SeatModel model)
         {
             var flight = await _context.Flights.FindAsync(int.Parse(model.Flight));
             if (flight != null)
@@ -350,7 +352,7 @@ namespace AvioCarBackend.Controllers
                 int economicNum = int.Parse(model.NumberOfEconomicSeats);
                 int numberOfAllSeats = firstNum + businessNum + economicNum;
 
-                for (int i = 0; i < numberOfAllSeats; i++) 
+                for (int i = 0; i < numberOfAllSeats; i++)
                 {
                     // initial
                     Ticket newTicket = new Ticket()
@@ -374,7 +376,7 @@ namespace AvioCarBackend.Controllers
                         newTicket.CardType = CardType.BUSINESS_CLASS;
                         newTicket.TicketPrice = double.Parse(model.BusinessClassPrice);
                     }
-                    else 
+                    else
                     {
                         // add economic class
                         newTicket.CardType = CardType.ECONOMIC_CLASS;
@@ -398,6 +400,60 @@ namespace AvioCarBackend.Controllers
             {
                 return BadRequest("Add seact configuration is unsuccessffully.Server not found selected flight.");
             }
+        }
+        #endregion
+        #region 11 - Metoda za ucitavanje destinacija odredjene aviokompanije
+        [HttpGet]
+        [Route("GetDestinations/{airlineID}")]
+        public IActionResult GetDestinations(string airlineID)
+        {
+            var destinations = _context.Destinations.Include(d => d.Airline);
+            if (destinations == null) 
+            {
+                return NotFound("Currentlly this airline not have any destinations.");
+            }
+
+            var result = new List<Destination>();
+            foreach (var dest in destinations) 
+            {
+                if (dest.Airline.AirlineID.Equals(int.Parse(airlineID))) 
+                {
+                    result.Add(dest);
+                }
+            }
+
+            if (result.Count == 0) 
+            {
+                return NotFound("Currentlly this airline not have any destinations.");
+            }
+            return Ok(result);
+        }
+        #endregion
+        #region 12 - Metoda za ucitavanje letova odredjene aviokompanije
+        [HttpGet]
+        [Route("GetAirlineFlights/{airlineID}")]
+        public IActionResult GetAirlineFlights(string airlineID) 
+        {
+            var flights = _context.Flights.Include(d => d.Airline);
+            if (flights == null)
+            {
+                return NotFound("Currentlly this airline not have any flight.");
+            }
+
+            var result = new List<Flight>();
+            foreach (var flight in flights)
+            {
+                if (flight.Airline.AirlineID.Equals(int.Parse(airlineID)))
+                {
+                    result.Add(flight);
+                }
+            }
+
+            if (result.Count == 0)
+            {
+                return NotFound("Currentlly this airline not have any flight.");
+            }
+            return Ok(result);
         }
         #endregion
     }
