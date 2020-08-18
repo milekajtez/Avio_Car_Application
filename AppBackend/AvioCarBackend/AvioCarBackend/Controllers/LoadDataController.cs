@@ -493,7 +493,7 @@ namespace AvioCarBackend.Controllers
             return destinations;
         }
         #endregion
-        #region 15 - Metoda za menjanje destinacije
+        #region 15 - Metoda za izmenu destinacije
         [HttpPut]
         [Route("ChangeDestination")]
         public async Task<Object> ChangeDestination(DestinationModel model)
@@ -623,6 +623,42 @@ namespace AvioCarBackend.Controllers
                     {
                         throw e;
                     }
+                }
+            }
+        }
+        #endregion
+        #region 18 - Metoda za izmenu osnovnih podataka aviokompanije
+        [HttpPut]
+        [Route("ChangeAirlineMainInfo/{airlineID}")]
+        public async Task<Object> ChangeAirlineMainInfo(string airlineID, NewModel model) 
+        {
+            var resultFind = await _context.Airlines.FindAsync(int.Parse(airlineID));
+            if (resultFind == null) 
+            {
+                return NotFound();
+            }
+
+            if (model.Name.Trim().Equals("") && model.Address.Trim().Equals("") && model.PromotionDescription.Trim().Equals("")
+                && model.PriceList.Trim().Equals(""))
+            {
+                return NotFound("You not entered any new data.");
+            }
+            else 
+            {
+                resultFind.AirlineName = model.Name == null || model.Name.Trim().Equals("") ? resultFind.AirlineName : model.Name;
+                resultFind.AirlineAddress = model.Address == null || model.Address.Trim().Equals("") ? resultFind.AirlineAddress : model.Address;
+                resultFind.AirlinePromotionDescription = model.PromotionDescription == null || model.PromotionDescription.Trim().Equals("") ? resultFind.AirlinePromotionDescription : model.PromotionDescription;
+                resultFind.AirlinePriceList = model.PriceList == null || model.PriceList.Trim().Equals("") ? resultFind.AirlinePriceList : model.PriceList;
+
+                try
+                {
+                    _context.Airlines.Update(resultFind);
+                    _context.SaveChanges();
+                    return Ok();
+                }
+                catch (Exception e)
+                {
+                    throw e;
                 }
             }
         }

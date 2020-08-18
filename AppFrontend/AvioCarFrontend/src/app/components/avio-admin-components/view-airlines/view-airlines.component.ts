@@ -238,4 +238,31 @@ export class ViewAirlinesComponent implements OnInit {
     this.laguageWeight = flight.laguageWeight;
   }
 
+
+  airlineID: string;
+  viewAirlineID(airline: any){
+    this.airlineID = airline.airlineID;
+  }
+
+  // metoda za izmenu glavnih informacija aviokompanije
+  changeAirlineMainInfo(){
+    this.loadService.changeMainInfo(this.airlineID).subscribe(
+      (res: any) => {
+        this.loadService.changeAirlineMainInfo.reset();
+        this.airlines  = [];
+        this.loadInitializeData();
+        alert("Change succesfully.");
+        
+      },
+      err => {
+        if(err.error === "You not entered any new data."){
+          alert("You not entered any new data.");
+        }
+        else{
+          alert("Unknown error.");
+        }
+      }
+    );
+  }
+
 }

@@ -80,6 +80,13 @@ export class LoadDataService {
     LugageWeight: ['', Validators.pattern("[0-9]+")]
   });
 
+  changeAirlineMainInfo = this.fb.group({
+    Name: [''],
+    Address: [''],
+    PromotionDescription: [''],
+    Pricelist: ['']
+  });
+
 
   // metoda za proveru identicnosti sifri
   compareNewPasswords(fb: FormGroup) {
@@ -193,6 +200,7 @@ export class LoadDataService {
     return this.http.put(this.BaseURI + '/LoadData/ChangeDestination/', body);
   }
 
+  // metoda za imenu leta
   changeFlight(){
     var body = {
       AirlineID: this.changeFlightForm.value.Flight,
@@ -212,5 +220,17 @@ export class LoadDataService {
     // klasu na backecu koja ima AirlineID..pa da ne pravim novi klasu
 
     return this.http.put(this.BaseURI + '/LoadData/ChangeFlight/', body);
+  }
+
+  //metoda za imenu osnovnih informacija aviokompanije
+  changeMainInfo(airlineID: string){
+    var body = {
+      Name: this.changeAirlineMainInfo.value.Name,
+      Address: this.changeAirlineMainInfo.value.Address,
+      PromotionDescription: this.changeAirlineMainInfo.value.PromotionDescription,
+      PriceList: this.changeAirlineMainInfo.value.Pricelist
+    }
+
+    return this.http.put(this.BaseURI + '/LoadData/ChangeAirlineMainInfo/' + airlineID, body);
   }
 }
