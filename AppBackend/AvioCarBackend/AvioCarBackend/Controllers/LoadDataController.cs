@@ -129,7 +129,6 @@ namespace AvioCarBackend.Controllers
         #endregion
         #region 4 - Metoda za menjanje podataka administratora na onsovu username-a
         // TO DO
-        //ChangeAdminProfile
         [HttpPut]
         [Route("ChangeAdminProfile")]
         public async Task<Object> ChangeAdminProfile(AvioAdminProfileModel model)
@@ -495,6 +494,44 @@ namespace AvioCarBackend.Controllers
             return destinations;
         }
         #endregion
+        #region 15 - Metoda za menjanje destinacije
+        [HttpPut]
+        [Route("ChangeDestination")]
+        public async Task<Object> ChangeDestination(DestinationModel model) 
+        {
+            var resultFind = await _context.Destinations.FindAsync(int.Parse(model.AirlineID));
+            if (resultFind == null) 
+            {
+                return NotFound();
+            }
+
+            if (model.AirportName == null && model.City == null && model.Country == null)
+            {
+                return NotFound("Change unsccessfully.All field are empty.");
+            }
+
+            if (model.AirportName.Trim().Equals("") && model.City.Trim().Equals("") && model.Country.Trim().Equals("")) 
+            {
+                return NotFound("Change unsccessfully.All field are empty.");
+            }
+
+            resultFind.AirportName = model.AirportName == null || model.AirportName.Trim().Equals("") ? resultFind.AirportName : model.AirportName;
+            resultFind.City = model.City == null || model.City.Trim().Equals("") ? resultFind.City : model.City;
+            resultFind.Country = model.Country == null || model.Country.Trim().Equals("") ? resultFind.Country : model.Country;
+
+            try
+            {
+                _context.Destinations.Update(resultFind);
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        #endregion
     }
 }
+
 

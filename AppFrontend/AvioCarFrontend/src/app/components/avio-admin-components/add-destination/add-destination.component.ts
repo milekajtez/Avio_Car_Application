@@ -79,4 +79,24 @@ export class AddDestinationComponent implements OnInit {
     );
   }
 
+  changeSubmit(){
+    this.service.changeDestination(this.service.changeDestinationForm.value.Destination).subscribe(
+      (res: any) => {
+        alert("Successfull chage destination.");
+        this.destinations = [];
+        this.loadDestinationData();
+        this.service.changeDestinationForm.reset();
+      },
+      err => {
+        if(err.error){
+          alert("Change unsccessfully.All field are empty.");
+        }
+        else{
+          alert("Unknown error.");
+        }
+        
+      }
+    );
+  }
+
 }

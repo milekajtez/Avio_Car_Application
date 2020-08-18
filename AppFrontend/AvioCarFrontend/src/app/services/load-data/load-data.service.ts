@@ -55,6 +55,13 @@ export class LoadDataService {
     Destination: ['', Validators.required]
   });
 
+  changeDestinationForm = this.fb.group({
+    Destination: ['', Validators.required],
+    AirportName: [''],
+    City: [''],
+    Country: ['']
+  });
+
 
   // metoda za proveru identicnosti sifri
   compareNewPasswords(fb: FormGroup) {
@@ -149,5 +156,16 @@ export class LoadDataService {
   // metoda za brisanje destinacije
   deleteDestination(airportID: string){
     return this.http.delete(this.BaseURI + '/LoadData/DeleteDestination/' + airportID);
+  }
+
+  changeDestination(destinationID: string){
+    var body = {
+      AirlineID: this.changeDestinationForm.value.Destination,
+      AirportName: this.changeDestinationForm.value.AirportName,
+      City: this.changeDestinationForm.value.City,
+      Country: this.changeDestinationForm.value.Country
+    }
+
+    return this.http.put(this.BaseURI + '/LoadData/ChangeDestination/', body);
   }
 }

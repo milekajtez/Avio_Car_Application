@@ -44,7 +44,7 @@ namespace AvioCarBackend.Controllers
             _mailSettings = mailSettings.Value;
             _context = context;
         }
-        
+
         #region 1 - Metoda za registraciju novog korisnika
         [HttpPost]
         [Route("Register")]
@@ -52,7 +52,7 @@ namespace AvioCarBackend.Controllers
         public async Task<Object> PostApplicationUser(RegisteredUserModel model)
         {
             // provera da korisnik ne unese username glavnog admina i sprecim da imam vise korisnika sa istim username-om
-            if (model.UserName.Equals("mainAdmin") || await _userManager.FindByNameAsync(model.UserName) != null) 
+            if (model.UserName.Equals("mainAdmin") || await _userManager.FindByNameAsync(model.UserName) != null)
             {
                 // jedinstveni identifikator korisnika je jmbg, ali ce mi biti dosta zgodnije da web aplikacija podrzava
                 // korisnike koji svi imaju razlicit username
@@ -60,7 +60,7 @@ namespace AvioCarBackend.Controllers
             }
 
             var resultFind = await _userManager.FindByIdAsync(model.Jmbg.ToString());
-            if (resultFind == null) 
+            if (resultFind == null)
             {
                 var registeredUser = new RegisteredUser()
                 {
@@ -120,7 +120,7 @@ namespace AvioCarBackend.Controllers
         [HttpPost]
         [Route("RegisterConfirm")]
         //POST : /api/ApplicationUser/RegisterConfirm
-        public async Task<Object> PostConfirmUser(RegisteredUserModel model) 
+        public async Task<Object> PostConfirmUser(RegisteredUserModel model)
         {
             var resultFind = await _userManager.FindByIdAsync(model.Jmbg.ToString());
             if (resultFind != null)
@@ -177,7 +177,7 @@ namespace AvioCarBackend.Controllers
             {
                 return BadRequest(new { message = "Please go to your mail accont and confirm you registration." });
             }
-            else 
+            else
             {
                 // ucitavanje svih claim-ove za trenutno korisnika koji se loguje
                 var claims = await _userManager.GetClaimsAsync(user);
@@ -231,7 +231,7 @@ namespace AvioCarBackend.Controllers
         }
         #endregion
         #region 6 - Metoda za validaciju tokena
-        public bool VerifyToken(string providerToken) 
+        public bool VerifyToken(string providerToken)
         {
             var httpClient = new HttpClient();
             var requestUri = new Uri(string.Format(GoogleApiTokenInfoUrl, providerToken));
@@ -242,7 +242,7 @@ namespace AvioCarBackend.Controllers
             {
                 httpResponseMessage = httpClient.GetAsync(requestUri).Result;
             }
-            catch 
+            catch
             {
                 return false;
             }
@@ -262,7 +262,7 @@ namespace AvioCarBackend.Controllers
         [HttpPost]
         [Route("AdminRegistration")]
         //POST : /api/ApplicationUser/AdminRegistration
-        public async Task<Object> PostRegistrationOfAdministrator(AdminModel model) 
+        public async Task<Object> PostRegistrationOfAdministrator(AdminModel model)
         {
             // provera da korisnik ne unese username glavnog admina i sprecim da imam vise korisnika sa istim username-om
             if (model.Username.Equals("mainAdmin") || await _userManager.FindByNameAsync(model.Username) != null)
@@ -273,7 +273,7 @@ namespace AvioCarBackend.Controllers
             }
 
             var resultFind = await _userManager.FindByIdAsync(model.Jmbg.ToString());
-            if (resultFind == null) 
+            if (resultFind == null)
             {
                 var registeredUser = new RegisteredUser()
                 {
@@ -315,7 +315,7 @@ namespace AvioCarBackend.Controllers
         [HttpPost]
         [Route("ChangeAdminPassword")]
         //POST : /api/ApplicationUser/ChangeAdminPassword
-        public async Task<Object> PostFirstLoginChangePass(LoginModel model) 
+        public async Task<Object> PostFirstLoginChangePass(LoginModel model)
         {
             var resultFind = await _userManager.FindByIdAsync(model.Id);
             if (resultFind != null)
@@ -328,12 +328,12 @@ namespace AvioCarBackend.Controllers
                     await _userManager.UpdateAsync(resultFind);
                     return Ok(result);
                 }
-                catch (Exception e) 
+                catch (Exception e)
                 {
                     throw e;
                 }
             }
-            else 
+            else
             {
                 return BadRequest(new { message = "Server didn't find the logged admin." });
             }
@@ -343,12 +343,12 @@ namespace AvioCarBackend.Controllers
         [HttpPost]
         [Route("AirlineRegistration")]
         //POST : /api/ApplicationUser/AirlineRegistration
-        public async Task<Object> AirlineRegistration(NewModel model) 
+        public async Task<Object> AirlineRegistration(NewModel model)
         {
             var airlines = _context.Airlines;
-            foreach (var air in airlines) 
+            foreach (var air in airlines)
             {
-                if (model.Name.Equals(air.AirlineName)) 
+                if (model.Name.Equals(air.AirlineName))
                 {
                     return BadRequest("Please enter a different airline name.");
                 }
@@ -371,7 +371,7 @@ namespace AvioCarBackend.Controllers
                 _context.SaveChanges();
                 return Ok();
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 throw e;
             }
@@ -381,7 +381,7 @@ namespace AvioCarBackend.Controllers
         [HttpPost]
         [Route("RentACarRegistration")]
         //POST : /api/ApplicationUser/RentACarRegistration
-        public async Task<Object> RentACarRegistration(NewModel model) 
+        public async Task<Object> RentACarRegistration(NewModel model)
         {
             var carServices = _context.RentACarServices;
             foreach (var service in carServices)
@@ -392,7 +392,7 @@ namespace AvioCarBackend.Controllers
                 }
             }
 
-            RentACarService rentACarService = new RentACarService() 
+            RentACarService rentACarService = new RentACarService()
             {
                 CarServiceName = model.Name,
                 CarServiceAddress = model.Address,
