@@ -1,0 +1,8 @@
+.text-block{
+    position: relative;
+    background-color: gray;
+    color: white;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}

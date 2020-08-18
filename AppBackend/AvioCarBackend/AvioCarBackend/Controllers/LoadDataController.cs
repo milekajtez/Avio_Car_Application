@@ -456,6 +456,45 @@ namespace AvioCarBackend.Controllers
             return Ok(result);
         }
         #endregion
+        #region 13 - Metoda za ucitavanje svih destinacija
+        //GetDestination
+        [HttpGet]
+        [Route("GetDestination")]
+        public IActionResult GetDestination()
+        {
+            try
+            {
+                var destinations = _context.Destinations;
+                if (destinations == null)
+                {
+                    return NotFound();
+                }
+                return Ok(destinations);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        #endregion
+        #region 14 - Metoda za brisanje destinacije
+        //DeleteDestination
+        [HttpDelete]
+        [Route("DeleteDestination/{airportID}")]
+        public async Task<ActionResult<Destination>> DeleteDestination(string airportID) 
+        {
+            var destinations = await _context.Destinations.FindAsync(int.Parse(airportID));
+            if (destinations == null) 
+            {
+                return NotFound();
+            }
+
+            _context.Destinations.Remove(destinations);
+            await _context.SaveChangesAsync();
+
+            return destinations;
+        }
+        #endregion
     }
 }
 

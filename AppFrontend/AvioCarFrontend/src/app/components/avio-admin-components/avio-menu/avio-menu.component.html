@@ -6,10 +6,11 @@
             <a class="btn" href="http://localhost:4200/avioAdminHomePage/{{username}}" type="img"><img src="../../../../assets/images/LogoFinal2.png" height="55"></a>
         </div>
         <div>
-            <a class="fa fa-map-marked-alt fa-lg" style="color:white" type="button" (click)="methodOption1()"> Add Destination</a>
-            <a class="fa fa-paper-plane fa-lg" type="button" style="margin-left :25px; color: white;" (click)="methodOption2()"> Add Flight</a>
-            <a class="fa fa-ticket-alt fa-lg" type="button" style="margin-left :25px; color: white;" (click)="methodOption5()"> Seats Configuration</a>
+            <a class="fa fa-map-marked-alt fa-lg" style="color:white" type="button" (click)="methodOption1()"> Destination Configuration</a>
+            <a class="fa fa-paper-plane fa-lg" type="button" style="margin-left :25px; color: white;" (click)="methodOption2()"> Flight Configuration</a>
+            <a class="fa fa-ticket-alt fa-lg" type="button" style="margin-left :25px; color: white;" (click)="methodOption5()"> Seats configuration</a>
             <a class="fa fa-plane fa-lg" type="button" style="margin-left :25px; color: white;" (click)="methodOption3()"> View Airlines</a>
+            <a class="fas fa-cog fa-lg" type="button" style="margin-left :25px; color: white;" (click)="methodOption6()"> Modify Flight Seats</a>
         </div>
     </div>
     <div class="nav-item dropdown">
@@ -26,3 +27,4 @@
 <div *ngIf="defaultComponent===3"><app-view-airlines></app-view-airlines></div>
 <div *ngIf="defaultComponent===4"><app-avio-profile></app-avio-profile></div>
 <div *ngIf="defaultComponent===5"><app-seat-configuration></app-seat-configuration></div>
+<div *ngIf="defaultComponent===6"><app-seats-modify></app-seats-modify></div>

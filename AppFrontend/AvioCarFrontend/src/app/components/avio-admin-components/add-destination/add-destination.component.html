@@ -1,51 +1,76 @@
 <div style="background-color: powderblue;">
     <div class="text-block">
-        <h2>ADD DESTINATION</h2>
+        <h2>DESTINATION CONFIGURATION</h2>
     </div>
-
-    <form [formGroup]="service.destinationForm" (ngSubmit)="onSubmit()" style="margin-left: 35%; margin-right: 35%; margin-top: 2%;">
+    <div style="display: flex;">
+        <span style="width: 30%; margin-top: 2%; margin-left: 2%;">
+            <h3 style="text-align: center;"> ADD DESTINATION</h3>
+            <form [formGroup]="service.destinationForm" (ngSubmit)="onSubmit()">
         
-        <!--airline-->
-        <div class="form-group">
-            <label>Airline</label>
-            <select name="airlines" id="airlines" class="form-control" formControlName="Airline">
-                <option *ngFor="let airline of airlines" value="{{airline.airlineID}}">{{airline.airlineName}}<b>/</b>{{airline.airlineAddress}}</option>
-            </select>
-            <label class="text-danger"
-            *ngIf="service.destinationForm.get('Airline').touched && service.destinationForm.get('Airline').errors?.required">
-            This field is mandatory.</label>
-        </div>
+                <!--airline-->
+                <div class="form-group">
+                    <label>Airline</label>
+                    <select name="airlines" id="airlines" class="form-control" formControlName="Airline">
+                        <option *ngFor="let airline of airlines" value="{{airline.airlineID}}">{{airline.airlineName}}<b>/</b>{{airline.airlineAddress}}</option>
+                    </select>
+                    <label class="text-danger"
+                    *ngIf="service.destinationForm.get('Airline').touched && service.destinationForm.get('Airline').errors?.required">
+                    This field is mandatory.</label>
+                </div>
+        
+                <!--airport name-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="airportname" formControlName="AirportName" placeholder="AirportName">
+                    <label class="text-danger"
+                      *ngIf="service.destinationForm.get('AirportName').touched && service.destinationForm.get('AirportName').errors?.required">
+                      This field is mandatory.
+                    </label>
+                </div>
+        
+                <!--city-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="city" formControlName="City" placeholder="City">
+                    <label class="text-danger"
+                      *ngIf="service.destinationForm.get('City').touched && service.destinationForm.get('City').errors?.required">
+                      This field is mandatory.
+                    </label>
+                </div>
+        
+                <!--country-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="country" formControlName="Country" placeholder="Country">
+                    <label class="text-danger"
+                      *ngIf="service.destinationForm.get('Country').touched && service.destinationForm.get('Country').errors?.required">
+                      This field is mandatory.
+                    </label>
+                </div>
+        
+                <div class="form-group text-center">
+                    <button [disabled]="!service.destinationForm.valid" class="btn btn-success" type="submit">Add Destination</button>
+                    <p>&nbsp;</p>
+                </div>
+            </form>
+            <hr>
+            <!--brisanje destinacije-->
+            <h3 style="text-align: center;"> DELETE DESTINATION</h3>
+            <form [formGroup]="service.deleteDestinationForm" (ngSubmit)="deleteSubmit()" autocomplete="off">
 
-        <!--airport name-->
-        <div class="form-group">
-            <input type="text" class="form-control" id="airportname" formControlName="AirportName" placeholder="AirportName">
-            <label class="text-danger"
-              *ngIf="service.destinationForm.get('AirportName').touched && service.destinationForm.get('AirportName').errors?.required">
-              This field is mandatory.
-            </label>
-        </div>
+                <!--destination-->
+                <div class="form-group">
+                    <label>Destination</label>
+                    <select name="destinations" id="destinations" class="form-control" formControlName="Destination">
+                        <option *ngFor="let destination of destinations" value="{{destination.destinationID}}">{{destination.airportName}}<b></b>/{{destination.city}}/{{destination.country}}</option>   
+                    </select>
+                    <label class="text-danger"
+                        *ngIf="service.deleteDestinationForm.get('Destination').touched && service.deleteDestinationForm.get('Destination').errors?.required">
+                        This field is mandatory.</label>
+                </div>
 
-        <!--city-->
-        <div class="form-group">
-            <input type="text" class="form-control" id="city" formControlName="City" placeholder="City">
-            <label class="text-danger"
-              *ngIf="service.destinationForm.get('City').touched && service.destinationForm.get('City').errors?.required">
-              This field is mandatory.
-            </label>
-        </div>
-
-        <!--country-->
-        <div class="form-group">
-            <input type="text" class="form-control" id="country" formControlName="Country" placeholder="Country">
-            <label class="text-danger"
-              *ngIf="service.destinationForm.get('Country').touched && service.destinationForm.get('Country').errors?.required">
-              This field is mandatory.
-            </label>
-        </div>
-
-        <div class="form-group text-center">
-            <button [disabled]="!service.destinationForm.valid" class="btn btn-success" type="submit">Add Destination</button>
-            <p>&nbsp;</p>
-        </div>
-    </form>
+                <div class="form-group text-center">
+                    <button [disabled]="!service.deleteDestinationForm.valid" class="btn btn-success" type="submit">Delete Destination</button>
+                    <p>&nbsp;</p>
+                </div>
+            </form>
+        </span>
+    </div>
 </div>

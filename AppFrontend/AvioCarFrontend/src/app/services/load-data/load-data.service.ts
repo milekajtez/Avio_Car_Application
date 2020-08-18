@@ -51,6 +51,10 @@ export class LoadDataService {
     Country: ['', Validators.required]
   });
 
+  deleteDestinationForm = this.fb.group({
+    Destination: ['', Validators.required]
+  });
+
 
   // metoda za proveru identicnosti sifri
   compareNewPasswords(fb: FormGroup) {
@@ -127,7 +131,12 @@ export class LoadDataService {
     return this.http.get(this.BaseURI + '/LoadData/GetFlights');
   }
 
-  // metoda za ucitavanje destinacija
+  // metoda za ucitavanje svih destinacija
+  loadAllDestinations(){
+    return this.http.get(this.BaseURI + '/LoadData/GetDestination');
+  }
+
+  // metoda za ucitavanje destinacija odredjene aviokompanije
   loadDestinations(airlineID: string){
     return this.http.get(this.BaseURI + '/LoadData/GetDestinations/' + airlineID);
   }
@@ -135,5 +144,10 @@ export class LoadDataService {
   // metoda za ucitavanje letova odredjene aviokompanije
   loadAirlineFlights(airlineID: string){
     return this.http.get(this.BaseURI + '/LoadData/GetAirlineFlights/' + airlineID);
+  }
+
+  // metoda za brisanje destinacije
+  deleteDestination(airportID: string){
+    return this.http.delete(this.BaseURI + '/LoadData/DeleteDestination/' + airportID);
   }
 }

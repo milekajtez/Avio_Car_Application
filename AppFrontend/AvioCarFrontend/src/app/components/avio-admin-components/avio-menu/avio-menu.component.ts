@@ -45,6 +45,10 @@ export class AvioMenuComponent implements OnInit {
     this.defaultComponent = 5;
   }
 
+  methodOption6(){
+    this.defaultComponent = 6;
+  }
+
   logout(): void {
     localStorage.removeItem("token");
   }

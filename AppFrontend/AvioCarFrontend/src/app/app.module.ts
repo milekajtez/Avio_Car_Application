@@ -26,6 +26,7 @@ import { AddFlightComponent } from './components/avio-admin-components/add-fligh
 import { ViewAirlinesComponent } from './components/avio-admin-components/view-airlines/view-airlines.component';
 import { AvioProfileComponent } from './components/avio-admin-components/avio-profile/avio-profile.component';
 import { SeatConfigurationComponent } from './components/avio-admin-components/seat-configuration/seat-configuration.component';
+import { SeatsModifyComponent } from './components/avio-admin-components/seats-modify/seats-modify.component';
 
 let config = new AuthServiceConfig([
   {
@@ -59,6 +60,7 @@ export function provideConfig()
     ViewAirlinesComponent,
     AvioProfileComponent,
     SeatConfigurationComponent,
+    SeatsModifyComponent,
   ],
   imports: [
     BrowserModule,
