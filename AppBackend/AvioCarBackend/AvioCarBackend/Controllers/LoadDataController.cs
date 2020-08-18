@@ -407,21 +407,21 @@ namespace AvioCarBackend.Controllers
         public IActionResult GetDestinations(string airlineID)
         {
             var destinations = _context.Destinations.Include(d => d.Airline);
-            if (destinations == null) 
+            if (destinations == null)
             {
                 return NotFound("Currentlly this airline not have any destinations.");
             }
 
             var result = new List<Destination>();
-            foreach (var dest in destinations) 
+            foreach (var dest in destinations)
             {
-                if (dest.Airline.AirlineID.Equals(int.Parse(airlineID))) 
+                if (dest.Airline.AirlineID.Equals(int.Parse(airlineID)))
                 {
                     result.Add(dest);
                 }
             }
 
-            if (result.Count == 0) 
+            if (result.Count == 0)
             {
                 return NotFound("Currentlly this airline not have any destinations.");
             }
@@ -431,7 +431,7 @@ namespace AvioCarBackend.Controllers
         #region 12 - Metoda za ucitavanje letova odredjene aviokompanije
         [HttpGet]
         [Route("GetAirlineFlights/{airlineID}")]
-        public IActionResult GetAirlineFlights(string airlineID) 
+        public IActionResult GetAirlineFlights(string airlineID)
         {
             var flights = _context.Flights.Include(d => d.Airline);
             if (flights == null)
@@ -477,13 +477,12 @@ namespace AvioCarBackend.Controllers
         }
         #endregion
         #region 14 - Metoda za brisanje destinacije
-        //DeleteDestination
         [HttpDelete]
         [Route("DeleteDestination/{airportID}")]
-        public async Task<ActionResult<Destination>> DeleteDestination(string airportID) 
+        public async Task<ActionResult<Destination>> DeleteDestination(string airportID)
         {
             var destinations = await _context.Destinations.FindAsync(int.Parse(airportID));
-            if (destinations == null) 
+            if (destinations == null)
             {
                 return NotFound();
             }
@@ -497,10 +496,10 @@ namespace AvioCarBackend.Controllers
         #region 15 - Metoda za menjanje destinacije
         [HttpPut]
         [Route("ChangeDestination")]
-        public async Task<Object> ChangeDestination(DestinationModel model) 
+        public async Task<Object> ChangeDestination(DestinationModel model)
         {
             var resultFind = await _context.Destinations.FindAsync(int.Parse(model.AirlineID));
-            if (resultFind == null) 
+            if (resultFind == null)
             {
                 return NotFound();
             }
@@ -510,7 +509,7 @@ namespace AvioCarBackend.Controllers
                 return NotFound("Change unsccessfully.All field are empty.");
             }
 
-            if (model.AirportName.Trim().Equals("") && model.City.Trim().Equals("") && model.Country.Trim().Equals("")) 
+            if (model.AirportName.Trim().Equals("") && model.City.Trim().Equals("") && model.Country.Trim().Equals(""))
             {
                 return NotFound("Change unsccessfully.All field are empty.");
             }
@@ -528,6 +527,103 @@ namespace AvioCarBackend.Controllers
             catch (Exception e)
             {
                 throw e;
+            }
+        }
+        #endregion
+        #region 16 - Metoda za brisanje leta
+        //DeleteFlight
+        [HttpDelete]
+        [Route("DeleteFlight/{flightID}")]
+        public async Task<ActionResult<Flight>> DeleteFlight(string flightID)
+        {
+            var flights = await _context.Flights.FindAsync(int.Parse(flightID));
+            if (flights == null)
+            {
+                return NotFound();
+            }
+
+            _context.Flights.Remove(flights);
+            await _context.SaveChangesAsync();
+
+            return flights;
+        }
+        #endregion
+        #region 17 - Metoda za izmenu leta
+        //ChangeFlight
+        [HttpPut]
+        [Route("ChangeFlight")]
+        public async Task<Object> ChangeFlight(FlightModel model)
+        {
+            var resultFind = await _context.Flights.FindAsync(int.Parse(model.AirlineID));
+            if (resultFind == null)
+            {
+                return NotFound();
+            }
+
+            // provera da li korisnik nista nije uneo
+            if (model.StartTime.Trim().Equals("") && model.EndTime.Trim().Equals("") && model.StartLocation.Trim().Equals("") && 
+                model.EndLocation.Trim().Equals("") && model.FlightLength.Trim().Equals("") && model.AdditionalInformation.Trim().Equals("") 
+                && model.NumberOfTransfers.Trim().Equals("") && model.AllTransfers.Trim().Equals("") && 
+                model.PlaneName.Trim().Equals("") && model.LugageWeight.Trim().Equals(""))
+            {
+                return BadRequest("Change flight unsuccessfully. You not enter any new informations.");
+            }
+            else 
+            {
+                // da li je uneo samo jedan datum
+                if ((model.StartTime.Trim().Equals("") && !model.EndTime.Trim().Equals("")) ||
+                    (!model.StartTime.Trim().Equals("") && model.EndTime.Trim().Equals("")))
+                {
+                    return BadRequest("If you insert one time, you must isert and another.Change unccessfully.");
+                }
+                else 
+                {
+                    // ako je uneo oba datuma
+                    if (!model.StartTime.Trim().Equals("") && !model.StartTime.Trim().Equals("")) 
+                    {
+                        DateTime start = DateTime.Parse(model.StartTime);
+                        DateTime end = DateTime.Parse(model.EndTime);
+                        int resultTime = DateTime.Compare(start, end);
+
+                        // da li je hronoloski dobro uneo datume
+                        if (resultTime == 0)
+                        {
+                            return BadRequest("Change flight is unsuccessffully. You entered same time for start and end od flight.");
+                        }
+                        else if (resultTime > 0)
+                        {
+                            return BadRequest("Change flight is unsuccessffully. Time of flight end is earlier than time of flight start.");
+                        }
+                        else
+                        {
+                            resultFind.FlightTime = DateTime.Parse(model.EndTime).Subtract(DateTime.Parse(model.StartTime)).TotalHours;
+                        }
+                    }
+
+                    resultFind.StartTime = model.StartTime == null || model.StartTime.Trim().Equals("") ? resultFind.StartTime : DateTime.Parse(model.StartTime);
+                    resultFind.EndTime = model.EndTime == null || model.EndTime.Trim().Equals("") ? resultFind.EndTime : DateTime.Parse(model.EndTime);
+                    resultFind.StartLocation = model.StartLocation == null || model.StartLocation.Trim().Equals("") ? resultFind.StartLocation : model.StartLocation;
+                    resultFind.EndLocation = model.EndLocation == null || model.EndLocation.Trim().Equals("") ? resultFind.EndLocation : model.EndLocation;
+                    resultFind.FlightLength = model.FlightLength == null || model.FlightLength.Trim().Equals("") ? resultFind.FlightLength : double.Parse(model.FlightLength);
+                    resultFind.FlightPrice = resultFind.FlightPrice;                   // ovo polje se ne menja
+                    resultFind.NumberOfFlightGrades = resultFind.NumberOfFlightGrades;  // ovo polje se ne menja
+                    resultFind.AdditionalInformation = model.AdditionalInformation == null || model.AdditionalInformation.Trim().Equals("") ? resultFind.AdditionalInformation : model.AdditionalInformation;
+                    resultFind.NumberOfTransfers = model.NumberOfTransfers == null || model.NumberOfTransfers.Trim().Equals("") ? resultFind.NumberOfTransfers : int.Parse(model.NumberOfTransfers);
+                    resultFind.AllTransfers = model.AllTransfers == null || model.AllTransfers.Trim().Equals("") ? resultFind.AllTransfers : model.AllTransfers;
+                    resultFind.PlaneName = model.PlaneName == null || model.PlaneName.Trim().Equals("") ? resultFind.PlaneName : model.PlaneName;
+                    resultFind.LugageWeight = model.LugageWeight == null || model.LugageWeight.Trim().Equals("") ? resultFind.LugageWeight : double.Parse(model.LugageWeight);
+
+                    try
+                    {
+                        _context.Flights.Update(resultFind);
+                        _context.SaveChanges();
+                        return Ok();
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                }
             }
         }
         #endregion

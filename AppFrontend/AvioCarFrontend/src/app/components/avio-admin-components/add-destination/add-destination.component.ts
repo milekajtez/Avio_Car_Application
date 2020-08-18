@@ -80,7 +80,7 @@ export class AddDestinationComponent implements OnInit {
   }
 
   changeSubmit(){
-    this.service.changeDestination(this.service.changeDestinationForm.value.Destination).subscribe(
+    this.service.changeDestination().subscribe(
       (res: any) => {
         alert("Successfull chage destination.");
         this.destinations = [];

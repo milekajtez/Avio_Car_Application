@@ -2,128 +2,270 @@
     <div class="text-block">
         <h2>FLIGHT CONFIGURATION</h2>
     </div>
-
-    <form [formGroup]="service.newFlightForm" (ngSubmit)="onSubmit()" style="margin-left: 35%; margin-right: 35%; margin-top: 2%;">
+    <div style="display: flex;">
+        <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
+            <h3 style="text-align: center;"> ADD FLIGHT</h3>
+            <form [formGroup]="service.newFlightForm" (ngSubmit)="onSubmit()">
         
-        <!--start time-->
-        <div class="form-group">
-            <label>Start time</label>
-            <input type="datetime-local" id="starttime" name="starttime" class="form-control" formControlName="StartTime">
-            <label class="text-danger"
-                *ngIf="service.newFlightForm.get('StartTime').touched && service.newFlightForm.get('StartTime').errors?.required">
-                This field is mandatory.
-            </label>
-        </div>
-
-        <!--end time-->
-        <div class="form-group">
-            <label>End time</label>
-            <input type="datetime-local" id="endtime" name="endtime" class="form-control" formControlName="EndTime">
-            <label class="text-danger"
-                *ngIf="service.newFlightForm.get('EndTime').touched && service.newFlightForm.get('EndTime').errors?.required">
-                This field is mandatory.
-            </label>
-        </div>
-
-        <!--start location-->
-        <div class="form-group">
-            <input type="text" class="form-control" id="startlocation" formControlName="StartLocation" placeholder="StartLocation">
-            <label class="text-danger"
-                *ngIf="service.newFlightForm.get('StartLocation').touched && service.newFlightForm.get('StartLocation').errors?.required">
-                This field is mandatory.
-            </label>
-        </div>
-
-        <!--end location-->
-        <div class="form-group">
-            <input type="text" class="form-control" id="endlocation" formControlName="EndLocation" placeholder="EndLocation">
-            <label class="text-danger"
-                *ngIf="service.newFlightForm.get('EndLocation').touched && service.newFlightForm.get('EndLocation').errors?.required">
-                This field is mandatory.
-            </label>
-        </div>
+                <!--start time-->
+                <div class="form-group">
+                    <label>Start time</label>
+                    <input type="datetime-local" id="starttime" name="starttime" class="form-control" formControlName="StartTime">
+                    <label class="text-danger"
+                        *ngIf="service.newFlightForm.get('StartTime').touched && service.newFlightForm.get('StartTime').errors?.required">
+                        This field is mandatory.
+                    </label>
+                </div>
         
-        <!--flight length-->
-        <div class="form-group">
-            <input type="text" class="form-control" id="flighttime" formControlName="FlightLength" placeholder="FlightLength(km)">
-            <label class="text-danger"
-                *ngIf="service.newFlightForm.get('FlightLength').touched && service.newFlightForm.get('FlightLength').errors?.required">
-                This field is mandatory.
-            </label>
-            <label class="text-danger"
-                *ngIf="service.newFlightForm.get('FlightLength').touched && service.newFlightForm.get('FlightLength').errors?.minlength && service.newFlightForm.get('FlightLength').errors?.maxlength">
-                Please insert a valid km.
-            </label>
-        </div>
+                <!--end time-->
+                <div class="form-group">
+                    <label>End time</label>
+                    <input type="datetime-local" id="endtime" name="endtime" class="form-control" formControlName="EndTime">
+                    <label class="text-danger"
+                        *ngIf="service.newFlightForm.get('EndTime').touched && service.newFlightForm.get('EndTime').errors?.required">
+                        This field is mandatory.
+                    </label>
+                </div>
+        
+                <!--start location-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="startlocation" formControlName="StartLocation" placeholder="StartLocation">
+                    <label class="text-danger"
+                        *ngIf="service.newFlightForm.get('StartLocation').touched && service.newFlightForm.get('StartLocation').errors?.required">
+                        This field is mandatory.
+                    </label>
+                </div>
+        
+                <!--end location-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="endlocation" formControlName="EndLocation" placeholder="EndLocation">
+                    <label class="text-danger"
+                        *ngIf="service.newFlightForm.get('EndLocation').touched && service.newFlightForm.get('EndLocation').errors?.required">
+                        This field is mandatory.
+                    </label>
+                </div>
+                
+                <!--flight length-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="flighttime" formControlName="FlightLength" placeholder="FlightLength(km)">
+                    <label class="text-danger"
+                        *ngIf="service.newFlightForm.get('FlightLength').touched && service.newFlightForm.get('FlightLength').errors?.required">
+                        This field is mandatory.
+                    </label>
+                    <label class="text-danger"
+                        *ngIf="service.newFlightForm.get('FlightLength').touched && service.newFlightForm.get('FlightLength').errors?.minlength && service.newFlightForm.get('FlightLength').errors?.maxlength">
+                        Please insert a valid km.
+                    </label>
+                </div>
+        
+                 <!--aditional information-->
+                 <div class="form-group">
+                    <textarea class="form-control" id="additionalinformation" formControlName="AdditionalInformation" placeholder="AdditionalInformation" rows="5" cols="50"></textarea>
+                    <label class="text-danger"
+                      *ngIf="service.newFlightForm.get('AdditionalInformation').touched && service.newFlightForm.get('AdditionalInformation').errors?.required">
+                      This field is mandatory.
+                    </label>
+                </div>
+        
+                <!--number od transfers-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="numberoftransfers" formControlName="NumberOfTransfers" placeholder="NumberOfTransfers">
+                    <label class="text-danger"
+                        *ngIf="service.newFlightForm.get('NumberOfTransfers').touched && service.newFlightForm.get('NumberOfTransfers').errors?.required">
+                        This field is mandatory.
+                    </label>
+                    <label class="text-danger"
+                        *ngIf="service.newFlightForm.get('NumberOfTransfers').touched && service.newFlightForm.get('NumberOfTransfers').errors?.minlength">
+                        Please insert a valid number.
+                    </label>
+                </div>
+        
+                <!--all transfers-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="alltransfers" formControlName="AllTransfers" placeholder="AllTransfers">
+                    <label>*example: "Beograd,Budapest,Berlin"</label><br>
+                    <label class="text-danger"
+                        *ngIf="service.newFlightForm.get('AllTransfers').touched && service.newFlightForm.get('AllTransfers').errors?.required">
+                        This field is mandatory.
+                    </label>
+                </div>
+        
+                <!--plane name-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="planename" formControlName="PlaneName" placeholder="PlaneName">
+                    <label class="text-danger"
+                        *ngIf="service.newFlightForm.get('PlaneName').touched && service.newFlightForm.get('PlaneName').errors?.required">
+                        This field is mandatory.
+                    </label>
+                </div>
+        
+                <!--lugage weight-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="lugageweight" formControlName="LugageWeight" placeholder="LugageWeight">
+                    <label class="text-danger"
+                        *ngIf="service.newFlightForm.get('LugageWeight').touched && service.newFlightForm.get('LugageWeight').errors?.required">
+                        This field is mandatory.
+                    </label>
+                    <label class="text-danger"
+                        *ngIf="service.newFlightForm.get('LugageWeight').touched && service.newFlightForm.get('LugageWeight').errors?.minlength">
+                        Please insert a valid number.
+                    </label>
+                </div>
+        
+                <!--airline-->
+                <div class="form-group">
+                    <label>Airline</label>
+                    <select name="airlines" id="airlines" class="form-control" formControlName="Airline">
+                        <option *ngFor="let airline of airlines" value="{{airline.airlineID}}">{{airline.airlineName}}<b>/</b>{{airline.airlineAddress}}</option>
+                    </select>
+                    <label class="text-danger"
+                    *ngIf="service.newFlightForm.get('Airline').touched && service.newFlightForm.get('Airline').errors?.required">
+                    This field is mandatory.</label>
+                </div>
+        
+                <div class="form-group text-center">
+                    <button [disabled]="!service.newFlightForm.valid" class="btn btn-success" type="submit">Add Flight</button>
+                    <p>&nbsp;</p>
+                </div>
+            </form>
+        </span>
 
-         <!--aditional information-->
-         <div class="form-group">
-            <textarea class="form-control" id="additionalinformation" formControlName="AdditionalInformation" placeholder="AdditionalInformation" rows="5" cols="50"></textarea>
-            <label class="text-danger"
-              *ngIf="service.newFlightForm.get('AdditionalInformation').touched && service.newFlightForm.get('AdditionalInformation').errors?.required">
-              This field is mandatory.
-            </label>
-        </div>
+        <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
+            <h3 style="text-align: center;"> DELETE FLIGHT</h3>
+            <form [formGroup]="loadService.deleteFlightForm" (ngSubmit)="deleteSubmit()" autocomplete="off">
 
-        <!--number od transfers-->
-        <div class="form-group">
-            <input type="text" class="form-control" id="numberoftransfers" formControlName="NumberOfTransfers" placeholder="NumberOfTransfers">
-            <label class="text-danger"
-                *ngIf="service.newFlightForm.get('NumberOfTransfers').touched && service.newFlightForm.get('NumberOfTransfers').errors?.required">
-                This field is mandatory.
-            </label>
-            <label class="text-danger"
-                *ngIf="service.newFlightForm.get('NumberOfTransfers').touched && service.newFlightForm.get('NumberOfTransfers').errors?.minlength">
-                Please insert a valid number.
-            </label>
-        </div>
+                <!--flight-->
+                <div class="form-group">
+                    <label>Flight</label>
+                    <select name="flights" id="flights" class="form-control" formControlName="Flight">
+                        <option *ngFor="let flight of flights" value="{{flight.flightID}}">{{flight.planeName}}/{{flight.startLocation}}/{{flight.endLocation}}</option>   
+                    </select>
+                    <label class="text-danger"
+                        *ngIf="loadService.deleteFlightForm.get('Flight').touched && loadService.deleteFlightForm.get('Flight').errors?.required">
+                        This field is mandatory.</label>
+                </div>
 
-        <!--all transfers-->
-        <div class="form-group">
-            <input type="text" class="form-control" id="alltransfers" formControlName="AllTransfers" placeholder="AllTransfers">
-            <label>*example: "Beograd,Budapest,Berlin"</label><br>
-            <label class="text-danger"
-                *ngIf="service.newFlightForm.get('AllTransfers').touched && service.newFlightForm.get('AllTransfers').errors?.required">
-                This field is mandatory.
-            </label>
-        </div>
+                <div class="form-group text-center">
+                    <button [disabled]="!loadService.deleteFlightForm.valid" class="btn btn-success" type="submit">Delete Flight</button>
+                    <p>&nbsp;</p>
+                </div>
+            </form>
+        </span>
 
-        <!--plane name-->
-        <div class="form-group">
-            <input type="text" class="form-control" id="planename" formControlName="PlaneName" placeholder="PlaneName">
-            <label class="text-danger"
-                *ngIf="service.newFlightForm.get('PlaneName').touched && service.newFlightForm.get('PlaneName').errors?.required">
-                This field is mandatory.
-            </label>
-        </div>
+        <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
+            <h3 style="text-align: center;"> CHANGE FLIGHT</h3>
+            <form [formGroup]="loadService.changeFlightForm" (ngSubmit)="changeSubmit()" autocomplete="off">
 
-        <!--lugage weight-->
-        <div class="form-group">
-            <input type="text" class="form-control" id="lugageweight" formControlName="LugageWeight" placeholder="LugageWeight">
-            <label class="text-danger"
-                *ngIf="service.newFlightForm.get('LugageWeight').touched && service.newFlightForm.get('LugageWeight').errors?.required">
-                This field is mandatory.
-            </label>
-            <label class="text-danger"
-                *ngIf="service.newFlightForm.get('LugageWeight').touched && service.newFlightForm.get('LugageWeight').errors?.minlength">
-                Please insert a valid number.
-            </label>
-        </div>
+                <!--flight-->
+                <div class="form-group">
+                    <label>Flight</label>
+                    <select name="flights" id="flights" class="form-control" formControlName="Flight">
+                        <option *ngFor="let flight of flights" value="{{flight.flightID}}">{{flight.planeName}}/{{flight.startLocation}}/{{flight.endLocation}}</option>   
+                    </select>
+                    <label class="text-danger"
+                        *ngIf="loadService.changeFlightForm.get('Flight').touched && loadService.changeFlightForm.get('Flight').errors?.required">
+                        This field is mandatory.</label>
+                </div>
 
-        <!--airline-->
-        <div class="form-group">
-            <label>Airline</label>
-            <select name="airlines" id="airlines" class="form-control" formControlName="Airline">
-                <option *ngFor="let airline of airlines" value="{{airline.airlineID}}">{{airline.airlineName}}<b>/</b>{{airline.airlineAddress}}</option>
-            </select>
-            <label class="text-danger"
-            *ngIf="service.newFlightForm.get('Airline').touched && service.newFlightForm.get('Airline').errors?.required">
-            This field is mandatory.</label>
-        </div>
+                <!--start time-->
+                <div class="form-group">
+                    <label>Start time</label>
+                    <input type="datetime-local" id="starttime" name="starttime" class="form-control" formControlName="StartTime">
+                    <label class="text-danger"
+                        *ngIf="loadService.changeFlightForm.get('StartTime').touched && loadService.changeFlightForm.get('StartTime').errors?.required">
+                        This field is mandatory.
+                    </label>
+                </div>
+        
+                <!--end time-->
+                <div class="form-group">
+                    <label>End time</label>
+                    <input type="datetime-local" id="endtime" name="endtime" class="form-control" formControlName="EndTime">
+                    <label class="text-danger"
+                        *ngIf="loadService.changeFlightForm.get('EndTime').touched && loadService.changeFlightForm.get('EndTime').errors?.required">
+                        This field is mandatory.
+                    </label>
+                </div>
+        
+                <!--start location-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="startlocation" formControlName="StartLocation" placeholder="StartLocation">
+                    <label class="text-danger"
+                        *ngIf="loadService.changeFlightForm.get('StartLocation').touched && loadService.changeFlightForm.get('StartLocation').errors?.required">
+                        This field is mandatory.
+                    </label>
+                </div>
+        
+                <!--end location-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="endlocation" formControlName="EndLocation" placeholder="EndLocation">
+                    <label class="text-danger"
+                        *ngIf="loadService.changeFlightForm.get('EndLocation').touched && loadService.changeFlightForm.get('EndLocation').errors?.required">
+                        This field is mandatory.
+                    </label>
+                </div>
+                
+                <!--flight length-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="flighttime" formControlName="FlightLength" placeholder="FlightLength(km)">
+                    <label class="text-danger"
+                        *ngIf="loadService.changeFlightForm.get('FlightLength').touched && loadService.changeFlightForm.get('FlightLength').errors?.minlength && service.newFlightForm.get('FlightLength').errors?.maxlength">
+                        Please insert a valid km.
+                    </label>
+                </div>
+        
+                 <!--aditional information-->
+                 <div class="form-group">
+                    <textarea class="form-control" id="additionalinformation" formControlName="AdditionalInformation" placeholder="AdditionalInformation" rows="5" cols="50"></textarea>
+                    <label class="text-danger"
+                      *ngIf="loadService.changeFlightForm.get('AdditionalInformation').touched && loadService.changeFlightForm.get('AdditionalInformation').errors?.required">
+                      This field is mandatory.
+                    </label>
+                </div>
+        
+                <!--number od transfers-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="numberoftransfers" formControlName="NumberOfTransfers" placeholder="NumberOfTransfers">
+                    <label class="text-danger"
+                        *ngIf="loadService.changeFlightForm.get('NumberOfTransfers').touched && loadService.changeFlightForm.get('NumberOfTransfers').errors?.minlength">
+                        Please insert a valid number.
+                    </label>
+                </div>
+        
+                <!--all transfers-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="alltransfers" formControlName="AllTransfers" placeholder="AllTransfers">
+                    <label>*example: "Beograd,Budapest,Berlin"</label><br>
+                    <label class="text-danger"
+                        *ngIf="loadService.changeFlightForm.get('AllTransfers').touched && loadService.changeFlightForm.get('AllTransfers').errors?.required">
+                        This field is mandatory.
+                    </label>
+                </div>
+        
+                <!--plane name-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="planename" formControlName="PlaneName" placeholder="PlaneName">
+                    <label class="text-danger"
+                        *ngIf="loadService.changeFlightForm.get('PlaneName').touched && loadService.changeFlightForm.get('PlaneName').errors?.required">
+                        This field is mandatory.
+                    </label>
+                </div>
+        
+                <!--lugage weight-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="lugageweight" formControlName="LugageWeight" placeholder="LugageWeight">
+                    <label class="text-danger"
+                        *ngIf="loadService.changeFlightForm.get('LugageWeight').touched && loadService.changeFlightForm.get('LugageWeight').errors?.minlength">
+                        Please insert a valid number.
+                    </label>
+                </div>
 
-        <div class="form-group text-center">
-            <button [disabled]="!service.newFlightForm.valid" class="btn btn-success" type="submit">Add Flight</button>
-            <p>&nbsp;</p>
-        </div>
-    </form>
+
+                <div class="form-group text-center">
+                    <button [disabled]="!loadService.changeFlightForm.valid" class="btn btn-success" type="submit">Change Flight</button>
+                    <p>&nbsp;</p>
+                </div>
+            </form>
+        </span>
+    </div>
 </div>

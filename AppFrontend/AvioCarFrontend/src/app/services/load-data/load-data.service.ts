@@ -62,6 +62,24 @@ export class LoadDataService {
     Country: ['']
   });
 
+  deleteFlightForm = this.fb.group({
+    Flight: ['', Validators.required]
+  });
+
+  changeFlightForm = this.fb.group({
+    Flight: ['', Validators.required],
+    StartTime: [''],
+    EndTime: [''],
+    StartLocation: ['', Validators.pattern("[a-z A-Z]+")],
+    EndLocation: ['', Validators.pattern("[a-z A-Z]+")],
+    FlightLength: ['', Validators.pattern("[0-9]{1,6}")],
+    AdditionalInformation: [''],
+    NumberOfTransfers: ['', Validators.pattern("[0-9]+")],
+    AllTransfers: [''],
+    PlaneName: [''],
+    LugageWeight: ['', Validators.pattern("[0-9]+")]
+  });
+
 
   // metoda za proveru identicnosti sifri
   compareNewPasswords(fb: FormGroup) {
@@ -158,7 +176,13 @@ export class LoadDataService {
     return this.http.delete(this.BaseURI + '/LoadData/DeleteDestination/' + airportID);
   }
 
-  changeDestination(destinationID: string){
+  // metoda za brisanje destinacije
+  deleteFlight(flightID: string){
+    return this.http.delete(this.BaseURI + '/LoadData/DeleteFlight/' + flightID);
+  }
+
+  // metoda za izmenu destinacije
+  changeDestination(){
     var body = {
       AirlineID: this.changeDestinationForm.value.Destination,
       AirportName: this.changeDestinationForm.value.AirportName,
@@ -167,5 +191,26 @@ export class LoadDataService {
     }
 
     return this.http.put(this.BaseURI + '/LoadData/ChangeDestination/', body);
+  }
+
+  changeFlight(){
+    var body = {
+      AirlineID: this.changeFlightForm.value.Flight,
+      StartTime: this.changeFlightForm.value.StartTime,
+      EndTime: this.changeFlightForm.value.EndTime,
+      StartLocation: this.changeFlightForm.value.StartLocation,
+      EndLocation: this.changeFlightForm.value.EndLocation,
+      FlightLength: this.changeFlightForm.value.FlightLength,
+      AdditionalInformation: this.changeFlightForm.value.AdditionalInformation,
+      NumberOfTransfers: this.changeFlightForm.value.NumberOfTransfers,
+      AllTransfers: this.changeFlightForm.value.AllTransfers,
+      PlaneName: this.changeFlightForm.value.PlaneName,
+      LugageWeight: this.changeFlightForm.value.LugageWeight,
+    }
+
+    // AirlineID je ustvari ID flihght-a..stavio sam AirlineID jer imam vec
+    // klasu na backecu koja ima AirlineID..pa da ne pravim novi klasu
+
+    return this.http.put(this.BaseURI + '/LoadData/ChangeFlight/', body);
   }
 }
