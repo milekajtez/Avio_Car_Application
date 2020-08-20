@@ -663,6 +663,221 @@ namespace AvioCarBackend.Controllers
             }
         }
         #endregion
+        #region 19 - Metoda za ucitavanje karata odredjenog leta
+        //GetTickets
+        [HttpGet]
+        [Route("GetFlightTickets/{flightID}")]
+        public IActionResult GetFlightTickets(string flightID)
+        {
+            var tickets = _context.Tickets.Include(d => d.Flight);
+            if (tickets == null) 
+            {
+                return NotFound("Currently this flight not have any ticket.");
+            }
+
+            var result = new List<Ticket>();
+            foreach(var ticket in tickets) 
+            {
+                if (ticket.Flight.FlightID.Equals(int.Parse(flightID))) 
+                {
+                    result.Add(ticket);
+                }
+            }
+
+            if (result.Count == 0)
+            {
+                return NotFound("Currently this flight not have any ticket.");
+            }
+            return Ok(result);
+        }
+        #endregion
+        #region 20 - Metoda za brisanje selektovnog mesta tj karte
+        [HttpDelete]
+        [Route("DeleteTicket/{flightID}/{ticketID}")]
+        public async Task<ActionResult<Ticket>> DeleteTicket(string flightID, string ticketID)
+        {
+            var tickets = _context.Tickets.Include(d => d.Flight);
+            if (tickets == null)
+            {
+                return NotFound();
+            }
+
+            var ticketForDelete = new Ticket();
+            foreach (var ticket in tickets) 
+            {
+                if (ticket.Flight.FlightID == int.Parse(flightID) && ticket.TicketID == int.Parse(ticketID)) 
+                {
+                    ticketForDelete = ticket;
+                    break;
+                }
+            }
+
+            //rezervisane karte se ne brisu!!!
+            if (ticketForDelete.IsTicketPurchased) 
+            {
+                return NotFound("Deleting unsuccessfuly because ticket is purchased.");
+            }
+
+            _context.Tickets.Remove(ticketForDelete);
+            await _context.SaveChangesAsync();
+
+            return ticketForDelete;
+        }
+        #endregion
+        #region 21 - Metoda za brisanje svih karata odredjenog leta
+        [HttpDelete]
+        [Route("DeleteAllTickets/{flightID}")]
+        public async Task<Object> DeleteAllTickets(string flightID)
+        {
+            var tickets = _context.Tickets.Include(d => d.Flight);
+            if (tickets == null)
+            {
+                return NotFound();
+            }
+
+            var ticketsForDelete = new List<Ticket>();
+            foreach (var ticket in tickets)
+            {
+                if (ticket.Flight.FlightID == int.Parse(flightID) && !ticket.IsTicketPurchased)
+                {
+                    ticketsForDelete.Add(ticket);
+                }
+            }
+
+            _context.Tickets.RemoveRange(ticketsForDelete);
+            await _context.SaveChangesAsync();
+
+            return ticketsForDelete;
+        }
+        #endregion
+        #region 22 - Metoda za dodavanje pojedinacne nove karte u odredjeni let
+        [HttpPost]
+        [Route("AddNewTicket/{flightID}")]
+        public async Task<Object> AddNewTicket(string flightID, New1Ticket model) 
+        {
+            var flight = await _context.Flights.FindAsync(int.Parse(flightID));
+            if (flight != null)
+            {
+                Ticket ticket = new Ticket() 
+                {
+                    TicketNumber = int.Parse(model.TicketNumber),
+                    TicketPrice = int.Parse(model.TicketPrice),
+                    IsTicketPurchased = false,
+                    Flight = flight
+                };
+
+                ticket.CardType = model.TicketType.Equals("ECONOMIC_CLASS") ? CardType.ECONOMIC_CLASS :
+                    model.TicketType.Equals("FIRST_CLASS") ? CardType.FIRST_CLASS : CardType.BUSINESS_CLASS;
+
+                ticket.IsQuickBooking = model.IsQuickBooking == "true";
+
+                try
+                {
+                    var result = await _context.Tickets.AddAsync(ticket);
+                    _context.SaveChanges();
+                    return Ok();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+            }
+            else 
+            {
+                return BadRequest("Add ticket is unsuccessffully.Server not found selected flight.");
+            }
+        }
+        #endregion
+        #region 23 - Metoda za izmenu selektovane karte
+        //ChangeTicket
+        [HttpPut]
+        [Route("ChangeTicket/{ticketID}/{flightID}")]
+        public async Task<Object> ChangeDestination(string ticketID, string flightID, New1Ticket model) 
+        {
+            var resultFind = await _context.Tickets.FindAsync(int.Parse(ticketID));
+
+            if (model.TicketNumber != null)
+            {
+                if (!model.TicketNumber.Trim().Equals(""))
+                {
+                    var tickets = _context.Tickets.Include(p => p.Flight);
+                    foreach (var ticket in tickets) 
+                    {
+                        if (ticket.TicketID != int.Parse(ticketID) && ticket.Flight.FlightID == int.Parse(flightID) && ticket.TicketNumber == int.Parse(model.TicketNumber)) 
+                        {
+                            return NotFound("Change unsuccessfuly because another ticket have entered new ticket number.");
+                        }
+                    }
+
+                    resultFind.TicketNumber = int.Parse(model.TicketNumber);
+                }
+                else 
+                {
+                    resultFind.TicketNumber = resultFind.TicketNumber;
+                }
+            }
+            else 
+            {
+                resultFind.TicketNumber = resultFind.TicketNumber;
+            }
+            
+
+            if (model.TicketType != null) 
+            {
+                if (model.TicketType.Equals("ECONOMIC_CLASS"))
+                {
+                    resultFind.CardType = CardType.ECONOMIC_CLASS;
+                }
+                else if (model.TicketType.Equals("FIRST_CLASS"))
+                {
+                    resultFind.CardType = CardType.FIRST_CLASS;
+                }
+                else 
+                {
+                    resultFind.CardType = CardType.BUSINESS_CLASS;
+                }
+            }
+
+            if (model.TicketPrice != null)
+            {
+                if (!model.TicketPrice.Trim().Equals(""))
+                {
+                    resultFind.TicketPrice = int.Parse(model.TicketPrice);
+                }
+                else 
+                {
+                    resultFind.TicketPrice = resultFind.TicketPrice;
+                }
+            }
+            else 
+            {
+                resultFind.TicketPrice = resultFind.TicketPrice;
+            }
+            
+            if (!model.IsQuickBooking.Trim().Equals("")) 
+            {
+                if (model.IsQuickBooking.Equals("true"))
+                {
+                    resultFind.IsQuickBooking = true;
+                }
+                else 
+                {
+                    resultFind.IsQuickBooking = false;
+                }
+            }
+
+            try
+            {
+                _context.Tickets.Update(resultFind);
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        #endregion
     }
 }
 

@@ -2,4 +2,168 @@
     <div class="text-block">
         <h2>MODIFY FLIGHT SEATS</h2>
     </div>
+
+    <div style="display: flex;">
+        <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
+            <h3 style="text-align: center;"> SELECT FLIGHT</h3>
+            <form [formGroup]="service.comboBoxFlightForm" (ngSubmit)="loadTickets()">
+                
+                <!--flight-->
+                <div class="form-group">
+                    <label>Flight</label>
+                    <select name="flights" id="flights" class="form-control" formControlName="Flight">
+                        <option *ngFor="let flight of flights" value="{{flight.flightID}}">{{flight.planeName}}<b>/</b>{{flight.startLocation}}<b>/</b>{{flight.endLocation}}</option>
+                    </select>
+                    <label class="text-danger"
+                    *ngIf="service.comboBoxFlightForm.get('Flight').touched && service.comboBoxFlightForm.get('Flight').errors?.required">
+                    This field is mandatory.</label>
+                </div>
+
+                <div class="form-group text-center">
+                    <button [disabled]="!service.comboBoxFlightForm.valid" class="btn btn-success" type="submit">SHOW TICKETS</button>
+                    <p>&nbsp;</p>
+                </div>
+            </form>
+            
+
+            <hr>
+            <ul class="list-group">
+                <li class="list-group-item text-muted" style="margin-left: 5%; margin-right: 5%;"><b>TICKET DATA</b><i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>ID: </strong>{{selectedTicket.ticketID}}<i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Number: </strong>{{selectedTicket.ticketNumber}}<i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Price: </strong>{{selectedTicket.ticketPrice}}<i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Card type: </strong>{{selectedTicket.cardType}}<i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Time of ticket purchase: </strong>{{selectedTicket.timeOfTicketPurchase}}<i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Is ticket purchased: </strong>{{selectedTicket.isTicketPurchased}}<i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Is quick booking: </strong>{{selectedTicket.isQuickBooking}}<i class="fa fa-dashboard fa-1x"></i></li>
+            </ul>
+            <hr>
+            <div class="form-group text-center">
+                <button class="btn btn-success" type="submit" (click)="deleteTicket()">DELETE SELECTED TICKET</button>
+                <hr>
+                <button class="btn btn-success" type="submit" (click)="deleteAllTickets()">DELETE ALL TICKETS</button>
+            </div>
+            
+        </span>
+
+        <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
+            <h3 style="text-align: center;"> TICKETS</h3>
+            <ul class="tickets" style="margin-left: 17.5%;">
+                <li *ngFor="let ticket of tickets" [class.selectedTicket]="ticket === selectedTicket"
+                    (click)="onSelect(ticket)" style="text-align: center;">
+                    <span class="badge">
+                        Ticket number:&nbsp;{{ticket.ticketNumber}}<br>
+                        Ticket price:&nbsp;{{ticket.ticketPrice}}<br>
+                        Ticket type:&nbsp;{{ticket.cardType}}
+                    </span>
+                </li>
+            </ul>
+        </span>
+
+        <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
+            <h3 style="text-align: center;"> ADD NEW TICKET</h3>
+            <h6 style="text-align: center;">*first you need to select flight</h6>
+            <form [formGroup]="service.newTicketForm" (ngSubmit)="addNewTicket()">
+
+                <!--broj karte-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="ticketnumber" formControlName="TicketNumber" placeholder="TicketNumber">
+                    <label class="text-danger"
+                        *ngIf="service.newTicketForm.get('TicketNumber').touched && service.newTicketForm.get('TicketNumber').errors?.required">
+                        This field is mandatory.
+                    </label>
+                    <label class="text-danger"
+                        *ngIf="service.newTicketForm.get('TicketNumber').touched && service.newTicketForm.get('TicketNumber').errors?.minlength">
+                        Please insert a valid number.
+                    </label>
+                </div>
+
+                <!--card type-->
+                <div class="form-group">
+                    <label>Ticket Type</label>
+                    <select name="tickettype" id="tickettype" class="form-control" formControlName="TicketType">
+                        <option value="ECONOMIC_CLASS">ECONOMIC_CLASS</option>
+                        <option value="FIRST_CLASS">FIRST_CLASS</option>
+                        <option value="BUSINESS_CLASS">BUSINESS_CLASS</option>
+                    </select>
+                    <label class="text-danger"
+                        *ngIf="service.newTicketForm.get('TicketType').touched && service.newTicketForm.get('TicketType').errors?.required">
+                        This field is mandatory.
+                    </label>
+                </div>
+
+                <!--cena karte-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="ticketprice" formControlName="TicketPrice" placeholder="TicketPrice(&euro;)">
+                    <label class="text-danger"
+                        *ngIf="service.newTicketForm.get('TicketPrice').touched && service.newTicketForm.get('TicketPrice').errors?.required">
+                        This field is mandatory.
+                    </label>
+                    <label class="text-danger"
+                        *ngIf="service.newTicketForm.get('TicketPrice').touched && service.newTicketForm.get('TicketPrice').errors?.minlength">
+                        Please insert a valid number.
+                    </label>
+                </div>
+
+                <!--is quick booking-->
+                <div class="form-group">
+                    <label>Is Quick Booking?</label>
+                    <input type="checkbox" class="form-control" id="isquickbooking" formControlName="IsQuickBooking" placeholder="IsQuickBooking">
+                    <label class="text-danger"
+                        *ngIf="service.newTicketForm.get('TicketType').touched && service.newTicketForm.get('TicketType').errors?.required">
+                        This field is mandatory.
+                    </label>
+                </div>
+
+                <div class="form-group text-center">
+                    <button [disabled]="!service.newTicketForm.valid" class="btn btn-success" type="submit">Add New Ticket</button>
+                    <p>&nbsp;</p>
+                </div>
+            </form>
+            <hr>
+            <h3 style="text-align: center;"> CHANGE SELECTED TICKET DATA</h3>  
+            <h6 style="text-align: center;">*first you need to select flight and ticket from ticket list</h6>
+            <form [formGroup]="service.changeTicketForm" (ngSubmit)="changeTicket()">
+
+                <!--broj karte-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="ticketnumber" formControlName="TicketNumber" placeholder="TicketNumber">
+                    <label class="text-danger"
+                        *ngIf="service.changeTicketForm.get('TicketNumber').touched && service.changeTicketForm.get('TicketNumber').errors?.minlength">
+                        Please insert a valid number.
+                    </label>
+                </div>
+
+                <!--card type-->
+                <div class="form-group">
+                    <label>Ticket Type</label>
+                    <select name="tickettype" id="tickettype" class="form-control" formControlName="TicketType">
+                        <option value="ECONOMIC_CLASS">ECONOMIC_CLASS</option>
+                        <option value="FIRST_CLASS">FIRST_CLASS</option>
+                        <option value="BUSINESS_CLASS">BUSINESS_CLASS</option>
+                    </select>
+                </div>
+
+                <!--cena karte-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="ticketprice" formControlName="TicketPrice" placeholder="TicketPrice(&euro;)">
+                    <label class="text-danger"
+                        *ngIf="service.newTicketForm.get('TicketPrice').touched && service.newTicketForm.get('TicketPrice').errors?.minlength">
+                        Please insert a valid number.
+                    </label>
+                </div>
+
+                <!--is quick booking-->
+                <div class="form-group">
+                    <label>Is Quick Booking?</label>
+                    <input type="checkbox" class="form-control" id="isquickbooking" formControlName="IsQuickBooking" placeholder="IsQuickBooking">
+                </div>
+
+                <div class="form-group text-center">
+                    <button [disabled]="!service.changeTicketForm.valid" class="btn btn-success" type="submit">Change Selected Ticket</button>
+                    <p>&nbsp;</p>
+                </div>
+            </form>
+        </span>
+    </div>
 </div>

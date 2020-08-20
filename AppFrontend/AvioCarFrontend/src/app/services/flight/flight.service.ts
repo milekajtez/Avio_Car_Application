@@ -34,6 +34,24 @@ export class FlightService {
     BusinessClassPrice: ['', [Validators.required, Validators.pattern("[0-9]+")]]
   });
 
+  comboBoxFlightForm = this.fb.group({
+    Flight: ['', Validators.required]
+  });
+
+  newTicketForm = this.fb.group({
+    TicketNumber: ['', [Validators.required, Validators.pattern("[0-9]+")]],
+    TicketType: ['', Validators.required],
+    TicketPrice: ['', [Validators.required, Validators.pattern("[0-9]+")]],
+    IsQuickBooking: ['',Validators.required]
+  });
+  
+  changeTicketForm = this.fb.group({
+    TicketNumber: ['', Validators.pattern("[0-9]+")],
+    TicketType: [''],
+    TicketPrice: ['', Validators.pattern("[0-9]+")],
+    IsQuickBooking: ['']
+  });
+
   addNewFlight() {
     var body = {
       StartTime: this.newFlightForm.value.StartTime,
@@ -64,5 +82,56 @@ export class FlightService {
     }
 
     return this.http.post(this.BaseURI + '/LoadData/AddSeatsConfiguration', body);
+  }
+
+  // brisanje selektovane karte
+  deleteTicket(flightID: string, ticketID: string){
+    return this.http.delete(this.BaseURI + '/LoadData/DeleteTicket/' + flightID + "/" + ticketID);
+  }
+
+  // brisanje svih karata leta
+  deleteAllTickets(flightID: string){
+    return this.http.delete(this.BaseURI + '/LoadData/DeleteAllTickets/' + flightID);
+  }
+
+  // metoda za dodavanje nove karte
+  add1newTicket(flightID: string){
+    var body = {
+      TicketNumber: this.newTicketForm.value.TicketNumber,
+      TicketType: this.newTicketForm.value.TicketType,
+      TicketPrice: this.newTicketForm.value.TicketPrice,
+      IsQuickBooking: ""
+    }
+
+    if(this.newTicketForm.value.IsQuickBooking){
+      body.IsQuickBooking = "true";
+    }
+    else{
+      body.IsQuickBooking = "false";
+    }
+    
+    return this.http.post(this.BaseURI + '/LoadData/AddNewTicket/' + flightID, body);
+  }
+
+  // metoda za zimenu karte
+  changeTicket(ticketID: string, flightID: string){
+    var body = {
+      TicketNumber: this.changeTicketForm.value.TicketNumber,
+      TicketType: this.changeTicketForm.value.TicketType,
+      TicketPrice: this.changeTicketForm.value.TicketPrice,
+      IsQuickBooking: ""
+    }
+
+    if(this.changeTicketForm.value.IsQuickBooking){
+      body.IsQuickBooking = "true";
+    }
+    else if(!this.changeTicketForm.value.IsQuickBooking){
+      body.IsQuickBooking = "false";
+    }
+    else{
+      body.IsQuickBooking = "";
+    }
+
+    return this.http.put(this.BaseURI + '/LoadData/ChangeTicket/' + ticketID + "/" + flightID, body);
   }
 }

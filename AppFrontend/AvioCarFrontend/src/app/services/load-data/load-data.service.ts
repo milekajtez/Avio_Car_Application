@@ -233,4 +233,9 @@ export class LoadDataService {
 
     return this.http.put(this.BaseURI + '/LoadData/ChangeAirlineMainInfo/' + airlineID, body);
   }
+
+  //metoda za ucitavanje karata odredjenog leta
+  loadTickets(flightID: string){
+    return this.http.get(this.BaseURI + '/LoadData/GetFlightTickets/' + flightID);
+  }
 }
