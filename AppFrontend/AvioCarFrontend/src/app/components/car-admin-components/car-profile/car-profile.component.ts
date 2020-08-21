@@ -1,17 +1,16 @@
-import { Component, OnInit, Input, Output, EventEmitter, Injectable } from '@angular/core';
-import { LoadDataService } from 'src/app/services/load-data/load-data.service';
+import { Component, OnInit } from '@angular/core';
+import { RentACarService } from 'src/app/services/rent-a-car/rent-a-car.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute } from '@angular/router';
 import { SharedDataService } from 'src/app/services/shared/shared-data.service';
+import { LoadDataService } from 'src/app/services/load-data/load-data.service';
 
 @Component({
-  selector: 'app-avio-profile',
-  templateUrl: './avio-profile.component.html',
-  styleUrls: ['./avio-profile.component.css']
+  selector: 'app-car-profile',
+  templateUrl: './car-profile.component.html',
+  styleUrls: ['./car-profile.component.css']
 })
-
-@Injectable()
-export class AvioProfileComponent implements OnInit {
+export class CarProfileComponent implements OnInit {
   username: string;
   email: string;
   phonenumber: string;
@@ -19,17 +18,17 @@ export class AvioProfileComponent implements OnInit {
   lastname: string;
   city: string;
 
-  constructor(public service: LoadDataService, private toastr: ToastrService, private route: ActivatedRoute, 
-    private data: SharedDataService) 
+  constructor(public carService: RentACarService, private toastr: ToastrService, private route: ActivatedRoute, 
+    private data: SharedDataService, public service: LoadDataService) 
   {
     route.params.subscribe(params => {
       this.username = params['UserName'];
     });
-   }
+  }
 
   ngOnInit(): void {
     this.initializeAdminData();
-    this.data.currentMessage.subscribe(message => this.username = message)
+    this.data.currentMessage.subscribe(message => this.username = message);
   }
 
   newMessage() {
@@ -52,7 +51,7 @@ export class AvioProfileComponent implements OnInit {
     );
   }
 
-  onSubmit() : void {
+  onSubmit(){
     this.service.changeAdminProfile(this.username).subscribe(
       (res: any) => {
         this.username = res.message;
@@ -79,7 +78,7 @@ export class AvioProfileComponent implements OnInit {
     );
   }
 
-  changePassword(): void {
+  changePassword(){
     this.service.changePassword(this.username).subscribe(
       (res: any) => {
         alert("Password changed successfully.");

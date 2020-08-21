@@ -1,1 +1,26 @@
-<p>car-menu works!</p>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <div class="collapse navbar-collapse">
+        <div>
+            <a class="btn" href="http://localhost:4200/carAdminHomePage/{{username}}" type="img"><img src="../../../../assets/images/LogoFinal2.png" height="55"></a>
+        </div>
+        <div>
+            <a class="fas fa-code-branch fa-lg" style="color:white" type="button" (click)="methodOption1()"> Branch Office Configuration</a>
+            <a class="fas fa-car-side fa-lg" type="button" style="margin-left :25px; color: white;" (click)="methodOption2()"> Car Configuration</a>
+            <a class="fa fa-car fa-lg" type="button" style="margin-left :25px; color: white;" (click)="methodOption3()"> View Rent-a-car Services</a>
+        </div>
+    </div>
+    <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-light" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown">{{username}}</a>
+        <div class="dropdown-menu pr-3">
+            <button class="dropdown-item" (click)="methodOption4()"><i class="fa fa-user"></i> Profile</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" routerLink="/" (click)="logout()"><i class="fa fa-sign-out-alt"></i> Log out</button>
+          </div>
+    </div>
+</nav>
+<div *ngIf="defaultComponent===1"><app-add-branch-office></app-add-branch-office></div> 
+<div *ngIf="defaultComponent===2"><app-add-car></app-add-car></div>
+<div *ngIf="defaultComponent===3"><app-view-rent-a-car-services></app-view-rent-a-car-services></div>
+<div *ngIf="defaultComponent===4"><app-car-profile></app-car-profile></div>

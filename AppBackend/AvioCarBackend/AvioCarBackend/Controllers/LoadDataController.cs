@@ -114,8 +114,8 @@ namespace AvioCarBackend.Controllers
         #endregion
         #region 3 - Metoda za ucitavanjem trenutnog korisnika u zavisnosti od username-a
         [HttpGet]
-        [Route("GetAvioAdmin/{username}")]
-        public async Task<ActionResult<RegisteredUser>> GetAvioAdmin(string username)
+        [Route("GetAdmin/{username}")]
+        public async Task<ActionResult<RegisteredUser>> GetAdmin(string username)
         {
             var user = await _userManager.FindByNameAsync(username);
 
@@ -128,7 +128,6 @@ namespace AvioCarBackend.Controllers
         }
         #endregion
         #region 4 - Metoda za menjanje podataka administratora na onsovu username-a
-        // TO DO
         [HttpPut]
         [Route("ChangeAdminProfile")]
         public async Task<Object> ChangeAdminProfile(AvioAdminProfileModel model)

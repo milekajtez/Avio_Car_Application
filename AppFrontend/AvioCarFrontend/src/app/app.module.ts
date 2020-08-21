@@ -27,6 +27,10 @@ import { ViewAirlinesComponent } from './components/avio-admin-components/view-a
 import { AvioProfileComponent } from './components/avio-admin-components/avio-profile/avio-profile.component';
 import { SeatConfigurationComponent } from './components/avio-admin-components/seat-configuration/seat-configuration.component';
 import { SeatsModifyComponent } from './components/avio-admin-components/seats-modify/seats-modify.component';
+import { CarProfileComponent } from './components/car-admin-components/car-profile/car-profile.component';
+import { AddBranchOfficeComponent } from './components/car-admin-components/add-branch-office/add-branch-office.component';
+import { AddCarComponent } from './components/car-admin-components/add-car/add-car.component';
+import { ViewRentACarServicesComponent } from './components/car-admin-components/view-rent-a-car-services/view-rent-a-car-services.component';
 
 let config = new AuthServiceConfig([
   {
@@ -61,6 +65,10 @@ export function provideConfig()
     AvioProfileComponent,
     SeatConfigurationComponent,
     SeatsModifyComponent,
+    CarProfileComponent,
+    AddBranchOfficeComponent,
+    AddCarComponent,
+    ViewRentACarServicesComponent,
   ],
   imports: [
     BrowserModule,

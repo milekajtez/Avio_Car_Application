@@ -111,9 +111,9 @@ export class LoadDataService {
     return this.http.put(this.BaseURI + '/LoadData/ChangeDiscount', body);
   }
 
-  // metoda za ucitavanje avio admina 
-  loadAvioAdmin(username: string){
-    return this.http.get(this.BaseURI + '/LoadData/GetAvioAdmin/' + username);
+  // metoda za ucitavanje admina 
+  loadAdmin(username: string){
+    return this.http.get(this.BaseURI + '/LoadData/GetAdmin/' + username);
   }
 
   // metoda za promeni podataka admina

@@ -1,0 +1,140 @@
+<div style="background-color: powderblue;">
+    <div class="text-block">
+        <h2>CAR ADMIN PROFILE</h2>
+    </div>
+
+    <div style="display: flex;">
+        <span style="width: 30%;">
+            <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar" style="margin-left: 28%; margin-top: 5%;">
+            <h6 style="text-align: center;">{{username}}</h6>
+            <ul class="list-group">
+                <li class="list-group-item text-muted" style="margin-left: 5%; margin-right: 5%;">Current Data <i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Username: </strong>{{username}}<i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>E-mail: </strong>{{email}}<i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Phone number: </strong>{{phonenumber}}<i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>First name: </strong>{{firstname}}<i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Last name: </strong>{{lastname}}<i class="fa fa-dashboard fa-1x"></i></li>
+                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>City: </strong>{{city}}<i class="fa fa-dashboard fa-1x"></i></li>
+            </ul>
+        </span>
+        <span style="width: 10.5%;"></span>
+        <span style="width: 20%; margin-top: 1%;">
+            <div><b><h4 style="margin-left: 2%;">CHANGE PROFILE DATA</h4></b></div>
+            <div class="tab-content">
+                <div class="tab-pane active" style="margin-left: 2%; margin-right: 5%;">
+                    <form [formGroup]="service.changeAdmin" autocomplete="off" (ngSubmit)="onSubmit()">
+
+                        <!--username-->
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="first_name"><h6>User name</h6></label>
+                                <input type="text" class="form-control"id="username" placeholder="UserName" formControlName="UserName">
+                            </div>
+                        </div>
+
+                        <!--email-->
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="email"><h6>Email</h6></label>
+                                <input type="email" class="form-control"id="email" placeholder="Email" formControlName="Email">
+                                <label class="text-danger"
+                                    *ngIf="service.changeAdmin.get('Email').errors?.email">Invalid email address.</label>
+                            </div>
+                        </div>
+
+                        <!--phone number-->
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="mobile"><h6>Mobile</h6></label>
+                                <input type="text" class="form-control" id="phonenumber" placeholder="PhoneNumber" formControlName="PhoneNumber">
+                                <label class="text-danger"
+                                    *ngIf="service.changeAdmin.get('PhoneNumber').errors?.pattern">Minimum 9 characters required.</label>
+                            </div>
+                        </div>
+
+                        <!--first name-->
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="first_name"><h6>First name</h6></label>
+                                <input type="text" class="form-control"id="firstname" placeholder="FirstName" formControlName="FirstName">
+                            </div>
+                        </div>
+
+                        <!--last name-->
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="last_name"><h6>Last name</h6></label>
+                                <input type="text" class="form-control" id="lastname" placeholder="LastName" formControlName="LastName">
+                            </div>
+                        </div>
+
+                        <!--city-->
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="first_name"><h6>City</h6></label>
+                                <input type="text" class="form-control" id="city" placeholder="City" formControlName="City">
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button [disabled]="!service.changeAdmin.valid" class="btn btn-success" type="submit">Change</button>
+                            <button class="btn btn-default" type="reset">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </span>
+        <span style="width: 10.5%;"></span>
+        <span style="width: 20%;  margin-top: 1%;">
+            <div><b><h4 style="margin-left: 2%;">CHANGE PASSWORD</h4></b>
+                <div class="tab-content">
+                    <form [formGroup]="service.changeAdminPassword" autocomplete="off" (ngSubmit)="changePassword()">
+
+                        <!--current password-->
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="password"><h6>Current password</h6></label>
+                                <input type="password" class="form-control" placeholder="CurrentPassword" formControlName="CurrentPassword">
+                                <label class="text-danger"
+                                        *ngIf="service.changeAdminPassword.get('CurrentPassword').touched && service.changeAdminPassword.get('CurrentPassword').errors?.required">This
+                                        field is mandatory.</label>
+                            </div>
+                        </div>
+
+                        <!--new password and confirm new password-->
+                        <div formGroupName="Passwords">
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="password"><h6>New password</h6></label>
+                                    <input type="password" class="form-control" id="password" formControlName="Password" placeholder="Password">
+                                    <label class="text-danger"
+                                        *ngIf="service.changeAdminPassword.get('Passwords.Password').touched && service.changeAdminPassword.get('Passwords.Password').errors?.required">This
+                                        field is mandatory.</label>
+                                    <label class="text-danger"
+                                        *ngIf="service.changeAdminPassword.get('Passwords.Password').touched && service.changeAdminPassword.get('Passwords.Password').errors?.minlength">Minimum
+                                        8 characters required.</label>              
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="password"><h6>Confirm new password</h6></label>
+                                    <input type="password" class="form-control" formControlName="ConfirmPassword" placeholder="ConfirmPassword">
+                                    <label class="text-danger"
+                                        *ngIf="service.changeAdminPassword.get('Passwords.ConfirmPassword').touched && service.changeAdminPassword.get('Passwords.ConfirmPassword').errors?.required">This
+                                        field is mandatory.</label>
+                                    <label class="text-danger"
+                                        *ngIf="service.changeAdminPassword.get('Passwords.ConfirmPassword').touched && service.changeAdminPassword.get('Passwords.ConfirmPassword').errors?.minlength">Minimum
+                                        8 characters required.</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button [disabled]="!service.changeAdminPassword.valid" class="btn btn-success" type="submit">Change</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </span>
+    </div>
+</div>
