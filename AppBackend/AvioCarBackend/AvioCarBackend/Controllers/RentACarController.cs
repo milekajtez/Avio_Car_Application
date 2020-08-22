@@ -165,5 +165,113 @@ namespace AvioCarBackend.Controllers
             }
         }
         #endregion
+        #region 6 - Metoda za ucitavanje automobila
+        [HttpGet]
+        [Route("GetCars")]
+        public IActionResult GetCars()
+        {
+            try
+            {
+                var cars = _context.Cars;
+                if (cars == null)
+                {
+                    return NotFound();
+                }
+                return Ok(cars);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        #endregion
+        #region 7 - Metoda za dodavanje novog automobila
+        [HttpPost]
+        [Route("AddNewCar")]
+        public async Task<Object> AddNewCar(CarModel model)
+        {
+            Flight flightFind = null;
+            if (model.FlightID != "") 
+            {
+                flightFind = await _context.Flights.FindAsync(int.Parse(model.FlightID));
+            }
+
+            var findRentACar = await _context.RentACarServices.FindAsync(int.Parse(model.RentACarServiceID));
+            if (findRentACar == null) 
+            {
+                return NotFound("Add car unsuccessfuly. Server not found entered rent-a-car service");
+            }
+
+            Car car = new Car() 
+            {
+                CarName = model.Name,
+                CarBrand = model.Brand,
+                CarModel = model.Model,
+                YearOdManufacture = int.Parse(model.YearOfManufacture),
+                NumberOfSeats = int.Parse(model.NumberOfSeats),
+                OverallGrade = 0,
+                NumberOfCarGrades = 0,
+                LugageWeight = double.Parse(model.LugageWeight),
+                IsCarPurchased = false,
+                CarPrice = 0,
+                Flight = flightFind,
+                RentACarService = findRentACar
+            };
+
+            if (model.CardType.Equals("1"))
+            {
+                car.CarType = CarType.GASOLINE;
+            }
+            else if (model.CardType.Equals("2"))
+            {
+                car.CarType = CarType.DIESEL;
+            }
+            else 
+            {
+                car.CarType = CarType.GAS;
+            }
+
+            if (model.IsQuickBooking.Equals("true"))
+            {
+                car.IsQuickBooking = true;
+            }
+            else 
+            {
+                car.IsQuickBooking = false;
+            }
+
+
+            try
+            {
+                var result = await _context.Cars.AddAsync(car);
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        #endregion
+        #region 8 - Metoda za brisanje automobila
+        [HttpDelete]
+        [Route("DeleteCar/{carID}")]
+        public async Task<ActionResult<Car>> DeleteCar(string carID)
+        {
+            var car = await _context.Cars.FindAsync(int.Parse(carID));
+            if (car == null)
+            {
+                return NotFound();
+            }
+
+            _context.Cars.Remove(car);
+            await _context.SaveChangesAsync();
+
+            return car;
+        }
+        #endregion
+
+        #region 9 - Metoda za menjanje automobila
+        #endregion
     }
 }

@@ -28,6 +28,36 @@ export class RentACarService {
     Country: ['']
   });
 
+  addCarForm = this.fb.group({
+    Name: ['', Validators.required],
+    Brand: ['', Validators.required],
+    Model: ['', Validators.required],
+    YearOfManufacture: ['', [Validators.required, Validators.pattern("[0-9]+")]],
+    NumberOfSeats: ['', [Validators.required, Validators.pattern("[0-9]+")]],
+    CardType: ['', Validators.required],
+    LugageWeight: ['', [Validators.required, Validators.pattern("[0-9]+")]],
+    IsQuickBooking: ['', [Validators.required]],
+    Flight: [''],
+    RentACarService: ['', Validators.required],
+  });
+
+  deleteCarForm = this.fb.group({
+    Car: ['', Validators.required]
+  });
+
+  changeCarForm = this.fb.group({
+    Car: ['', Validators.required],
+    Name: [''],
+    Brand: [''],
+    Model: ['', Validators.required],
+    YearOfManufacture: ['', Validators.pattern("[0-9]+")],
+    NumberOfSeats: ['', Validators.pattern("[0-9]+")],
+    CardType: [''],
+    LugageWeight: ['', Validators.pattern("[0-9]+")],
+    IsQuickBooking: [''],
+    Flight: ['']
+  });
+
   // metoda za ucitavanje svih rent-a-car servisa
   loadRentACarServices() {
     return this.http.get(this.BaseURI + '/RentACar/GetRentACarServices');
@@ -70,4 +100,41 @@ export class RentACarService {
     return this.http.put(this.BaseURI + '/RentACar/ChangeBranchOffice/', body);
   }
 
+  // metoda za ucitavanje svih automobila
+  loadCars(){
+    return this.http.get(this.BaseURI + '/RentACar/GetCars');
+  }
+
+  // metoda za dodavanje novog automobila
+  addNewCar(){
+    console.log(this.addCarForm.value.IsQuickBooking);
+    var body = {
+      Name: this.addCarForm.value.Name,
+      Brand: this.addCarForm.value.Brand,
+      Model: this.addCarForm.value.Model,
+      YearOfManufacture: this.addCarForm.value.YearOfManufacture,
+      NumberOfSeats: this.addCarForm.value.NumberOfSeats,
+      CardType: this.addCarForm.value.CardType,
+      LugageWeight: this.addCarForm.value.LugageWeight,
+      IsQuickBooking: "",
+      FlightID: this.addCarForm.value.Flight,
+      RentACarServiceID: this.addCarForm.value.RentACarService,
+    }
+
+    if(this.addCarForm.value.IsQuickBooking){
+      body.IsQuickBooking = "true";
+    }
+    else{
+      body.IsQuickBooking = "false";
+    }
+
+    return this.http.post(this.BaseURI + '/RentACar/AddNewCar', body);
+  }
+
+  // metoda za brisanje kola
+  deleteCar(carID: string){
+    return this.http.delete(this.BaseURI + '/RentACar/DeleteCar/' + carID);
+  }
+
+  // dodati metodu za pormenu podataka vozila
 }

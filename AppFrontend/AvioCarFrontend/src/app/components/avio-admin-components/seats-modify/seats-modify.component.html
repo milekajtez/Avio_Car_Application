@@ -110,7 +110,7 @@
                     <label>Is Quick Booking?</label>
                     <input type="checkbox" class="form-control" id="isquickbooking" formControlName="IsQuickBooking" placeholder="IsQuickBooking">
                     <label class="text-danger"
-                        *ngIf="service.newTicketForm.get('TicketType').touched && service.newTicketForm.get('TicketType').errors?.required">
+                        *ngIf="service.newTicketForm.get('IsQuickBooking').touched && service.newTicketForm.get('IsQuickBooking').errors?.required">
                         This field is mandatory.
                     </label>
                 </div>

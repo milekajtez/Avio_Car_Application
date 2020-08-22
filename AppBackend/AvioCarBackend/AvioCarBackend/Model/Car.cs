@@ -16,7 +16,8 @@ namespace AvioCarBackend.Model
     /// YearOdManufacture ------- godina prozivodnje
     /// NumberOfSeats ----------- broj sedista
     /// CarType ----------------- tipa automobila
-    /// CarRating --------------- ocena automobila
+    /// OverallGrade ------------ ukupna vrednsot svih datih ocena
+    /// NumberOfCarGrades ------- broj ocena koje su date za trenutni automobil
     /// LugageWeight ------------ kolicina prtljaga koju je moguce poneti
     /// TimeOfCarPurchase ------- vreme rezervacije automobila
     /// IsCarPurchased ---------- da li je auto rezervisano
@@ -56,7 +57,10 @@ namespace AvioCarBackend.Model
         public CarType CarType { get; set; }
 
         [Required]
-        public double CarRating { get; set; }
+        public int OverallGrade { get; set; }
+
+        [Required]
+        public int NumberOfCarGrades { get; set; }
 
         [Required]
         public double LugageWeight { get; set; }
@@ -71,7 +75,8 @@ namespace AvioCarBackend.Model
 
         [Required]
         public double CarPrice { get; set; }
-
+        
+        [JsonIgnore]
         public Flight Flight { get; set; }                  // moze biti null
 
         [Required]

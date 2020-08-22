@@ -93,8 +93,7 @@ export class AddDestinationComponent implements OnInit {
         }
         else{
           alert("Unknown error.");
-        }
-        
+        } 
       }
     );
   }
