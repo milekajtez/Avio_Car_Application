@@ -49,7 +49,7 @@ export class RentACarService {
     Car: ['', Validators.required],
     Name: [''],
     Brand: [''],
-    Model: ['', Validators.required],
+    Model: [''],
     YearOfManufacture: ['', Validators.pattern("[0-9]+")],
     NumberOfSeats: ['', Validators.pattern("[0-9]+")],
     CardType: [''],
@@ -137,4 +137,27 @@ export class RentACarService {
   }
 
   // dodati metodu za pormenu podataka vozila
+  changeCar(){
+    var body = {
+      Name: this.changeCarForm.value.Name,
+      Brand: this.changeCarForm.value.Brand,
+      Model: this.changeCarForm.value.Model,
+      YearOfManufacture: this.changeCarForm.value.YearOfManufacture,
+      NumberOfSeats: this.changeCarForm.value.NumberOfSeats,
+      CardType: this.changeCarForm.value.CardType,
+      LugageWeight: this.changeCarForm.value.LugageWeight,
+      IsQuickBooking: "",
+      FlightID: this.changeCarForm.value.Flight
+    }
+
+    if(this.changeCarForm.value.IsQuickBooking){
+      body.IsQuickBooking = "true";
+    }
+    else{
+      body.IsQuickBooking = "false";
+    }
+    
+    var carID = this.changeCarForm.value.Car;
+    return this.http.put(this.BaseURI + '/RentACar/ChangeCar/' + carID, body);
+  }
 }

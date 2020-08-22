@@ -15,7 +15,7 @@ namespace AvioCarBackend.Controllers
     public class RentACarController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public RentACarController(ApplicationDbContext context) 
+        public RentACarController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -126,9 +126,9 @@ namespace AvioCarBackend.Controllers
             {
                 return NotFound("Change unsccessfully.All field are empty.");
             }
-            else 
+            else
             {
-                if (model.BranchOfficeAddress != null) 
+                if (model.BranchOfficeAddress != null)
                 {
                     if (!model.BranchOfficeAddress.Trim().Equals(""))
                     {
@@ -136,7 +136,7 @@ namespace AvioCarBackend.Controllers
                     }
                 }
 
-                if (model.City != null) 
+                if (model.City != null)
                 {
                     if (!model.City.Trim().Equals(""))
                     {
@@ -191,18 +191,18 @@ namespace AvioCarBackend.Controllers
         public async Task<Object> AddNewCar(CarModel model)
         {
             Flight flightFind = null;
-            if (model.FlightID != "") 
+            if (model.FlightID != "")
             {
                 flightFind = await _context.Flights.FindAsync(int.Parse(model.FlightID));
             }
 
             var findRentACar = await _context.RentACarServices.FindAsync(int.Parse(model.RentACarServiceID));
-            if (findRentACar == null) 
+            if (findRentACar == null)
             {
                 return NotFound("Add car unsuccessfuly. Server not found entered rent-a-car service");
             }
 
-            Car car = new Car() 
+            Car car = new Car()
             {
                 CarName = model.Name,
                 CarBrand = model.Brand,
@@ -226,7 +226,7 @@ namespace AvioCarBackend.Controllers
             {
                 car.CarType = CarType.DIESEL;
             }
-            else 
+            else
             {
                 car.CarType = CarType.GAS;
             }
@@ -235,7 +235,7 @@ namespace AvioCarBackend.Controllers
             {
                 car.IsQuickBooking = true;
             }
-            else 
+            else
             {
                 car.IsQuickBooking = false;
             }
@@ -264,14 +264,131 @@ namespace AvioCarBackend.Controllers
                 return NotFound();
             }
 
+            if (car.IsCarPurchased)
+            {
+                return NotFound("Car is currently purchased. Delete unsuccessfuly.");
+            }
+
             _context.Cars.Remove(car);
             await _context.SaveChangesAsync();
 
             return car;
         }
         #endregion
-
         #region 9 - Metoda za menjanje automobila
+        [HttpPut]
+        [Route("ChangeCar/{carID}")]
+        public async Task<Object> ChangeCar(string carID, CarModel model)
+        {
+            var resultFind = await _context.Cars.FindAsync(int.Parse(carID));
+            if (resultFind == null)
+            {
+                return NotFound("Changing is unsuccessfuly. Server not found selected car.");
+            }
+
+            if (model.Name != null)
+            {
+                if (!model.Name.Trim().Equals(""))
+                {
+                    resultFind.CarName = model.Name;
+                }
+            }
+
+            if (model.Model != null)
+            {
+                if (!model.Model.Trim().Equals(""))
+                {
+                    resultFind.CarModel = model.Model;
+                }
+            }
+
+            if (model.Brand != null)
+            {
+                if (!model.Brand.Trim().Equals(""))
+                {
+                    resultFind.CarBrand = model.Brand;
+                }
+            }
+
+            if (model.YearOfManufacture != null)
+            {
+                if (!model.YearOfManufacture.Trim().Equals(""))
+                {
+                    resultFind.YearOdManufacture = int.Parse(model.YearOfManufacture);
+                }
+            }
+
+            if (model.NumberOfSeats != null)
+            {
+                if (!model.NumberOfSeats.Trim().Equals(""))
+                {
+                    resultFind.NumberOfSeats = int.Parse(model.NumberOfSeats);
+                }
+            }
+
+            if (model.CardType != null)
+            {
+                if (!model.CardType.Trim().Equals(""))
+                {
+                    if (model.CardType.Equals("1"))
+                    {
+                        resultFind.CarType = CarType.GASOLINE;
+                    }
+                    else if (model.CardType.Equals("2"))
+                    {
+                        resultFind.CarType = CarType.DIESEL;
+                    }
+                    else
+                    {
+                        resultFind.CarType = CarType.GAS;
+                    }
+                }
+            }
+
+            if (model.LugageWeight != null)
+            {
+                if (!model.LugageWeight.Trim().Equals(""))
+                {
+                    resultFind.LugageWeight = int.Parse(model.LugageWeight);
+                }
+            }
+
+            if (model.IsQuickBooking != null)
+            {
+                if (model.IsQuickBooking.Equals("true"))
+                {
+                    resultFind.IsQuickBooking = true;
+                }
+                else
+                {
+                    resultFind.IsQuickBooking = false;
+                }
+            }
+
+            if (model.FlightID != null)
+            {
+                var flight = await _context.Flights.FindAsync(int.Parse(model.FlightID));
+                if (flight == null)
+                {
+                    return NotFound("Changing unsuccessfuly. Server Not found selectred flight.");
+                }
+                else
+                {
+                    resultFind.Flight = flight;
+                }
+            }
+
+            try
+            {
+                _context.Cars.Update(resultFind);
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
         #endregion
     }
 }

@@ -136,30 +136,37 @@ export class AddCarComponent implements OnInit {
         this.initializeCarsData();
       },
       err => {
-        console.log(err);
-        alert("Deleting car is unsuccessfully.");
+        if(err.error === "Car is currently purchased. Delete unsuccessfuly."){
+          alert("Car is currently purchased. Delete unsuccessfuly.");
+        }
+        else{
+          alert("Unknown error.");
+        }
       }
     );
   }
 
   changeSubmit(): void {
     // TO DO: izmeniti
-    /*this.service.changeDestination().subscribe(
+    this.service.changeCar().subscribe(
       (res: any) => {
-        alert("Successfull chage destination.");
-        this.destinations = [];
-        this.loadDestinationData();
-        this.service.changeDestinationForm.reset();
+        alert("Successfully chage car.");
+        this.cars = [];
+        this.initializeCarsData();
+        this.service.changeCarForm.reset();
       },
       err => {
-        if(err.error){
-          alert("Change unsccessfully.All field are empty.");
+        if(err.error === "Changing unsuccessfuly. Server Not found selectred flight."){
+          alert("Changing unsuccessfuly. Server Not found selectred flight.");
+        }
+        else if(err.error === "Changing is unsuccessfuly. Server not found selected car."){
+          alert("Changing is unsuccessfuly. Server not found selected car.");
         }
         else{
           alert("Unknown error.");
         } 
       }
-    );*/
+    );
   }
 
 }
