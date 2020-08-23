@@ -15,6 +15,7 @@ namespace AvioCarBackend.Data.rentACar
         public string CardType { get; set; }
         public string LugageWeight { get; set; }
         public string IsQuickBooking { get; set; }
+        public string CarPrice { get; set; }
         public string FlightID { get; set; }
         public string RentACarServiceID { get; set; }
     }

@@ -95,6 +95,19 @@
                     </label>
                 </div>
 
+                <!--car price-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="carprice" formControlName="CarPrice" placeholder="CarPrice">
+                    <label class="text-danger"
+                        *ngIf="service.addCarForm.get('CarPrice').touched && service.addCarForm.get('CarPrice').errors?.required">
+                        This field is mandatory.
+                    </label>
+                    <label class="text-danger"
+                        *ngIf="service.addCarForm.get('CarPrice').touched && service.addCarForm.get('CarPrice').errors?.minlength">
+                        Please insert a valid number.
+                    </label>
+                </div>
+
                 <!--flight + car-->
                 <div class="form-group">
                     <label>Flight</label>
@@ -215,6 +228,15 @@
                 <div class="form-group">
                     <label>Is Quick Booking?</label>
                     <input type="checkbox" class="form-control" id="isquickbooking" formControlName="IsQuickBooking" placeholder="IsQuickBooking">
+                </div>
+
+                <!--car price-->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="carprice" formControlName="CarPrice" placeholder="CarPrice">
+                    <label class="text-danger"
+                        *ngIf="service.changeCarForm.get('CarPrice').touched && service.changeCarForm.get('CarPrice').errors?.minlength">
+                        Please insert a valid number.
+                    </label>
                 </div>
 
                 <!--flight + car-->

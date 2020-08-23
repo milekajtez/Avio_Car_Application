@@ -3,12 +3,12 @@ export class RentACarServiceComboBox {
     carServiceName: string;
     carServiceAddress: string;
     carServicePromotionDescription: string;
-    carServiceRating: string;
+    carServiceRating: number;
     servicePriceList: string;
-    serviceEarnings: string;
+    serviceEarnings: number;
 
     constructor(carServiceID: string, carServiceName: string, carServiceAddress: string, carServicePromotionDescription: string,
-        carServiceRating: string, servicePriceList: string, serviceEarnings: string)
+        carServiceRating: number, servicePriceList: string, serviceEarnings: number)
     {
         this.carServiceID = carServiceID;
         this.carServiceName = carServiceName;

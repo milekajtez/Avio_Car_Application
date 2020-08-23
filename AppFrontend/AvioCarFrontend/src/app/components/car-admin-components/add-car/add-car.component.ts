@@ -26,13 +26,14 @@ export class AddCarComponent implements OnInit {
   initializeCarsData(): void {
     this.service.loadCars().subscribe(
       (res: any) => {
+        console.log(res);
         for(var i = 0; i < res.length; i++){
           var rating;
-          if(res[i].NumberOfCarGrades == "0"){
+          if(res[i].numberOfCarGrades == "0"){
             rating = 0;
           }
           else{
-            rating = Number(res[i].OverallGrade) / Number(res[i].NumberOfCarGrades);
+            rating = Number(res[i].overallGrade) / Number(res[i].numberOfCarGrades);
           }
 
           var carType;

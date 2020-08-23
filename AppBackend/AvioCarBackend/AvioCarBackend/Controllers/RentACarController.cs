@@ -7,6 +7,7 @@ using AvioCarBackend.Data.rentACar;
 using AvioCarBackend.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AvioCarBackend.Controllers
 {
@@ -213,7 +214,7 @@ namespace AvioCarBackend.Controllers
                 NumberOfCarGrades = 0,
                 LugageWeight = double.Parse(model.LugageWeight),
                 IsCarPurchased = false,
-                CarPrice = 0,
+                CarPrice = double.Parse(model.CarPrice),
                 Flight = flightFind,
                 RentACarService = findRentACar
             };
@@ -365,6 +366,14 @@ namespace AvioCarBackend.Controllers
                 }
             }
 
+            if (model.CarPrice != null) 
+            {
+                if (!model.CarPrice.Equals("")) 
+                {
+                    resultFind.CarPrice = double.Parse(model.CarPrice);
+                }
+            }
+
             if (model.FlightID != null)
             {
                 var flight = await _context.Flights.FindAsync(int.Parse(model.FlightID));
@@ -381,6 +390,88 @@ namespace AvioCarBackend.Controllers
             try
             {
                 _context.Cars.Update(resultFind);
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        #endregion
+        #region 10 - Metoda za uictavanje kola odredjenog rent-a-car servisa
+        [HttpGet]
+        [Route("GetRentACarServiceCars/{serviceID}")]
+        public IActionResult GetDestinations(string serviceID)
+        {
+            var cars = _context.Cars.Include(d => d.RentACarService);
+            if (cars == null)
+            {
+                return NotFound("Currentlly this rent-a-car service not have any cars.");
+            }
+
+            var result = new List<Car>();
+            foreach (var car in cars)
+            {
+                if (car.RentACarService.CarServiceID.Equals(int.Parse(serviceID)))
+                {
+                    result.Add(car);
+                }
+            }
+
+            if (result.Count == 0)
+            {
+                return NotFound("Currentlly this rent-a-car service not have any cars.");
+            }
+            return Ok(result);
+        }
+        #endregion
+        #region 11- Metoda za izmenu odredjenog rent-a-car servisa
+        [HttpPut]
+        [Route("ChangeRentACar/{serviceID}")]
+        public async Task<Object> ChangeRentACar(string serviceID, RentACarModel model)
+        {
+            var resultFind = await _context.RentACarServices.FindAsync(int.Parse(serviceID));
+            if (resultFind == null) 
+            {
+                return NotFound("Changing is unsuccessfuly. Server not found retna-a-car.");
+            }
+
+            if (model.CarServiceName != null) 
+            {
+                if (!model.CarServiceName.Trim().Equals("")) 
+                {
+                    resultFind.CarServiceName = model.CarServiceName;
+                }
+            }
+
+            if (model.CarServiceAddress != null)
+            {
+                if (!model.CarServiceAddress.Trim().Equals(""))
+                {
+                    resultFind.CarServiceAddress = model.CarServiceAddress;
+                }
+            }
+
+            if (model.CarServicePromotionDescription != null)
+            {
+                if (!model.CarServicePromotionDescription.Trim().Equals(""))
+                {
+                    resultFind.CarServicePromotionDescription = model.CarServicePromotionDescription;
+                }
+            }
+
+            if (model.ServicePriceList != null)
+            {
+                if (!model.ServicePriceList.Trim().Equals(""))
+                {
+                    resultFind.ServicePriceList = model.ServicePriceList;
+                }
+            }
+
+            try
+            {
+                _context.RentACarServices.Update(resultFind);
                 _context.SaveChanges();
                 return Ok();
             }

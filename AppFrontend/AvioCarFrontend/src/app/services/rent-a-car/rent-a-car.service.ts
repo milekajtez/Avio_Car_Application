@@ -37,6 +37,7 @@ export class RentACarService {
     CardType: ['', Validators.required],
     LugageWeight: ['', [Validators.required, Validators.pattern("[0-9]+")]],
     IsQuickBooking: ['', [Validators.required]],
+    CarPrice: ['', [Validators.required, Validators.pattern("[0-9]+")]],
     Flight: [''],
     RentACarService: ['', Validators.required],
   });
@@ -55,7 +56,15 @@ export class RentACarService {
     CardType: [''],
     LugageWeight: ['', Validators.pattern("[0-9]+")],
     IsQuickBooking: [''],
+    CarPrice: ['', Validators.pattern("[0-9]+")],
     Flight: ['']
+  });
+
+  changeRentACarMainInfoForm = this.fb.group({
+    CarServiceName: [''],
+    CarServiceAddress: [''],
+    CarServicePromotionDescription: [''],
+    ServicePriceList: ['']
   });
 
   // metoda za ucitavanje svih rent-a-car servisa
@@ -105,6 +114,11 @@ export class RentACarService {
     return this.http.get(this.BaseURI + '/RentACar/GetCars');
   }
 
+  // metoda za ucitavanje kola oredjenog rent-a-car servisa--novo
+  loadRentACarServiceCars(serviceID: string){
+    return this.http.get(this.BaseURI + '/RentACar/GetRentACarServiceCars/' + serviceID);
+  }
+
   // metoda za dodavanje novog automobila
   addNewCar(){
     console.log(this.addCarForm.value.IsQuickBooking);
@@ -117,6 +131,7 @@ export class RentACarService {
       CardType: this.addCarForm.value.CardType,
       LugageWeight: this.addCarForm.value.LugageWeight,
       IsQuickBooking: "",
+      CarPrice: this.addCarForm.value.CarPrice,
       FlightID: this.addCarForm.value.Flight,
       RentACarServiceID: this.addCarForm.value.RentACarService,
     }
@@ -147,6 +162,7 @@ export class RentACarService {
       CardType: this.changeCarForm.value.CardType,
       LugageWeight: this.changeCarForm.value.LugageWeight,
       IsQuickBooking: "",
+      CarPrice: this.addCarForm.value.CarPrice,
       FlightID: this.changeCarForm.value.Flight
     }
 
@@ -159,5 +175,16 @@ export class RentACarService {
     
     var carID = this.changeCarForm.value.Car;
     return this.http.put(this.BaseURI + '/RentACar/ChangeCar/' + carID, body);
+  }
+
+  changeMainInfo(serviceID: string){
+    var body = {
+      CarServiceName: this.changeRentACarMainInfoForm.value.CarServiceName,
+      CarServiceAddress: this.changeRentACarMainInfoForm.value.CarServiceAddress,
+      CarServicePromotionDescription: this.changeRentACarMainInfoForm.value.CarServicePromotionDescription,
+      ServicePriceList: this.changeRentACarMainInfoForm.value.ServicePriceList
+    }
+
+    return this.http.put(this.BaseURI + '/RentACar/ChangeRentACar/' + serviceID, body);
   }
 }
