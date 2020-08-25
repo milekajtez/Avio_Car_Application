@@ -87,7 +87,7 @@ export function provideConfig()
      provide: AuthServiceConfig,
      useFactory: provideConfig
    }
-   ],
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

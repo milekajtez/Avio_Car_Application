@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { SharedDataService } from 'src/app/services/shared/shared-data.service';
 
 @Component({
   selector: 'app-regular-menu',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegularMenuComponent implements OnInit {
 
-  constructor() { }
+  constructor(public service: SharedDataService, public router: Router) { }
 
   ngOnInit(): void {
+    /*if(!this.service.checkIsTokenValid()){
+      this.logout();
+    }*/
   }
+
+  /*logout(): void {
+    localStorage.removeItem("token");
+  }*/
 
 }

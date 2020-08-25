@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +13,9 @@ export class SharedDataService {
   private messageSource = new BehaviorSubject('default message');
   currentMessage = this.messageSource.asObservable();
 
-  constructor() { }
+  constructor(public router: Router) { }
 
   changeMessage(message: string) {
     this.messageSource.next(message)
   }
-
 }
