@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Flight } from 'src/app/entities/avio-entities/flight/flight';
+import { AbstractFilterParam } from 'src/app/entities/abstract-filter-param/abstract-filter-param';
+import { StringFilterParam } from 'src/app/entities/string-filter-param/string-filter-param';
+import { NumberFilterParam } from 'src/app/entities/number-filter-param/number-filter-param';
 
 @Injectable({
   providedIn: 'root'
@@ -133,5 +137,39 @@ export class FlightService {
     }
 
     return this.http.put(this.BaseURI + '/LoadData/ChangeTicket/' + ticketID + "/" + flightID, body);
+  }
+
+
+  //startlocation
+  checkStartLocationFilter(flight: Flight, filterParam: AbstractFilterParam): boolean {
+    return filterParam instanceof StringFilterParam && filterParam.getFilterParamName() === 'startLocationFilter' && !flight.startLocation.toLowerCase().includes(filterParam.getFilterParamValue().toLowerCase());
+  }
+  //endLocation
+  checkEndLocationFilter(flight: Flight, filterParam: AbstractFilterParam): boolean {
+    return filterParam instanceof StringFilterParam && filterParam.getFilterParamName() === 'endLocationFilter' && !flight.endLocation.toLowerCase().includes(filterParam.getFilterParamValue().toLowerCase());
+  }
+  //avgRating
+  checkFlightRatingFilter(flight: Flight, filterParam: AbstractFilterParam): boolean {
+    return filterParam instanceof NumberFilterParam && filterParam.getFilterParamName() === 'flightRatingFilter' && !(Number(flight.flightRating) == filterParam.getFilterParamValue());
+  }
+
+  // metoda za filtriranje letova
+  filterFlights(flights: Flight[], filterParams: AbstractFilterParam[]): Flight[] {
+    let filteredFlights = new Array<Flight>();
+    for (const flight of flights) {
+      let addFlight = true;
+      for (const filterParam of filterParams) {
+        if (this.checkStartLocationFilter(flight, filterParam) || this.checkEndLocationFilter(flight, filterParam)
+        || this.checkFlightRatingFilter(flight, filterParam)){
+          addFlight = false;
+        }
+      }
+
+      if (addFlight){
+        filteredFlights.push(flight);
+      }
+    }
+
+    return filteredFlights;
   }
 }

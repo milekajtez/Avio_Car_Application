@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Car } from 'src/app/entities/car-entities/car/car';
+import { AbstractFilterParam } from 'src/app/entities/abstract-filter-param/abstract-filter-param';
+import { StringFilterParam } from 'src/app/entities/string-filter-param/string-filter-param';
+import { NumberFilterParam } from 'src/app/entities/number-filter-param/number-filter-param';
 
 @Injectable({
   providedIn: 'root'
@@ -186,5 +190,39 @@ export class RentACarService {
     }
 
     return this.http.put(this.BaseURI + '/RentACar/ChangeRentACar/' + serviceID, body);
+  }
+
+
+  
+  checkCarNameFilter(car: Car, filterParam: AbstractFilterParam): boolean {
+    return filterParam instanceof StringFilterParam && filterParam.getFilterParamName() === 'carNameFilter' && !car.carName.toLowerCase().includes(filterParam.getFilterParamValue().toLowerCase());
+  }
+  
+  checkNumberOfSeatsFilter(car: Car, filterParam: AbstractFilterParam): boolean {
+    return filterParam instanceof NumberFilterParam && filterParam.getFilterParamName() === 'numberOfSeatsFilter' && !(Number(car.numberOfSeats) == filterParam.getFilterParamValue());
+  }
+  
+  checkCarRatingFilter(car: Car, filterParam: AbstractFilterParam): boolean {
+    return filterParam instanceof NumberFilterParam && filterParam.getFilterParamName() === 'carRatingFilter' && !(Number(car.carRating) == filterParam.getFilterParamValue());
+  }
+
+  // metoda za filtriranje kola
+  filterCars(cars: Car[], filterParams: AbstractFilterParam[]): Car[] {
+    let filteredCars = new Array<Car>();
+    for (const car of cars) {
+      let addCar = true;
+      for (const filterParam of filterParams) {
+        if (this.checkCarNameFilter(car, filterParam) || this.checkNumberOfSeatsFilter(car, filterParam)
+        || this.checkCarRatingFilter(car, filterParam)){
+          addCar = false;
+        }
+      }
+
+      if (addCar){
+        filteredCars.push(car);
+      }
+    }
+
+    return filteredCars;
   }
 }

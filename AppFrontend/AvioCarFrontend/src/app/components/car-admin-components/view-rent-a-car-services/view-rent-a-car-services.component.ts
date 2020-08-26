@@ -187,6 +187,7 @@ export class ViewRentACarServicesComponent implements OnInit {
       (res: any) => {
         this.branchOffices = [];
         for(var i = 0; i < res.length; i++){
+          // dodati proveru da li je to ta filijala koja pripada servisu..mislim da sam to zaboravio
           this.branchOffices.push(new BranchOffice(res[i].branchOfficeID, res[i].branchOfficeAddress, res[i].city, 
             res[i].country));
         }
