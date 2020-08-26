@@ -17,6 +17,7 @@ export class SeatConfigurationComponent implements OnInit {
     this.initializeFlightsData();
   }
 
+  //#region 1 - Uictavanje letova
   initializeFlightsData(): void {
     this.loadService.loadFlights().subscribe(
       (res: any) => {
@@ -27,11 +28,12 @@ export class SeatConfigurationComponent implements OnInit {
       },
       err => {
         console.log(err);
-        alert("Loading airlines is unsuccessfully.");
+        alert("Loading flights failed.");
       }
     );
   }
-
+  //#endregion
+  //#region 2 - Metoda za dodavanje konfikuracije sedista
   onSubmit(): void {
     this.service.addNewSeatsConfiguration().subscribe(
       (res: any) => {
@@ -40,7 +42,7 @@ export class SeatConfigurationComponent implements OnInit {
       },
       err => {
         if(err.error === "Add seact configuration is unsuccessffully.Server not found selected flight."){
-          alert("Add seact configuration is unsuccessffully.Server not found selected flight.");
+          alert("Adding seats configuration failed. Server not found selected flight.");
         }
         else{
           alert("Unknown error.");
@@ -48,4 +50,5 @@ export class SeatConfigurationComponent implements OnInit {
       }
     );
   }
+  //#endregion
 }

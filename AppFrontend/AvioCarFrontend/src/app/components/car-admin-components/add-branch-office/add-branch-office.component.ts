@@ -19,6 +19,7 @@ export class AddBranchOfficeComponent implements OnInit {
     this.initializeLoadBranchOfficesData();
   }
 
+  //#region 1 - Metoda za ucitavanje rent-a-car servisa
   initializeRentACarServiceData(): void {
     this.service.loadRentACarServices().subscribe(
       (res: any) => {
@@ -38,11 +39,12 @@ export class AddBranchOfficeComponent implements OnInit {
       },
       err => {
         console.log(err);
-        alert("Loading rent-a-car services is unsuccessfully.");
+        alert("Loading rent-a-car services failed.");
       }
     );
   }
-
+  //#endregion
+  //#region 2 - Metoda za ucitavanje filijala
   initializeLoadBranchOfficesData() : void {
     this.service.loadBranchOffices().subscribe(
       (res: any) => {
@@ -53,20 +55,21 @@ export class AddBranchOfficeComponent implements OnInit {
       },
       err => {
         console.log(err);
-        alert("Loading branch offices is unsuccessfully.");
+        alert("Loading branch offices failed.");
       }
     );
   }
-
+  //#endregion
+  //#region 3 - Metoda za dodavanje nove filijale
   addSubmit(): void {
     this.service.addNewBranch().subscribe(
       (res: any) => {
-        alert("Branch Office is added successfuly.");
+        alert("Adding branch office successfuly.");
         this.service.addBranchForm.reset();
       },
       err => {
         if(err.error === "Add bransh office is unsuccessffully.Server not found selected rent-a-car service."){
-          alert("Add branch office is unsuccessffully.Server not found selected rent-a-car service.");
+          alert("Adding branch office failed. Server not found selected rent-a-car service.");
         }
         else{
           alert("Unknown error.");
@@ -74,7 +77,8 @@ export class AddBranchOfficeComponent implements OnInit {
       }
     );
   }
-
+  //#endregion
+  //#region 4 - Metoda za brisanje filijale
   deleteSubmit(): void {
     this.service.deleteBranch(this.service.deleteBranchForm.value.BranchOffice).subscribe(
       (res: any) => {
@@ -83,29 +87,29 @@ export class AddBranchOfficeComponent implements OnInit {
         this.initializeLoadBranchOfficesData();
       },
       err => {
-        alert("Deleting branch office is unsuccessfully.");
+        alert("Deleting branch office failed.");
       }
     );
   }
-
+  //#endregion
+  //#region 5 - Metoda za izmenu filijale
   changeSubmit(): void {
     this.service.changeBranchOffice().subscribe(
       (res: any) => {
-        alert("Successfull change branch office.");
+        alert("Changing branch office successfuly.");
         this.branchOffices = [];
         this.initializeLoadBranchOfficesData();
         this.service.changeBranchForm.reset();
       },
       err => {
         if(err.error){
-          alert("Change unsccessfully.All field are empty.");
+          alert("Changing branch office failed. All field are empty.");
         }
         else{
           alert("Unknown error.");
         }
-        
       }
     );
   }
-
+  //#endregion
 }

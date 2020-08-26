@@ -27,31 +27,23 @@ declare var ol: any;
 })
 export class MenuComponent implements OnInit {
   firstLoginVariable: any;
-  
   airlines = new Array<Airline>();
   destinations = new Array<Destination>();
   flights = new Array<Flight>();
   filteredFlights = new Array<Flight>();
-
   rentACarServices = new Array<RentACarServiceComboBox>();
   branchOffices = new Array<BranchOffice>();
   cars = new Array<Car>();
   filteredCars = new Array<Car>();
-
   lon: number;
   lat: number;
   map: any;
-
   promotionDescription: string;
-
-  // flight more info
   additionalInfo: string;
   numberOfTransfers: string;
   allTransfers: string;
   planeName: string;
   laguageWeight: string;
-
-  // more info car
   yearOdManufacture: string;
   carType: string;
   lugageWeightCar: string;
@@ -257,7 +249,7 @@ export class MenuComponent implements OnInit {
     this.laguageWeight = flight.laguageWeight;
   }
   //#endregion
-  //#region 7 - Metoda za pravljenje stringa na osnovu kojeg ce se odredjivati koordiante adrese
+  //#region 7 - Metoda za pravljenje stringa na osnovu kojeg ce se odredjivati koordiante adrese i metoda za uvacivanje mape u modal
   viewAirlineMapAddress(airline: any){
     var address = airline.airlineAddress;
     var broj = "";
@@ -288,9 +280,59 @@ export class MenuComponent implements OnInit {
     var formatedAddress = broj + "," + ulica + "," + grad;
     this.addressLookup(formatedAddress);
   }
-  //#endregion
 
-  //#region 8 - Metoda za ucitavanje rent-a-car servisa
+  myFunction(){
+    var element = document.getElementById("map");
+    element.parentNode.removeChild(element);
+    var node  = document.createElement("div");
+    node.setAttribute("id", "map");
+    node.setAttribute("style", "height: 400px;");
+    var parent = document.getElementById("destory1");
+    parent.appendChild(node);
+  }
+  //#endregion
+  //#region 8 - Metoda za ubacivanje podataka u modal (promotivni opis)
+  viewAirlinePromotionDescription(airline: any){
+    this.promotionDescription = airline.airlinePromotionDescription;
+  }
+  //#endregion
+  //#region 9 - Metode za filtriranje letova
+  filterFlights(): void {
+    let filterParams = new Array<AbstractFilterParam>();
+    if (this.getFilterFieldValue("startLocationFilter")) {
+      filterParams.push(this.addStartLocationFilterParam());
+    }
+    if (this.getFilterFieldValue("endLocationFilter")) {
+      filterParams.push(this.addEndLocationFilterParam());
+    }
+    if (this.getFilterFieldValue("flightRatingFilter")) {
+      filterParams.push(this.addFlightRatingFilterParam());
+    }
+
+    this.filteredFlights = this.flightService.filterFlights(this.flights, filterParams);
+  }
+
+  resetFilter(): void {
+    this.filteredFlights = this.flights;
+  }
+
+  getFilterFieldValue(filterFieldId: string){
+    return (<HTMLInputElement> document.getElementById(filterFieldId)).value;
+  }
+
+  addStartLocationFilterParam(): ReturnType<any> {
+    return new StringFilterParam("startLocationFilter", this.getFilterFieldValue("startLocationFilter"));
+  }
+
+  addEndLocationFilterParam(): ReturnType<any> {
+    return new StringFilterParam("endLocationFilter", this.getFilterFieldValue("endLocationFilter"));
+  }
+
+  addFlightRatingFilterParam(): ReturnType<any> {
+    return new NumberFilterParam("flightRatingFilter", +this.getFilterFieldValue("flightRatingFilter"));
+  }
+  //#endregion
+  //#region 10 - Metoda za ucitavanje rent-a-car servisa
   loadRentACarServices(): void {
     this.rentACarServices = [];
     this.carService.loadRentACarServices().subscribe(
@@ -317,14 +359,13 @@ export class MenuComponent implements OnInit {
     );
   }
   //#endregion
-  //#region 9 - Metoda za ucitavanje filijala
+  //#region 11 - Metoda za ucitavanje filijala
   loadBranchOffices(service: any): void {
     this.branchOffices = [];
-    this.carService.loadBranchOffices().subscribe(
+    this.carService.loadRentACarServiceBranchOffices(service.carServiceID).subscribe(
       (res: any) => {
         this.branchOffices = [];
         for(var i = 0; i < res.length; i++){
-          // dodati proveru da li je to ta filijala koja pripada servisu..mislim da sam to zaboravio
           this.branchOffices.push(new BranchOffice(res[i].branchOfficeID, res[i].branchOfficeAddress, res[i].city, 
             res[i].country));
         }
@@ -335,7 +376,7 @@ export class MenuComponent implements OnInit {
     );
   }
   //#endregion
-  //#region 10 - Metoda za ucitavanje kola
+  //#region 12 - Metoda za ucitavanje kola
   loadcars(service: any): void {
     this.cars = [];
     this.carService.loadRentACarServiceCars(service.carServiceID).subscribe(
@@ -371,6 +412,7 @@ export class MenuComponent implements OnInit {
       err => {
         if(err.error === "Currentlly this rent-a-car service not have any cars."){
           alert("Currentlly this rent-a-car service not have any cars.");
+          this.filteredCars = [];
         }
         else{
           alert("Unkonwn error.");
@@ -379,7 +421,7 @@ export class MenuComponent implements OnInit {
     );
   }
   //#endregion
-  //#region 11 - More info za car
+  //#region 13 - More info za car
   viewCarMoreInfo(car: any){
     this.yearOdManufacture = car.yearOdManufacture;
     this.carType = car.carType;
@@ -390,7 +432,7 @@ export class MenuComponent implements OnInit {
     this.carPrice = car.carPrice;
   }
   //#endregion
-  //#region 12 - Metoda za pravljenje stringa adrese
+  //#region 14 - Metoda za pravljenje stringa adrese i metoda za ubacivanje mape u modal
   viewRentACarMapAddress(service: any){
     var address = service.carServiceAddress;
     var broj = "";
@@ -421,11 +463,6 @@ export class MenuComponent implements OnInit {
     var formatedAddress = broj + "," + ulica + "," + grad;
     this.addressLookup(formatedAddress);
   }
-  //#endregion
-
-  viewRentACarPromotionDescription(service: any){
-    this.promotionDescription = service.carServicePromotionDescription;
-  }
 
   myFunctionCar(){
     var element = document.getElementById("map");
@@ -436,12 +473,45 @@ export class MenuComponent implements OnInit {
     var parent = document.getElementById("destory1Car");
     parent.appendChild(node);
   }
-  
+  //#endregion
+  //#region 15 - Metoda za ubacivanje podatak u modal (prmotivni opis)
+  viewRentACarPromotionDescription(service: any){
+    this.promotionDescription = service.carServicePromotionDescription;
+  }
+  //#endregion
+  //#region 16 - Metoda za filtriranje automobila
+  filterCars(): void {
+    let filterParams = new Array<AbstractFilterParam>();
+    if (this.getFilterFieldValue("carNameFilter")) {
+      filterParams.push(this.addCarNameFilterParam());
+    }
+    if (this.getFilterFieldValue("numberOfSeatsFilter")) {
+      filterParams.push(this.addNumberOfSeatsFilterParam());
+    }
+    if (this.getFilterFieldValue("carRatingFilter")) {
+      filterParams.push(this.addCarRatingFilterParam());
+    }
 
+    this.filteredCars = this.carService.filterCars(this.cars, filterParams);
+  }
 
-  
+  addCarNameFilterParam(): ReturnType<any> {
+    return new StringFilterParam("carNameFilter", this.getFilterFieldValue("carNameFilter"));
+  }
 
-  // calculating location
+  addNumberOfSeatsFilterParam(): ReturnType<any> {
+    return new NumberFilterParam("numberOfSeatsFilter", +this.getFilterFieldValue("numberOfSeatsFilter"));
+  }
+
+  addCarRatingFilterParam(): ReturnType<any> {
+    return new NumberFilterParam("carRatingFilter", +this.getFilterFieldValue("carRatingFilter"));
+  }
+
+  resetFilterCar(){
+    this.filteredCars = this.cars;
+  }
+  //#endregion
+  //#region 17 - Metode za racunanje koordinata, inicijalizaciju mape i markera
   addressLookup(formatedAddress: string) : void {
     var splited = formatedAddress.split(",", 3);
     var houseNumber = (splited[0]).replace(' ', '%20');
@@ -465,7 +535,6 @@ export class MenuComponent implements OnInit {
     );
   }
 
-  // define map
   defineMap(longitude: any, latitude: any){
     console.log("definisanje mape");
     this.map = new ol.Map({
@@ -484,7 +553,6 @@ export class MenuComponent implements OnInit {
     this.addPoint(latitude  - 0.00, longitude - 0.00);
   }
 
-  // add point on map
   addPoint(lat: number, lng: number) {
     var vectorLayer = new ol.layer.Vector({
       source: new ol.source.Vector({
@@ -504,98 +572,5 @@ export class MenuComponent implements OnInit {
 
     this.map.addLayer(vectorLayer);
   }
-
-  // function for deteteand add new div element in address modal
-  myFunction(){
-    var element = document.getElementById("map");
-    element.parentNode.removeChild(element);
-    var node  = document.createElement("div");
-    node.setAttribute("id", "map");
-    node.setAttribute("style", "height: 400px;");
-    var parent = document.getElementById("destory1");
-    parent.appendChild(node);
-  }
-
-  viewAirlinePromotionDescription(airline: any){
-    this.promotionDescription = airline.airlinePromotionDescription;
-  }
-
-
-  // filtriranje letova
-  filterFlights(): void {
-    let filterParams = new Array<AbstractFilterParam>();
-    if (this.getFilterFieldValue("startLocationFilter")) {
-      filterParams.push(this.addStartLocationFilterParam());
-    }
-    if (this.getFilterFieldValue("endLocationFilter")) {
-      filterParams.push(this.addEndLocationFilterParam());
-    }
-    if (this.getFilterFieldValue("flightRatingFilter")) {
-      filterParams.push(this.addFlightRatingFilterParam());
-    }
-
-    // ovo kanije resiti
-    this.filteredFlights = this.flightService.filterFlights(this.flights, filterParams);
-
-  }
-
-  resetFilter(): void {
-    this.filteredFlights = this.flights;
-  }
-
-  getFilterFieldValue(filterFieldId: string){
-    return (<HTMLInputElement> document.getElementById(filterFieldId)).value;
-  }
-
-  //name
-  addStartLocationFilterParam(): ReturnType<any> {
-    return new StringFilterParam("startLocationFilter", this.getFilterFieldValue("startLocationFilter"));
-  }
-
-  //address
-  addEndLocationFilterParam(): ReturnType<any> {
-    return new StringFilterParam("endLocationFilter", this.getFilterFieldValue("endLocationFilter"));
-  }
-
-  //avgRanging
-  addFlightRatingFilterParam(): ReturnType<any> {
-    return new NumberFilterParam("flightRatingFilter", +this.getFilterFieldValue("flightRatingFilter"));
-  }
-
-
-  filterCars(): void {
-    console.log("qwerty");
-    let filterParams = new Array<AbstractFilterParam>();
-    if (this.getFilterFieldValue("carNameFilter")) {
-      filterParams.push(this.addCarNameFilterParam());
-    }
-    if (this.getFilterFieldValue("numberOfSeatsFilter")) {
-      filterParams.push(this.addNumberOfSeatsFilterParam());
-    }
-    if (this.getFilterFieldValue("carRatingFilter")) {
-      filterParams.push(this.addCarRatingFilterParam());
-    }
-
-    // ovo kanije resiti
-    this.filteredCars = this.carService.filterCars(this.cars, filterParams);
-  }
-
-  //name
-  addCarNameFilterParam(): ReturnType<any> {
-    return new StringFilterParam("carNameFilter", this.getFilterFieldValue("carNameFilter"));
-  }
-
-  //number of seats
-  addNumberOfSeatsFilterParam(): ReturnType<any> {
-    return new NumberFilterParam("numberOfSeatsFilter", +this.getFilterFieldValue("numberOfSeatsFilter"));
-  }
-
-  //avgRanging
-  addCarRatingFilterParam(): ReturnType<any> {
-    return new NumberFilterParam("carRatingFilter", +this.getFilterFieldValue("carRatingFilter"));
-  }
-
-  resetFilterCar(){
-    this.filteredCars = this.cars;
-  }
+  //#endregion
 }

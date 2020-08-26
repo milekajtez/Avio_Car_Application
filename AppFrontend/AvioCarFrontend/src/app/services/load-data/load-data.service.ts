@@ -10,6 +10,7 @@ export class LoadDataService {
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
+  //#region 1 - Forme za unos vrednost promene popusta
   form1 = this.fb.group({
     AirlinePlusCar: ['', Validators.required]
   });
@@ -25,7 +26,8 @@ export class LoadDataService {
   form4 = this.fb.group({
     Points1200: ['', Validators.required]
   });
-
+  //#endregion
+  //#region 2 - Forma za menjanje podataka admina i forma za izmenu sifre admina
   changeAdmin = this.fb.group({
     UserName: [''],
     Email: ['', Validators.email],
@@ -42,8 +44,8 @@ export class LoadDataService {
       ConfirmPassword: ['', [Validators.required, Validators.minLength(8)]]
     }, { validator: this.compareNewPasswords })
   });
-
-
+  //#endregion
+  //#region 3 - Forma za unos nove destinacije, brisanje i izmenu destinacije
   destinationForm = this.fb.group({
     Airline: ['', Validators.required],
     AirportName: ['', Validators.required],
@@ -61,7 +63,8 @@ export class LoadDataService {
     City: [''],
     Country: ['']
   });
-
+  //#endregion
+  //#region 4 - Frome za brisanje i izmenu leta
   deleteFlightForm = this.fb.group({
     Flight: ['', Validators.required]
   });
@@ -79,16 +82,16 @@ export class LoadDataService {
     PlaneName: [''],
     LugageWeight: ['', Validators.pattern("[0-9]+")]
   });
-
+  //#endregion
+  //#region 5 - Forma za izmenu glavnih podataka aviokompanije
   changeAirlineMainInfo = this.fb.group({
     Name: [''],
     Address: [''],
     PromotionDescription: [''],
     Pricelist: ['']
   });
-
-
-  // metoda za proveru identicnosti sifri
+  //#endregion
+  //#region 6 - Metoda za proveru identicnosti sifri
   compareNewPasswords(fb: FormGroup) {
     let confirmPswrdCtrl = fb.get('ConfirmPassword');
     //passwordMismatch
@@ -100,23 +103,21 @@ export class LoadDataService {
         confirmPswrdCtrl.setErrors(null);
     }
   }
-
-  // metoda za ucitavanje popusta
+  //#endregion
+  //#region 7 - Metoda za ucitavanje i metoda za izmenu popusta
   loadDiscounts() {
     return this.http.get(this.BaseURI + '/LoadData/GetDiscounts');
   }
 
-  // metoda za izmenu popusta
   changeDiscount(body){
     return this.http.put(this.BaseURI + '/LoadData/ChangeDiscount', body);
   }
-
-  // metoda za ucitavanje admina 
+  //#endregion
+  //#region 8 - Metoda za ucitavanje admina, metoda za imenu podataka admina i metoda za izmenu sifre
   loadAdmin(username: string){
     return this.http.get(this.BaseURI + '/LoadData/GetAdmin/' + username);
   }
 
-  // metoda za promeni podataka admina
   changeAdminProfile(username: string){
     var body = {
       CurrentUsername: username,
@@ -127,27 +128,32 @@ export class LoadDataService {
       LastName: this.changeAdmin.value.LastName,
       City: this.changeAdmin.value.City
     }
-
     return this.http.put(this.BaseURI + '/LoadData/ChangeAdminProfile', body);
   }
 
-  // metoda za promenu sifre
   changePassword(username : string){
     var body = {
       Username: username,
       CurrentPassword: this.changeAdminPassword.value.CurrentPassword,
       NewPassword:  this.changeAdminPassword.value.Passwords.Password
     }
-
     return this.http.put(this.BaseURI + '/LoadData/ChangePassword', body);
   }
-
-  // etoda za ucitavanje avio kompanija
+  //#endregion
+  //#region 9 - Metoda za ucitavanje svih aviokompanija
   loadAirlines() {
     return this.http.get(this.BaseURI + '/LoadData/GetAirlines');
   }
+  //#endregion
+  //#region 10 - Metoda za ucitavanje svih destinacija, za ucitavanje destinacije odredjene aviokopmanije, dodavanje, brisanje i izmenu destinacije
+  loadAllDestinations(){
+    return this.http.get(this.BaseURI + '/LoadData/GetDestination');
+  }
 
-  // metoda za dodavanje nove destinacije
+  loadDestinations(airlineID: string){
+    return this.http.get(this.BaseURI + '/LoadData/GetDestinations/' + airlineID);
+  }
+  
   addNewDestination() {
     var body = {
       AirlineID: this.destinationForm.value.Airline,
@@ -158,37 +164,10 @@ export class LoadDataService {
     return this.http.post(this.BaseURI + '/LoadData/AddDestination', body);
   }
 
-  // metoda za ucitavanje svih letova
-  loadFlights() {
-    return this.http.get(this.BaseURI + '/LoadData/GetFlights');
-  }
-
-  // metoda za ucitavanje svih destinacija
-  loadAllDestinations(){
-    return this.http.get(this.BaseURI + '/LoadData/GetDestination');
-  }
-
-  // metoda za ucitavanje destinacija odredjene aviokompanije
-  loadDestinations(airlineID: string){
-    return this.http.get(this.BaseURI + '/LoadData/GetDestinations/' + airlineID);
-  }
-
-  // metoda za ucitavanje letova odredjene aviokompanije
-  loadAirlineFlights(airlineID: string){
-    return this.http.get(this.BaseURI + '/LoadData/GetAirlineFlights/' + airlineID);
-  }
-
-  // metoda za brisanje destinacije
   deleteDestination(airportID: string){
     return this.http.delete(this.BaseURI + '/LoadData/DeleteDestination/' + airportID);
   }
 
-  // metoda za brisanje destinacije
-  deleteFlight(flightID: string){
-    return this.http.delete(this.BaseURI + '/LoadData/DeleteFlight/' + flightID);
-  }
-
-  // metoda za izmenu destinacije
   changeDestination(){
     var body = {
       AirlineID: this.changeDestinationForm.value.Destination,
@@ -196,11 +175,22 @@ export class LoadDataService {
       City: this.changeDestinationForm.value.City,
       Country: this.changeDestinationForm.value.Country
     }
-
     return this.http.put(this.BaseURI + '/LoadData/ChangeDestination/', body);
   }
+  //#endregion
+  //#region 11 - Metoda za ucitavanje svih letova, za ucitavanje letova odredjene aviokompanije, dodavanje, brisanje i izmenu letova
+  loadFlights() {
+    return this.http.get(this.BaseURI + '/LoadData/GetFlights');
+  }
 
-  // metoda za imenu leta
+  loadAirlineFlights(airlineID: string){
+    return this.http.get(this.BaseURI + '/LoadData/GetAirlineFlights/' + airlineID);
+  }
+
+  deleteFlight(flightID: string){
+    return this.http.delete(this.BaseURI + '/LoadData/DeleteFlight/' + flightID);
+  }
+
   changeFlight(){
     var body = {
       AirlineID: this.changeFlightForm.value.Flight,
@@ -215,14 +205,12 @@ export class LoadDataService {
       PlaneName: this.changeFlightForm.value.PlaneName,
       LugageWeight: this.changeFlightForm.value.LugageWeight,
     }
-
     // AirlineID je ustvari ID flihght-a..stavio sam AirlineID jer imam vec
     // klasu na backecu koja ima AirlineID..pa da ne pravim novi klasu
-
     return this.http.put(this.BaseURI + '/LoadData/ChangeFlight/', body);
   }
-
-  //metoda za imenu osnovnih informacija aviokompanije
+  //#endregion
+  //#region 12 - Metoda za izmenu osnovnih podataka aviokompanije
   changeMainInfo(airlineID: string){
     var body = {
       Name: this.changeAirlineMainInfo.value.Name,
@@ -230,12 +218,12 @@ export class LoadDataService {
       PromotionDescription: this.changeAirlineMainInfo.value.PromotionDescription,
       PriceList: this.changeAirlineMainInfo.value.Pricelist
     }
-
     return this.http.put(this.BaseURI + '/LoadData/ChangeAirlineMainInfo/' + airlineID, body);
   }
-
-  //metoda za ucitavanje karata odredjenog leta
+  //#endregion
+  //#region 13 - Metoda za ucitavanje karata odredjenog leta
   loadTickets(flightID: string){
     return this.http.get(this.BaseURI + '/LoadData/GetFlightTickets/' + flightID);
   }
+  //#endregion
 }

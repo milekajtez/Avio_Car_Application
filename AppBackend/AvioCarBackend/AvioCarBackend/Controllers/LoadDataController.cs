@@ -189,7 +189,6 @@ namespace AvioCarBackend.Controllers
                     {
                         throw e;
                     }
-
                 }
                 else
                 {
@@ -225,7 +224,6 @@ namespace AvioCarBackend.Controllers
         #region 7 - Metoda za dodavanje nove destinacije
         [HttpPost]
         [Route("AddDestination")]
-        //POST : /api/LoadData/AddDestination
         public async Task<Object> AddDestination(DestinationModel model)
         {
             var airline = await _context.Airlines.FindAsync(int.Parse(model.AirlineID));
@@ -259,7 +257,6 @@ namespace AvioCarBackend.Controllers
         #region 8 - Metoda za dodavanje novog leta
         [HttpPost]
         [Route("AddFlight")]
-        //POST : /api/LoadData/AddFlight
         public async Task<Object> AddFlight(FlightModel model)
         {
             var airline = await _context.Airlines.FindAsync(int.Parse(model.AirlineID));
@@ -336,10 +333,8 @@ namespace AvioCarBackend.Controllers
         }
         #endregion
         #region 10 - Metoda za dodavanje kongiguracije sedista za avion tj let
-        //AddSeatsConfiguration
         [HttpPost]
         [Route("AddSeatsConfiguration")]
-        //POST : /api/LoadData/AddSeatsConfiguration
         public async Task<Object> AddSeatsConfiguration(SeatModel model)
         {
             var flight = await _context.Flights.FindAsync(int.Parse(model.Flight));
@@ -455,7 +450,6 @@ namespace AvioCarBackend.Controllers
         }
         #endregion
         #region 13 - Metoda za ucitavanje svih destinacija
-        //GetDestination
         [HttpGet]
         [Route("GetDestination")]
         public IActionResult GetDestination()
@@ -530,7 +524,6 @@ namespace AvioCarBackend.Controllers
         }
         #endregion
         #region 16 - Metoda za brisanje leta
-        //DeleteFlight
         [HttpDelete]
         [Route("DeleteFlight/{flightID}")]
         public async Task<ActionResult<Flight>> DeleteFlight(string flightID)
@@ -548,7 +541,6 @@ namespace AvioCarBackend.Controllers
         }
         #endregion
         #region 17 - Metoda za izmenu leta
-        //ChangeFlight
         [HttpPut]
         [Route("ChangeFlight")]
         public async Task<Object> ChangeFlight(FlightModel model)
@@ -604,7 +596,7 @@ namespace AvioCarBackend.Controllers
                     resultFind.StartLocation = model.StartLocation == null || model.StartLocation.Trim().Equals("") ? resultFind.StartLocation : model.StartLocation;
                     resultFind.EndLocation = model.EndLocation == null || model.EndLocation.Trim().Equals("") ? resultFind.EndLocation : model.EndLocation;
                     resultFind.FlightLength = model.FlightLength == null || model.FlightLength.Trim().Equals("") ? resultFind.FlightLength : double.Parse(model.FlightLength);
-                    resultFind.FlightPrice = resultFind.FlightPrice;                   // ovo polje se ne menja
+                    resultFind.FlightPrice = resultFind.FlightPrice;                    // ovo polje se ne menja
                     resultFind.NumberOfFlightGrades = resultFind.NumberOfFlightGrades;  // ovo polje se ne menja
                     resultFind.AdditionalInformation = model.AdditionalInformation == null || model.AdditionalInformation.Trim().Equals("") ? resultFind.AdditionalInformation : model.AdditionalInformation;
                     resultFind.NumberOfTransfers = model.NumberOfTransfers == null || model.NumberOfTransfers.Trim().Equals("") ? resultFind.NumberOfTransfers : int.Parse(model.NumberOfTransfers);
@@ -663,7 +655,6 @@ namespace AvioCarBackend.Controllers
         }
         #endregion
         #region 19 - Metoda za ucitavanje karata odredjenog leta
-        //GetTickets
         [HttpGet]
         [Route("GetFlightTickets/{flightID}")]
         public IActionResult GetFlightTickets(string flightID)

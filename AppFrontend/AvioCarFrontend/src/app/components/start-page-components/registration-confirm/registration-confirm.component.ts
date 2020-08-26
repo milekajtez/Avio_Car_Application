@@ -12,19 +12,17 @@ export class RegistrationConfirmComponent implements OnInit {
   constructor(public service: RegisterService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
-    console.log("Inicijalizovano");
     this.confirmRegistration();
     localStorage.removeItem('registration');
   }
 
-  // metoda koja poziva metodu sa servisa koja salje zahtev za menjanje bool polja regstracije
+  //#region 1 - Metoda koja poziva metodu sa servisa koja salje zahtev za menjanje bool polja regstracije
   confirmRegistration() : void {
-    console.log("Usao u metodu.");
     this.service.confirm().subscribe(
       (res: any) => {
         console.log(res);
       }
     );
   }
-
+  //#endregion
 }

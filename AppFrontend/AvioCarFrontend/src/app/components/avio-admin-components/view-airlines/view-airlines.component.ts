@@ -18,16 +18,13 @@ export class ViewAirlinesComponent implements OnInit {
   airlines = new  Array<Airline>();
   destinations = new Array<Destination>();
   flights = new Array<Flight>();
-
   promotionDescription: string;
   priceList: string;
-
   additionalInfo: string;
   numberOfTransfers: string;
   allTransfers: string;
   planeName: string;
   laguageWeight: string;
-
   lon: number;
   lat: number;
   map: any;
@@ -38,12 +35,13 @@ export class ViewAirlinesComponent implements OnInit {
     this.loadInitializeData();
   }
 
+  //#region 1 - Metoda za ucitavanje aviokompanija
   loadInitializeData(): void {
     this.loadService.loadAirlines().subscribe(
       (res: any) => {
         for(var i = 0; i < res.length; i++)
         {
-          var rating;
+          var rating: number;
           if(res[i].numberOfAirlineGrades == "0")
           {
             rating = 0;
@@ -54,16 +52,68 @@ export class ViewAirlinesComponent implements OnInit {
           }
           
           this.airlines.push(new Airline(res[i].airlineID, res[i].airlineName, res[i].airlineAddress, 
-            res[i].airlinePromotionDescription, res[i].airlinePriceList, res[i].numberOfSoldTickets, i + 1/*rating*/));
+            res[i].airlinePromotionDescription, res[i].airlinePriceList, res[i].numberOfSoldTickets, rating));
         }
       },
       err => {
         console.log(err);
-        alert("Loading airlines is unsuccessfully.");
+        alert("Loading airlines failed.");
       }
     );
   }
+  //#endregion
+  //#region 2 - Metoda za ucitavanje destinacija
+  viewDestinations(airline: any){
+    this.destinations = [];
+    this.loadService.loadDestinations(airline.airlineID).subscribe(
+      (res: any) => {
+        for(var i = 0; i < res.length; i++){
+          this.destinations.push(new Destination(res[i].airportID, res[i].airportName, res[i].city, res[i].country));
+        }
+      },
+      err => {
+        console.log(err);
+        if(err.error === "Currentlly this airline not have any destinations."){
+          alert("Currentlly airline not have any destinations.");
+        }
+        else{
+          alert("Unknown error.");
+        }
+      }
+    );
+  }
+  //#endregion
+  //#region 3 - Metoda za ucitavanje letova
+  viewFlights(airline: any){
+    this.flights = [];
+    this.loadService.loadAirlineFlights(airline.airlineID).subscribe(
+      (res: any) => {
+        for(var i = 0; i < res.length; i++){
+          var rating;
+          if(res[i].numberOfFlightGrades == "0"){
+            rating = 0;
+          }
+          else{
+            rating = Number(res[i].flightPrice) / Number(res[i].numberOfFlightGrades);
+          }
 
+          this.flights.push(new Flight(res[i].flightID, res[i].startTime, res[i].endTime, res[i].startLocation,
+            res[i].endLocation, res[i].flightTime, res[i].flightLength, rating, res[i].additionalInformation, 
+            res[i].numberOfTransfers, res[i].allTransfers, res[i].planeName, res[i].lugageWeight));
+        }
+      },
+      err => {
+        if(err.error === "Currentlly this airline not have any flight."){
+          alert("Currentlly this airline not have any flight.");
+        }
+        else{
+          alert("Unkonwn error.");
+        }
+      }
+    );
+  }
+  //#endregion
+  //#region 4 - Metoda za ubacivanje podataka u modal (promotivni opis i cenovnik)
   viewAirlinePromotionDescription(airline: any){
     this.promotionDescription = airline.airlinePromotionDescription;
   }
@@ -71,7 +121,8 @@ export class ViewAirlinesComponent implements OnInit {
   viewAirlinePricelist(airline: any){
     this.priceList = airline.airlinePriceList;
   }
-
+  //#endregion
+  //#region 5 - Metoda za podesavanje stringa adrese, pronalazak koordinata adrese, inicijalizaciju mape i markera i metoda za postavljanje mape u modal
   viewAirlineMapAddress(airline: any){
     var address = airline.airlineAddress;
     var broj = "";
@@ -103,7 +154,6 @@ export class ViewAirlinesComponent implements OnInit {
     this.addressLookup(formatedAddress);
   }
 
-  // calculating location
   addressLookup(formatedAddress: string) : void {
     var splited = formatedAddress.split(",", 3);
     var houseNumber = (splited[0]).replace(' ', '%20');
@@ -127,7 +177,6 @@ export class ViewAirlinesComponent implements OnInit {
     );
   }
 
-  // define map
   defineMap(longitude: any, latitude: any){
     console.log("definisanje mape");
     this.map = new ol.Map({
@@ -146,7 +195,6 @@ export class ViewAirlinesComponent implements OnInit {
     this.addPoint(latitude  - 0.00, longitude - 0.00);
   }
 
-  // add point on map
   addPoint(lat: number, lng: number) {
     var vectorLayer = new ol.layer.Vector({
       source: new ol.source.Vector({
@@ -167,7 +215,6 @@ export class ViewAirlinesComponent implements OnInit {
     this.map.addLayer(vectorLayer);
   }
 
-  // function for deteteand add new div element in address modal
   myFunction(){
     var element = document.getElementById("map");
     element.parentNode.removeChild(element);
@@ -177,59 +224,8 @@ export class ViewAirlinesComponent implements OnInit {
     var parent = document.getElementById("destory1");
     parent.appendChild(node);
   }
-  
-  // ucitavanje destinacija
-  viewDestinations(airline: any){
-    this.destinations = [];
-    this.loadService.loadDestinations(airline.airlineID).subscribe(
-      (res: any) => {
-        for(var i = 0; i < res.length; i++){
-          this.destinations.push(new Destination(res[i].airportID, res[i].airportName, res[i].city, res[i].country));
-        }
-      },
-      err => {
-        console.log(err);
-        if(err.error === "Currentlly this airline not have any destinations."){
-          alert("Currentlly airline not have any destinations.");
-        }
-        else{
-          alert("Unknown error.");
-        }
-      }
-    );
-  }
-
-  // ucitavanje letova
-  viewFlights(airline: any){
-    this.flights = [];
-    this.loadService.loadAirlineFlights(airline.airlineID).subscribe(
-      (res: any) => {
-        for(var i = 0; i < res.length; i++){
-          var rating;
-          if(res[i].numberOfFlightGrades == "0"){
-            rating = 0;
-          }
-          else{
-            rating = Number(res[i].flightPrice) / Number(res[i].numberOfFlightGrades);
-          }
-
-          this.flights.push(new Flight(res[i].flightID, res[i].startTime, res[i].endTime, res[i].startLocation,
-            res[i].endLocation, res[i].flightTime, res[i].flightLength, rating, res[i].additionalInformation, 
-            res[i].numberOfTransfers, res[i].allTransfers, res[i].planeName, res[i].lugageWeight));
-        }
-      },
-      err => {
-        if(err.error === "Currentlly this airline not have any flight."){
-          alert("Currentlly this airline not have any flight.");
-        }
-        else{
-          alert("Unkonwn error.");
-        }
-      }
-    );
-  }
-
-  // prikaz dodatnih informacija o letu
+  //#endregion
+  //#region 6 - Metoda za prikaz dodatnih informacija o letu
   flightMoreInfo(flight: any){
     this.additionalInfo = flight.adittionalInformation;
     this.numberOfTransfers = flight.numberOfTransfers;
@@ -237,22 +233,20 @@ export class ViewAirlinesComponent implements OnInit {
     this.planeName = flight.planeName;
     this.laguageWeight = flight.laguageWeight;
   }
-
-
+  //#endregion
+  //#region 7 - Metoda za izvlacenje id aviokompanije i izmenu glavnih informacija iste
   airlineID: string;
   viewAirlineID(airline: any){
     this.airlineID = airline.airlineID;
   }
 
-  // metoda za izmenu glavnih informacija aviokompanije
   changeAirlineMainInfo(){
     this.loadService.changeMainInfo(this.airlineID).subscribe(
       (res: any) => {
         this.loadService.changeAirlineMainInfo.reset();
         this.airlines  = [];
         this.loadInitializeData();
-        alert("Change succesfully.");
-        
+        alert("Changing airline succesfully.");
       },
       err => {
         if(err.error === "You not entered any new data."){
@@ -264,5 +258,5 @@ export class ViewAirlinesComponent implements OnInit {
       }
     );
   }
-
+  //#endregion
 }

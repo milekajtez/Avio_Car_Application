@@ -30,7 +30,6 @@ export class AirlineRegistrationComponent implements OnInit {
         }
       }
     );
-
   }
 
 }

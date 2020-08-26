@@ -12,13 +12,6 @@ export class RegularMenuComponent implements OnInit {
   constructor(public service: SharedDataService, public router: Router) { }
 
   ngOnInit(): void {
-    /*if(!this.service.checkIsTokenValid()){
-      this.logout();
-    }*/
   }
-
-  /*logout(): void {
-    localStorage.removeItem("token");
-  }*/
-
+  
 }

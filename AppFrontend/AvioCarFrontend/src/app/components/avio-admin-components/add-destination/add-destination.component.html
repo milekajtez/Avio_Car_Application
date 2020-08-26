@@ -7,7 +7,6 @@
         <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
             <h3 style="text-align: center;"> ADD DESTINATION</h3>
             <form [formGroup]="service.destinationForm" (ngSubmit)="onSubmit()">
-        
                 <!--airline-->
                 <div class="form-group">
                     <label>Airline</label>
@@ -18,7 +17,6 @@
                     *ngIf="service.destinationForm.get('Airline').touched && service.destinationForm.get('Airline').errors?.required">
                     This field is mandatory.</label>
                 </div>
-        
                 <!--airport name-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="airportname" formControlName="AirportName" placeholder="AirportName">
@@ -27,7 +25,6 @@
                       This field is mandatory.
                     </label>
                 </div>
-        
                 <!--city-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="city" formControlName="City" placeholder="City">
@@ -36,7 +33,6 @@
                       This field is mandatory.
                     </label>
                 </div>
-        
                 <!--country-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="country" formControlName="Country" placeholder="Country">
@@ -45,19 +41,16 @@
                       This field is mandatory.
                     </label>
                 </div>
-        
                 <div class="form-group text-center">
                     <button [disabled]="!service.destinationForm.valid" class="btn btn-success" type="submit">Add Destination</button>
                     <p>&nbsp;</p>
                 </div>
             </form>
         </span>
-
         <!--brisanje destinacije-->
         <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
             <h3 style="text-align: center;"> DELETE DESTINATION</h3>
             <form [formGroup]="service.deleteDestinationForm" (ngSubmit)="deleteSubmit()" autocomplete="off">
-
                 <!--destination-->
                 <div class="form-group">
                     <label>Destination</label>
@@ -68,19 +61,16 @@
                         *ngIf="service.deleteDestinationForm.get('Destination').touched && service.deleteDestinationForm.get('Destination').errors?.required">
                         This field is mandatory.</label>
                 </div>
-
                 <div class="form-group text-center">
                     <button [disabled]="!service.deleteDestinationForm.valid" class="btn btn-success" type="submit">Delete Destination</button>
                     <p>&nbsp;</p>
                 </div>
             </form>
         </span>
-
         <!--menajnje destinacije-->
         <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
             <h3 style="text-align: center;"> CHANGE DESTINATION</h3>
             <form [formGroup]="service.changeDestinationForm" (ngSubmit)="changeSubmit()" autocomplete="off">
-
                 <!--destination-->
                 <div class="form-group">
                     <label>Destination</label>
@@ -91,28 +81,24 @@
                         *ngIf="service.changeDestinationForm.get('Destination').touched && service.changeDestinationForm.get('Destination').errors?.required">
                         This field is mandatory.</label>
                 </div>
-
                 <!--airport name-->
                 <div class="form-group">
                     <div class="col-xs-6">
                         <input type="text" class="form-control"id="airportname" placeholder="AirportName" formControlName="AirportName">
                     </div>
                 </div>
-
                 <!--city-->
                 <div class="form-group">
                     <div class="col-xs-6">
                         <input type="text" class="form-control"id="city" placeholder="City" formControlName="City">
                     </div>
                 </div>
-
                 <!--country-->
                 <div class="form-group">
                     <div class="col-xs-6">
                         <input type="text" class="form-control"id="country" placeholder="Country" formControlName="Country">
                     </div>
                 </div>
-
                 <div class="form-group text-center">
                     <button [disabled]="!service.changeDestinationForm.valid" class="btn btn-success" type="submit">Change Destination</button>
                     <p>&nbsp;</p>

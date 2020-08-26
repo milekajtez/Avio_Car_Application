@@ -19,7 +19,6 @@ export class AdministratorsRegistrationComponent implements OnInit {
   }
 
   onSubmit(): void {
-    // pozivacu servis koji ce pozivati regsitrciju
     console.log(this.service.regAdminForm.value);        // test za klik na regrister button
     this.service.adminRegister().subscribe(
       (res: any) => {

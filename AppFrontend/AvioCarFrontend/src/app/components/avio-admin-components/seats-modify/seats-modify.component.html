@@ -2,12 +2,11 @@
     <div class="text-block">
         <h2>MODIFY FLIGHT SEATS</h2>
     </div>
-
     <div style="display: flex;">
+        <!--selektovanje leta, ispis podataka selektovane karte, brisanje selektovane karte i brisanje svih karata selektovanog leta-->
         <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
             <h3 style="text-align: center;"> SELECT FLIGHT</h3>
             <form [formGroup]="service.comboBoxFlightForm" (ngSubmit)="loadTickets()">
-                
                 <!--flight-->
                 <div class="form-group">
                     <label>Flight</label>
@@ -18,14 +17,11 @@
                     *ngIf="service.comboBoxFlightForm.get('Flight').touched && service.comboBoxFlightForm.get('Flight').errors?.required">
                     This field is mandatory.</label>
                 </div>
-
                 <div class="form-group text-center">
                     <button [disabled]="!service.comboBoxFlightForm.valid" class="btn btn-success" type="submit">SHOW TICKETS</button>
                     <p>&nbsp;</p>
                 </div>
             </form>
-            
-
             <hr>
             <ul class="list-group">
                 <li class="list-group-item text-muted" style="margin-left: 5%; margin-right: 5%;"><b>TICKET DATA</b><i class="fa fa-dashboard fa-1x"></i></li>
@@ -43,9 +39,8 @@
                 <hr>
                 <button class="btn btn-success" type="submit" (click)="deleteAllTickets()">DELETE ALL TICKETS</button>
             </div>
-            
         </span>
-
+        <!--ispis karata selektovanog leta-->
         <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
             <h3 style="text-align: center;"> TICKETS</h3>
             <ul class="tickets" style="margin-left: 17.5%;">
@@ -59,12 +54,11 @@
                 </li>
             </ul>
         </span>
-
+        <!--dodavanje nove krate i izmena selektovane karte-->
         <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
             <h3 style="text-align: center;"> ADD NEW TICKET</h3>
             <h6 style="text-align: center;">*first you need to select flight</h6>
             <form [formGroup]="service.newTicketForm" (ngSubmit)="addNewTicket()">
-
                 <!--broj karte-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="ticketnumber" formControlName="TicketNumber" placeholder="TicketNumber">
@@ -77,7 +71,6 @@
                         Please insert a valid number.
                     </label>
                 </div>
-
                 <!--card type-->
                 <div class="form-group">
                     <label>Ticket Type</label>
@@ -91,7 +84,6 @@
                         This field is mandatory.
                     </label>
                 </div>
-
                 <!--cena karte-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="ticketprice" formControlName="TicketPrice" placeholder="TicketPrice(&euro;)">
@@ -104,7 +96,6 @@
                         Please insert a valid number.
                     </label>
                 </div>
-
                 <!--is quick booking-->
                 <div class="form-group">
                     <label>Is Quick Booking?</label>
@@ -114,7 +105,6 @@
                         This field is mandatory.
                     </label>
                 </div>
-
                 <div class="form-group text-center">
                     <button [disabled]="!service.newTicketForm.valid" class="btn btn-success" type="submit">Add New Ticket</button>
                     <p>&nbsp;</p>
@@ -124,7 +114,6 @@
             <h3 style="text-align: center;"> CHANGE SELECTED TICKET DATA</h3>  
             <h6 style="text-align: center;">*first you need to select flight and ticket from ticket list</h6>
             <form [formGroup]="service.changeTicketForm" (ngSubmit)="changeTicket()">
-
                 <!--broj karte-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="ticketnumber" formControlName="TicketNumber" placeholder="TicketNumber">
@@ -133,7 +122,6 @@
                         Please insert a valid number.
                     </label>
                 </div>
-
                 <!--card type-->
                 <div class="form-group">
                     <label>Ticket Type</label>
@@ -143,7 +131,6 @@
                         <option value="BUSINESS_CLASS">BUSINESS_CLASS</option>
                     </select>
                 </div>
-
                 <!--cena karte-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="ticketprice" formControlName="TicketPrice" placeholder="TicketPrice(&euro;)">
@@ -152,13 +139,11 @@
                         Please insert a valid number.
                     </label>
                 </div>
-
                 <!--is quick booking-->
                 <div class="form-group">
                     <label>Is Quick Booking?</label>
                     <input type="checkbox" class="form-control" id="isquickbooking" formControlName="IsQuickBooking" placeholder="IsQuickBooking">
                 </div>
-
                 <div class="form-group text-center">
                     <button [disabled]="!service.changeTicketForm.valid" class="btn btn-success" type="submit">Change Selected Ticket</button>
                     <p>&nbsp;</p>

@@ -62,7 +62,6 @@ namespace AvioCarBackend.Controllers
         }
         #endregion
         #region 3 - Metoda za dodavanje nove filijale
-        //AddBranchOffice
         [HttpPost]
         [Route("AddBranchOffice")]
         public async Task<Object> AddBranchOffice(BranchOfficeModel model)
@@ -166,7 +165,34 @@ namespace AvioCarBackend.Controllers
             }
         }
         #endregion
-        #region 6 - Metoda za ucitavanje automobila
+        #region 6 - Metoda za ucitavanje filijala odredjenog rent-a-car servisa
+        [HttpGet]
+        [Route("GetRentACarServiceBranchOffices/{serviceID}")]
+        public IActionResult GetRentACarServiceBranchOffices(string serviceID) 
+        {
+            var branchOffices = _context.BranchOffices.Include(d => d.RentACarService);
+            if (branchOffices == null)
+            {
+                return NotFound("Currentlly this rent-a-car service not have any branch office.");
+            }
+
+            var result = new List<BranchOffice>();
+            foreach (var office in branchOffices)
+            {
+                if (office.RentACarService.CarServiceID.Equals(int.Parse(serviceID)))
+                {
+                    result.Add(office);
+                }
+            }
+
+            if (result.Count == 0)
+            {
+                return NotFound("Currentlly this rent-a-car service not have any branch office.");
+            }
+            return Ok(result);
+        }
+        #endregion
+        #region 7 - Metoda za ucitavanje automobila
         [HttpGet]
         [Route("GetCars")]
         public IActionResult GetCars()
@@ -186,7 +212,7 @@ namespace AvioCarBackend.Controllers
             }
         }
         #endregion
-        #region 7 - Metoda za dodavanje novog automobila
+        #region 8 - Metoda za dodavanje novog automobila
         [HttpPost]
         [Route("AddNewCar")]
         public async Task<Object> AddNewCar(CarModel model)
@@ -241,7 +267,6 @@ namespace AvioCarBackend.Controllers
                 car.IsQuickBooking = false;
             }
 
-
             try
             {
                 var result = await _context.Cars.AddAsync(car);
@@ -254,7 +279,7 @@ namespace AvioCarBackend.Controllers
             }
         }
         #endregion
-        #region 8 - Metoda za brisanje automobila
+        #region 9 - Metoda za brisanje automobila
         [HttpDelete]
         [Route("DeleteCar/{carID}")]
         public async Task<ActionResult<Car>> DeleteCar(string carID)
@@ -276,7 +301,7 @@ namespace AvioCarBackend.Controllers
             return car;
         }
         #endregion
-        #region 9 - Metoda za menjanje automobila
+        #region 10 - Metoda za menjanje automobila
         [HttpPut]
         [Route("ChangeCar/{carID}")]
         public async Task<Object> ChangeCar(string carID, CarModel model)
@@ -399,10 +424,10 @@ namespace AvioCarBackend.Controllers
             }
         }
         #endregion
-        #region 10 - Metoda za uictavanje kola odredjenog rent-a-car servisa
+        #region 11 - Metoda za ucitavanje kola odredjenog rent-a-car servisa
         [HttpGet]
         [Route("GetRentACarServiceCars/{serviceID}")]
-        public IActionResult GetDestinations(string serviceID)
+        public IActionResult GetRentACarServiceCars(string serviceID)
         {
             var cars = _context.Cars.Include(d => d.RentACarService);
             if (cars == null)
@@ -426,7 +451,7 @@ namespace AvioCarBackend.Controllers
             return Ok(result);
         }
         #endregion
-        #region 11- Metoda za izmenu odredjenog rent-a-car servisa
+        #region 12- Metoda za izmenu odredjenog rent-a-car servisa
         [HttpPut]
         [Route("ChangeRentACar/{serviceID}")]
         public async Task<Object> ChangeRentACar(string serviceID, RentACarModel model)

@@ -23,6 +23,7 @@ export class AddCarComponent implements OnInit {
     this.initializeLoadFlightsData();
   }
 
+  //#region 1 - Metoda za ucitavanje kola
   initializeCarsData(): void {
     this.service.loadCars().subscribe(
       (res: any) => {
@@ -36,7 +37,7 @@ export class AddCarComponent implements OnInit {
             rating = Number(res[i].overallGrade) / Number(res[i].numberOfCarGrades);
           }
 
-          var carType;
+          var carType: string;
           if(res[i].carType == "0"){
             carType = "GASOLINE";
           }
@@ -54,11 +55,12 @@ export class AddCarComponent implements OnInit {
       },
       err => {
         console.log(err);
-        alert("Loading rent-a-car services is unsuccessfully.");
+        alert("Loading rent-a-car services failed.");
       }
     );
   }
-
+  //#endregion
+  //#region 2 - Metoda za ucitavanje rent-a-car servisa
   initializeRentACarServiceData(): void {
     this.service.loadRentACarServices().subscribe(
       (res: any) => {
@@ -78,11 +80,12 @@ export class AddCarComponent implements OnInit {
       },
       err => {
         console.log(err);
-        alert("Loading rent-a-car services is unsuccessfully.");
+        alert("Loading rent-a-car services failed.");
       }
     );
   }
-
+  //#endregion
+  //#region 3 - Metoda za ucitavanje letova
   initializeLoadFlightsData(): void {
     this.loadService.loadFlights().subscribe(
       (res: any) => {
@@ -103,24 +106,25 @@ export class AddCarComponent implements OnInit {
       },
       err => {
         console.log(err);
-        alert("Loading flights is unsuccessfully.");
+        alert("Loading flights failed.");
       }
     );
   }
-
+  //#endregion
+  //#region 4 - Metoda za dodavanje novih kola
   addSubmit(): void {
     this.service.addNewCar().subscribe(
       (res: any) => {
         this.cars = [];
         this.initializeRentACarServiceData();
         this.initializeCarsData();
-        alert("Car added successfully.");
+        alert("Adding car successfully.");
         this.service.addCarForm.reset();
       },
       err => {
         console.log(err);
         if(err.error === "Add car unsuccessfuly. Server not found entered rent-a-car service"){
-          alert("Add car unsuccessfuly. Server not found entered rent-a-car service.");
+          alert("Adding car failed. Server not found entered rent-a-car service.");
         }
         else{
           alert("Unknown error.");
@@ -128,7 +132,8 @@ export class AddCarComponent implements OnInit {
       }
     );
   }
-
+  //#endregion
+  //#region 5 - Metoda za brisanje kola
   deleteSubmit(): void {
     this.service.deleteCar(this.service.deleteCarForm.value.Car).subscribe(
       (res: any) => {
@@ -138,7 +143,7 @@ export class AddCarComponent implements OnInit {
       },
       err => {
         if(err.error === "Car is currently purchased. Delete unsuccessfuly."){
-          alert("Car is currently purchased. Delete unsuccessfuly.");
+          alert("Car is currently purchased. Deleting car failed.");
         }
         else{
           alert("Unknown error.");
@@ -146,9 +151,9 @@ export class AddCarComponent implements OnInit {
       }
     );
   }
-
+  //#endregion
+  //#region 6 - Metoda za izmenu kola
   changeSubmit(): void {
-    // TO DO: izmeniti
     this.service.changeCar().subscribe(
       (res: any) => {
         alert("Successfully chage car.");
@@ -158,10 +163,10 @@ export class AddCarComponent implements OnInit {
       },
       err => {
         if(err.error === "Changing unsuccessfuly. Server Not found selectred flight."){
-          alert("Changing unsuccessfuly. Server Not found selectred flight.");
+          alert("Changing car failed. Server Not found selectred flight.");
         }
         else if(err.error === "Changing is unsuccessfuly. Server not found selected car."){
-          alert("Changing is unsuccessfuly. Server not found selected car.");
+          alert("Changing car failed. Server not found selected car.");
         }
         else{
           alert("Unknown error.");
@@ -169,5 +174,5 @@ export class AddCarComponent implements OnInit {
       }
     );
   }
-
+  //#endregion
 }

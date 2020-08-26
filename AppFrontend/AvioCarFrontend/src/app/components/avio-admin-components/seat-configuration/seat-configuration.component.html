@@ -2,9 +2,8 @@
     <div class="text-block">
         <h2>SEAT CONFIGURATION</h2>
     </div>
-
-    <form [formGroup]="service.aircraftSeatForm" (ngSubmit)="onSubmit()" style="margin-left: 35%; margin-right: 35%; margin-top: 2%;">
-        
+    <!--konfigurisanje sedista-->
+    <form [formGroup]="service.aircraftSeatForm" (ngSubmit)="onSubmit()" style="margin-left: 35%; margin-right: 35%; margin-top: 2%;">        
         <!--airline-->
         <div class="form-group">
             <label>Flight</label>
@@ -15,7 +14,6 @@
             *ngIf="service.aircraftSeatForm.get('Flight').touched && service.aircraftSeatForm.get('Flight').errors?.required">
             This field is mandatory.</label>
         </div>
-
         <!--broj ekonomskih sedista(karata)-->
         <div class="form-group">
             <input type="text" class="form-control" id="numberofeconomicseats" formControlName="NumberOfEconomicSeats" placeholder="NumberOfEconomicSeats">
@@ -28,7 +26,6 @@
                 Please insert a valid number.
             </label>
         </div>
-
         <!--cena ekonomske karte-->
         <div class="form-group">
             <input type="text" class="form-control" id="economicclassprice" formControlName="EconomicClassPrice" placeholder="EconomicClassPrice(&euro;)">
@@ -41,7 +38,6 @@
                 Please insert a valid number.
             </label>
         </div>
-
         <!--broj prve klase sedista(karata)-->
         <div class="form-group">
             <input type="text" class="form-control" id="numberoffirstseats" formControlName="NumberOfFirstSeats" placeholder="NumberOfFirstSeats">
@@ -54,7 +50,6 @@
                 Please insert a valid number.
             </label>
         </div>
-
         <!--cena prve klase karte-->
         <div class="form-group">
             <input type="text" class="form-control" id="firstclassprice" formControlName="FirstClassPrice" placeholder="FirstClassPrice(&euro;)">
@@ -67,7 +62,6 @@
                 Please insert a valid number.
             </label>
         </div>
-
         <!--broj biznis sedista(karata)-->
         <div class="form-group">
             <input type="text" class="form-control" id="numberofbusinessseats" formControlName="NumberOfBusinessSeats" placeholder="NumberOfBusinessSeats">
@@ -80,7 +74,6 @@
                 Please insert a valid number.
             </label>
         </div>
-
         <!--cena biznis karte-->
         <div class="form-group">
             <input type="text" class="form-control" id="businessclassprice" formControlName="BusinessClassPrice" placeholder="BusinessClassPrice(&euro;)">
@@ -93,7 +86,6 @@
                 Please insert a valid number.
             </label>
         </div>
-
         <div class="form-group text-center">
             <button [disabled]="!service.aircraftSeatForm.valid" class="btn btn-success" type="submit">Add Seat Configuration</button>
             <p>&nbsp;</p>

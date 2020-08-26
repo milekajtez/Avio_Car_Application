@@ -19,6 +19,7 @@ export class AddDestinationComponent implements OnInit {
     this.loadDestinationData();
   }
 
+  //#region 1 - Metoda za uctavanje letova
   loadInitializeData(): void {
     this.service.loadAirlines().subscribe(
       (res: any) => {
@@ -27,31 +28,12 @@ export class AddDestinationComponent implements OnInit {
         }
       },
       err => {
-        alert("Loading airlines is unsuccessfully.");
+        alert("Airlines loading failed.");
       }
     );
   }
-
-  onSubmit(): void {
-    this.service.addNewDestination().subscribe(
-      (res: any) => {
-        this.destinations = [];
-        this.loadDestinationData();
-        alert("Destination added successfully.");
-        this.service.destinationForm.reset();
-      },
-      err => {
-        console.log(err);
-        if(err.error === "Add destination is unsuccessffully.Server not found selected airline."){
-          alert("Add destination is unsuccessffully.Server not found selected airline.");
-        }
-        else{
-          alert("Unknown error.");
-        }
-      }
-    );
-  }
-
+  //#endregion
+  //#region 2 - Metoda za ucitavanje destinacija
   loadDestinationData(){
     this.service.loadAllDestinations().subscribe(
       (res: any) => {
@@ -61,11 +43,33 @@ export class AddDestinationComponent implements OnInit {
         }
       },
       err => {
-        alert("Loading airlines is unsuccessfully.");
+        alert("Destinations loading failed");
       }
     );
   }
-
+  //#endregion
+  //#region 3 - Metoda za dodavanje nove destinacije
+  onSubmit(): void {
+    this.service.addNewDestination().subscribe(
+      (res: any) => {
+        this.destinations = [];
+        this.loadDestinationData();
+        alert("Adding destination successfully.");
+        this.service.destinationForm.reset();
+      },
+      err => {
+        console.log(err);
+        if(err.error === "Add destination is unsuccessffully.Server not found selected airline."){
+          alert("Adding destination is unsuccessfully. Server not found selected airline.");
+        }
+        else{
+          alert("Unknown error.");
+        }
+      }
+    );
+  }
+  //#endregion
+  //#region 4 - Metoda za brisanje destinacije
   deleteSubmit(){
     this.service.deleteDestination(this.service.deleteDestinationForm.value.Destination).subscribe(
       (res: any) => {
@@ -74,22 +78,23 @@ export class AddDestinationComponent implements OnInit {
         this.loadDestinationData();
       },
       err => {
-        alert("Deleting destination is unsuccessfully.");
+        alert("Deleting destination failed.");
       }
     );
   }
-
+  //#endregion
+  //#region 5 - Metoda za izmenu destinacije
   changeSubmit(){
     this.service.changeDestination().subscribe(
       (res: any) => {
-        alert("Successfull chage destination.");
+        alert("Changing destination successfully.");
         this.destinations = [];
         this.loadDestinationData();
         this.service.changeDestinationForm.reset();
       },
       err => {
         if(err.error){
-          alert("Change unsccessfully.All field are empty.");
+          alert("Changing destination failed. All field are empty.");
         }
         else{
           alert("Unknown error.");
@@ -97,5 +102,5 @@ export class AddDestinationComponent implements OnInit {
       }
     );
   }
-
+  //#endregion
 }

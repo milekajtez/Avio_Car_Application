@@ -14,6 +14,7 @@ export class RentACarService {
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
+  //#region 1 - Forme za dodavanje, brisanje i menjanje filijale
   addBranchForm = this.fb.group({
     RentACarService: ['', Validators.required],
     BranchOfficeAddress: ['', Validators.required],
@@ -31,7 +32,8 @@ export class RentACarService {
     City: [''],
     Country: ['']
   });
-
+  //#endregion
+  //#region 2 - Forme za dodavanje, brisanje i menjanje kola
   addCarForm = this.fb.group({
     Name: ['', Validators.required],
     Brand: ['', Validators.required],
@@ -63,25 +65,29 @@ export class RentACarService {
     CarPrice: ['', Validators.pattern("[0-9]+")],
     Flight: ['']
   });
-
+  //#endregion
+  //#region 3 - Forma za menjanje osnovnih podataka rent-a-car servisa
   changeRentACarMainInfoForm = this.fb.group({
     CarServiceName: [''],
     CarServiceAddress: [''],
     CarServicePromotionDescription: [''],
     ServicePriceList: ['']
   });
-
-  // metoda za ucitavanje svih rent-a-car servisa
+  //#endregion
+  //#region 4 - Metoda za ucitavanje svih rent-a-car servisa
   loadRentACarServices() {
     return this.http.get(this.BaseURI + '/RentACar/GetRentACarServices');
   }
-
-  // metoda za ucitavanje svih filijala
+  //#endregion
+  //#region 5 - Metode za ucitavanje svih, ucitavanje filijala odredjenog rent-a-car servisa, dodavanje, brisanje i menjanje filijala
   loadBranchOffices() {
     return this.http.get(this.BaseURI + '/RentACar/GetBranchOffices');
   }
 
-  // metoda za dodavanje nove filijale
+  loadRentACarServiceBranchOffices(serviceID: string){
+    return this.http.get(this.BaseURI + '/RentACar/GetRentACarServiceBranchOffices/' + serviceID);
+  }
+
   addNewBranch(){
     var body = {
       RentACarServiceID: this.addBranchForm.value.RentACarService,
@@ -89,16 +95,13 @@ export class RentACarService {
       City: this.addBranchForm.value.City,
       Country: this.addBranchForm.value.Country
     }
-
     return this.http.post(this.BaseURI + '/RentACar/AddBranchOffice', body);
   }
 
-  // metoda za brisanje filijale
   deleteBranch(branchOfficeID: string){
     return this.http.delete(this.BaseURI + '/RentACar/DeleteBranchOffice/' + branchOfficeID);
   }
 
-  // metoda za izmenu filijale
   changeBranchOffice(){
     var body = {
       RentACarServiceID: this.changeBranchForm.value.BranchOffice,
@@ -106,24 +109,20 @@ export class RentACarService {
       City: this.changeBranchForm.value.City,
       Country: this.changeBranchForm.value.Country
     }
-
     // RentACarServiceID je ustvari u ovom slucaj id filijale..ove sam stavio ovaj naziv da ne moram da pravim novu klasu
     // koja ce primati poruke samo zbog jednog polja
-
     return this.http.put(this.BaseURI + '/RentACar/ChangeBranchOffice/', body);
   }
-
-  // metoda za ucitavanje svih automobila
+  //#endregion
+  //#region 6 - Metode za ucitavanje svih, ucitavanje kola odredjenog rent-a-car servisa, dodavanje, brisanje i menjanje kola
   loadCars(){
     return this.http.get(this.BaseURI + '/RentACar/GetCars');
   }
 
-  // metoda za ucitavanje kola oredjenog rent-a-car servisa--novo
   loadRentACarServiceCars(serviceID: string){
     return this.http.get(this.BaseURI + '/RentACar/GetRentACarServiceCars/' + serviceID);
   }
 
-  // metoda za dodavanje novog automobila
   addNewCar(){
     console.log(this.addCarForm.value.IsQuickBooking);
     var body = {
@@ -146,16 +145,13 @@ export class RentACarService {
     else{
       body.IsQuickBooking = "false";
     }
-
     return this.http.post(this.BaseURI + '/RentACar/AddNewCar', body);
   }
 
-  // metoda za brisanje kola
   deleteCar(carID: string){
     return this.http.delete(this.BaseURI + '/RentACar/DeleteCar/' + carID);
   }
 
-  // dodati metodu za pormenu podataka vozila
   changeCar(){
     var body = {
       Name: this.changeCarForm.value.Name,
@@ -180,7 +176,8 @@ export class RentACarService {
     var carID = this.changeCarForm.value.Car;
     return this.http.put(this.BaseURI + '/RentACar/ChangeCar/' + carID, body);
   }
-
+  //#endregion
+  //#region 7 - Metoda za izmenu osnovnih podataka rent-a-car servisa
   changeMainInfo(serviceID: string){
     var body = {
       CarServiceName: this.changeRentACarMainInfoForm.value.CarServiceName,
@@ -188,12 +185,10 @@ export class RentACarService {
       CarServicePromotionDescription: this.changeRentACarMainInfoForm.value.CarServicePromotionDescription,
       ServicePriceList: this.changeRentACarMainInfoForm.value.ServicePriceList
     }
-
     return this.http.put(this.BaseURI + '/RentACar/ChangeRentACar/' + serviceID, body);
   }
-
-
-  
+  //#endregion
+  //#region 8 - Metode za filtriranje kola
   checkCarNameFilter(car: Car, filterParam: AbstractFilterParam): boolean {
     return filterParam instanceof StringFilterParam && filterParam.getFilterParamName() === 'carNameFilter' && !car.carName.toLowerCase().includes(filterParam.getFilterParamValue().toLowerCase());
   }
@@ -206,7 +201,6 @@ export class RentACarService {
     return filterParam instanceof NumberFilterParam && filterParam.getFilterParamName() === 'carRatingFilter' && !(Number(car.carRating) == filterParam.getFilterParamValue());
   }
 
-  // metoda za filtriranje kola
   filterCars(cars: Car[], filterParams: AbstractFilterParam[]): Car[] {
     let filteredCars = new Array<Car>();
     for (const car of cars) {
@@ -222,7 +216,7 @@ export class RentACarService {
         filteredCars.push(car);
       }
     }
-
     return filteredCars;
   }
+  //#endregion
 }

@@ -2,7 +2,7 @@
     <div class="text-block">
         <h2>VIEW RENT-A-CAR SERVICES</h2>
     </div>
-
+    <!--ispis rent-a-car servisa-->
     <div style="margin-top: 1%; margin-left: 2%; margin-right: 2%; size: 80%;">
         <table class="table table-dark">
             <thead style="text-align: center;">
@@ -21,34 +21,27 @@
             </thead>
             <tbody style="text-align: center;">
                 <tr *ngFor="let service of rentACarServices">
-
                     <!--id-->
                     <td>{{service.carServiceID}}</td>
-
                     <!--name-->
                     <td>{{service.carServiceName}}</td>
-
                     <!--address-->
                     <td>
                         <a role="button" data-toggle="modal" data-target="#addressModal"
                         (click)="viewRentACarMapAddress(service)">{{service.carServiceAddress}}</a>
                     </td>
-
                     <!--promotion description-->
                     <td>
                         <button class="btn btn-success" data-toggle="modal" data-target="#descriptionModal" 
                         (click)="viewRentACarPromotionDescription(service)">VIEW PROMOTION DECRIPTION</button>
                     </td>
-
                     <!--pricelist-->
                     <td>
                         <button class="btn btn-success" data-toggle="modal" data-target="#priceListModal" 
                         (click)="viewRentACarPricelist(service)">VIEW PRICELIST</button>
                     </td>
-
                     <!--zarada servisa-->
                     <td><button class="btn btn-success">VIEW RENT-A-CAR EARNIGNS(kasnije uraditi)</button></td>
-
                     <!--rating-->
                     <td *ngIf="service.carServiceRating < 1.5">
                         <span class="fa fa-star checked"></span>
@@ -90,14 +83,11 @@
                         <span class="fa fa-star checked"></span>
                         <div>{{service.carServiceRating}}</div>
                     </td>
-
                     <td><button type="button" class="btn btn-success" data-toggle="modal" data-target=".bd-example-modal-xl"
                         (click)="viewBranchOffices(service)">VIEW BRANCH OFFICES</button>
                     </td>
-
                     <td><button type="button" class="btn btn-success" data-toggle="modal" data-target=".bd-example-modal-x2"
                         (click)="viewCars(service)">VIEW CARS</button></td>
-
                     <td><button class="btn btn-success" data-toggle="modal" data-target="#mainInfoModal"
                         (click)="viewRentACarID(service)">CHANGE MAIN INFO</button></td>
                 </tr>
@@ -106,7 +96,7 @@
     </div>
 </div>
 
-
+<!--MODALS-->
 <!--address-->
 <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
@@ -181,7 +171,7 @@
                             <thead style="text-align: center;">
                                 <tr>
                                     <th>ID</th>
-                                    <th>AIRPORT NAME</th>
+                                    <th>BRANCH OFFICE NAME</th>
                                     <th>CITY</th>
                                     <th>COUNTRY</th>
                                 </tr>
@@ -201,7 +191,6 @@
         </div>
     </div>
 </div>
-
 
 <!--rent-a-car serv8ce cars-->
 <div class="modal fade bd-example-modal-x2" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
@@ -290,7 +279,6 @@
     </div>
 </div>
 
-
 <!--more car info-->
 <div class="modal fade bd-example-modal-x3" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -330,7 +318,6 @@
         </div>
     </div>
 </div>
-
 
 <!--change rent-a-car main info-->
 <div class="modal fade" id="mainInfoModal" tabindex="-1" role="dialog" aria-labelledby="mainInfoModal" aria-hidden="true">
@@ -377,4 +364,3 @@
         </div>
     </div>
 </div>
--->

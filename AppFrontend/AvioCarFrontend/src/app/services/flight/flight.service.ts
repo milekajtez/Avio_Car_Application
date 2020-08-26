@@ -14,6 +14,7 @@ export class FlightService {
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
+  //#region 1 - Forma za dodavanje novog leta i forma za biranje odredjenog leta
   newFlightForm = this.fb.group({
     StartTime: ['', Validators.required],
     EndTime: ['', Validators.required],
@@ -28,6 +29,11 @@ export class FlightService {
     Airline: ['', Validators.required]
   });
 
+  comboBoxFlightForm = this.fb.group({
+    Flight: ['', Validators.required]
+  });
+  //#endregion
+  //#region 2 - Forma za Dodavanje sedista tj karata
   aircraftSeatForm = this.fb.group({
     Flight: ['', Validators.required],
     NumberOfEconomicSeats: ['', [Validators.required, Validators.pattern("[0-9]+")]],
@@ -37,11 +43,8 @@ export class FlightService {
     NumberOfBusinessSeats: ['', [Validators.required, Validators.pattern("[0-9]+")]],
     BusinessClassPrice: ['', [Validators.required, Validators.pattern("[0-9]+")]]
   });
-
-  comboBoxFlightForm = this.fb.group({
-    Flight: ['', Validators.required]
-  });
-
+  //#endregion
+  //#region 3 - Forma za dodavanje nove karte tj sedista, i forma za izmenu karte tj sedista
   newTicketForm = this.fb.group({
     TicketNumber: ['', [Validators.required, Validators.pattern("[0-9]+")]],
     TicketType: ['', Validators.required],
@@ -55,7 +58,8 @@ export class FlightService {
     TicketPrice: ['', Validators.pattern("[0-9]+")],
     IsQuickBooking: ['']
   });
-
+  //#endregion
+  //#region 4 - Metoda za dodavanje novog leta
   addNewFlight() {
     var body = {
       StartTime: this.newFlightForm.value.StartTime,
@@ -70,10 +74,10 @@ export class FlightService {
       LugageWeight: this.newFlightForm.value.LugageWeight,
       AirlineID: this.newFlightForm.value.Airline
     }
-
     return this.http.post(this.BaseURI + '/LoadData/AddFlight', body);
   }
-
+  //#endregion
+  //#region 5 - Metoda za dodavanje konfiguracije sedista
   addNewSeatsConfiguration() {
     var body = {
       Flight: this.aircraftSeatForm.value.Flight,
@@ -84,21 +88,18 @@ export class FlightService {
       NumberOfBusinessSeats: this.aircraftSeatForm.value.NumberOfBusinessSeats,
       BusinessClassPrice: this.aircraftSeatForm.value.BusinessClassPrice
     }
-
     return this.http.post(this.BaseURI + '/LoadData/AddSeatsConfiguration', body);
   }
-
-  // brisanje selektovane karte
+  //#endregion
+  //#region 6 - Metode za brisanje selektovane karte, brisanje svih karata, dodavanje nove karte i izmenu selektovane karte
   deleteTicket(flightID: string, ticketID: string){
     return this.http.delete(this.BaseURI + '/LoadData/DeleteTicket/' + flightID + "/" + ticketID);
   }
 
-  // brisanje svih karata leta
   deleteAllTickets(flightID: string){
     return this.http.delete(this.BaseURI + '/LoadData/DeleteAllTickets/' + flightID);
   }
 
-  // metoda za dodavanje nove karte
   add1newTicket(flightID: string){
     var body = {
       TicketNumber: this.newTicketForm.value.TicketNumber,
@@ -117,7 +118,6 @@ export class FlightService {
     return this.http.post(this.BaseURI + '/LoadData/AddNewTicket/' + flightID, body);
   }
 
-  // metoda za zimenu karte
   changeTicket(ticketID: string, flightID: string){
     var body = {
       TicketNumber: this.changeTicketForm.value.TicketNumber,
@@ -135,25 +135,22 @@ export class FlightService {
     else{
       body.IsQuickBooking = "";
     }
-
     return this.http.put(this.BaseURI + '/LoadData/ChangeTicket/' + ticketID + "/" + flightID, body);
   }
-
-
-  //startlocation
+  //#endregion
+  //#region 7 - Metode za filtriranje kola
   checkStartLocationFilter(flight: Flight, filterParam: AbstractFilterParam): boolean {
     return filterParam instanceof StringFilterParam && filterParam.getFilterParamName() === 'startLocationFilter' && !flight.startLocation.toLowerCase().includes(filterParam.getFilterParamValue().toLowerCase());
   }
-  //endLocation
+  
   checkEndLocationFilter(flight: Flight, filterParam: AbstractFilterParam): boolean {
     return filterParam instanceof StringFilterParam && filterParam.getFilterParamName() === 'endLocationFilter' && !flight.endLocation.toLowerCase().includes(filterParam.getFilterParamValue().toLowerCase());
   }
-  //avgRating
+  
   checkFlightRatingFilter(flight: Flight, filterParam: AbstractFilterParam): boolean {
     return filterParam instanceof NumberFilterParam && filterParam.getFilterParamName() === 'flightRatingFilter' && !(Number(flight.flightRating) == filterParam.getFilterParamValue());
   }
 
-  // metoda za filtriranje letova
   filterFlights(flights: Flight[], filterParams: AbstractFilterParam[]): Flight[] {
     let filteredFlights = new Array<Flight>();
     for (const flight of flights) {
@@ -169,7 +166,7 @@ export class FlightService {
         filteredFlights.push(flight);
       }
     }
-
     return filteredFlights;
   }
+  //#endregion
 }

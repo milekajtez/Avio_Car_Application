@@ -2,13 +2,11 @@
     <div class="text-block">
         <h2>BRANCH OFFICE CONFIGURATION</h2>
     </div>
-
     <div style="display: flex;">
         <!--dodavanje destincije-->
         <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
             <h3 style="text-align: center;"> ADD BRANCH OFFICE</h3>
             <form [formGroup]="service.addBranchForm" (ngSubmit)="addSubmit()">
-        
                 <!--rent a car services-->
                 <div class="form-group">
                     <label>Rent-a-car Service</label>
@@ -19,16 +17,13 @@
                     *ngIf="service.addBranchForm.get('RentACarService').touched && service.addBranchForm.get('RentACarService').errors?.required">
                     This field is mandatory.</label>
                 </div>
-
-                <!--branch office address-->
+                <!--branch office name-->
                 <div class="form-group">
-                    <input type="text" class="form-control" id="branchofficeaddress" formControlName="BranchOfficeAddress" placeholder="BranchOfficeAddress">
-                    <label>*example: Djordja Isakova,33,Kac,Serbia</label><br>
+                    <input type="text" class="form-control" id="branchofficeaddress" formControlName="BranchOfficeAddress" placeholder="BranchOfficeNme">
                     <label class="text-danger"
                     *ngIf="service.addBranchForm.get('BranchOfficeAddress').touched && service.addBranchForm.get('BranchOfficeAddress').errors?.required">This
                     field is mandatory.</label>
                 </div>
-
                 <!--city-->
                 <div class="form-group">
                     <div class="col-xs-6">
@@ -38,7 +33,6 @@
                         field is mandatory.</label>
                     </div>
                 </div>
-
                 <!--country-->
                 <div class="form-group">
                     <div class="col-xs-6">
@@ -48,7 +42,6 @@
                         field is mandatory.</label>
                     </div>
                 </div>
-        
                 <div class="form-group text-center">
                     <button [disabled]="!service.addBranchForm.valid" class="btn btn-success" type="submit">Add Branch Office</button>
                     <p>&nbsp;</p>
@@ -56,11 +49,10 @@
             </form>
         </span>
 
-        <!--brisanje destinacije-->
+        <!--brisanje filijale-->
         <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
             <h3 style="text-align: center;"> DELETE BRANCH OFFICE</h3>
             <form [formGroup]="service.deleteBranchForm" (ngSubmit)="deleteSubmit()" autocomplete="off">
-
                 <!--branch offices-->
                 <div class="form-group">
                     <label>Branch Office</label>
@@ -71,19 +63,17 @@
                         *ngIf="service.deleteBranchForm.get('BranchOffice').touched && service.deleteBranchForm.get('BranchOffice').errors?.required">
                         This field is mandatory.</label>
                 </div>
-
                 <div class="form-group text-center">
                     <button [disabled]="!service.deleteBranchForm.valid" class="btn btn-success" type="submit">Delete Branch office</button>
                     <p>&nbsp;</p>
                 </div>
             </form>
         </span>
-
-        <!--menajnje destinacije-->
+        
+        <!--menjanje filijale-->
         <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
             <h3 style="text-align: center;"> CHANGE BRANCH OFFICE</h3>
             <form [formGroup]="service.changeBranchForm" (ngSubmit)="changeSubmit()" autocomplete="off">
-
                 <!--rent a car services-->
                 <div class="form-group">
                     <label>Branch Office</label>
@@ -94,27 +84,22 @@
                     *ngIf="service.changeBranchForm.get('BranchOffice').touched && service.changeBranchForm.get('BranchOffice').errors?.required">
                     This field is mandatory.</label>
                 </div>
-
-                <!--branch office address-->
+                <!--branch office name-->
                 <div class="form-group">
-                    <input type="text" class="form-control" id="branchofficeaddress" formControlName="BranchOfficeAddress" placeholder="BranchOfficeAddress">
-                    <label>*example: Djordja Isakova,33,Kac,Serbia</label><br>
+                    <input type="text" class="form-control" id="branchofficeaddress" formControlName="BranchOfficeAddress" placeholder="BranchOfficeName">
                 </div>
-
                 <!--city-->
                 <div class="form-group">
                     <div class="col-xs-6">
                         <input type="text" class="form-control"id="city" placeholder="City" formControlName="City">
                     </div>
                 </div>
-
                 <!--country-->
                 <div class="form-group">
                     <div class="col-xs-6">
                         <input type="text" class="form-control"id="country" placeholder="Country" formControlName="Country">
                     </div>
                 </div>
-
                 <div class="form-group text-center">
                     <button [disabled]="!service.changeBranchForm.valid" class="btn btn-success" type="submit">Change Branch Office</button>
                     <p>&nbsp;</p>

@@ -36,6 +36,7 @@ export class AvioProfileComponent implements OnInit {
     this.data.changeMessage(this.username);
   }
 
+  //#region 1 - Metoda za ucitavanje podataka administratora
   initializeAdminData() : void {
     this.service.loadAdmin(this.username).subscribe(
       (res: any) => {
@@ -47,11 +48,12 @@ export class AvioProfileComponent implements OnInit {
         this.city = res.city;
       },
       err => {
-        alert("Loading current avio admin is unsuccessfully.");
+        alert("Loading current avio admin is failed.");
       }
     );
   }
-
+  //#endregion
+  //#region 2 - Metoda za izmenu podataka administratora
   onSubmit() : void {
     this.service.changeAdminProfile(this.username).subscribe(
       (res: any) => {
@@ -59,18 +61,18 @@ export class AvioProfileComponent implements OnInit {
         this.service.changeAdmin.reset();
         this.initializeAdminData();
         this.newMessage();
-        alert("Change profile data successfully.");
+        alert("Changing profile data successfully.");
       },
       err => {
         console.log(err);
         if(err.error === "Change unsucessfully. User is not registred."){
-          alert("Change unsucessfully. User is not registred.");
+          alert("Changing profile data failed. User is not registred.");
         }
         else if(err.error === "Change unsucessfully.You must enter new data in form."){
-          alert("Change unsucessfully.You must enter new data in form.");
+          alert("Changing profile data failed. You must enter new data in form.");
         }
         else if(err.error === "Change unsucessfully.Please input different username."){
-          alert("Change unsucessfully.Please enter different username.");
+          alert("Changing profile data failed .Please enter different username.");
         }
         else{
           alert("Unknown error");
@@ -78,19 +80,20 @@ export class AvioProfileComponent implements OnInit {
       }
     );
   }
-
+  //#endregion
+  //#region 3 - Metoda za izmenu sifre
   changePassword(): void {
     this.service.changePassword(this.username).subscribe(
       (res: any) => {
-        alert("Password changed successfully.");
+        alert("Changing password successfully.");
         this.service.changeAdminPassword.reset();
       },
       err => {
         if(err.error === "Server didn't find the username. Changing password is unsuccessfully."){
-          alert("Server didn't find the username. Changing password is unsuccessfully.");
+          alert("Server didn't find the username. Changing password failed.");
         }
         else if(err.error === "Changing password is unsuccessfully. Please enter correct current password."){
-          alert("Changing password is unsuccessfully. Please enter correct current password.");
+          alert("Changing password failed. Please enter correct current password.");
         }
         else{
           alert("Unknown error.");
@@ -98,5 +101,5 @@ export class AvioProfileComponent implements OnInit {
       }
     );
   }
-
+  //#endregion
 }

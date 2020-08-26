@@ -23,7 +23,7 @@ export class SeatsModifyComponent implements OnInit {
     this.initializeFlights();
   }
 
-  // ucitavanje letova
+  //#region 1 - Metoda za ucitavanje letova
   initializeFlights(){
     this.loadService.loadFlights().subscribe(
       (res: any) => {
@@ -43,21 +43,18 @@ export class SeatsModifyComponent implements OnInit {
         }
       },
       err => {
-        alert("Loading flight unsuccessfully.");
+        alert("Loading flight failed.");
       }
     );
   }
-
-  // metoda za ucitavanje karata odredjenog leta 
+  //#endregion
+  //#region 2 - Metoda za ucitavanje karata odredjenog leta
   loadTickets(){
     this.loadService.loadTickets(this.service.comboBoxFlightForm.value.Flight).subscribe(
       (res: any) => {
-        // prvo brisem tikete iz liste,jer je mozda doslo do promene
         this.tickets = [];
-        console.log(res);
-        // tip karte
         for(var i = 0; i < res.length; i++){
-          var type;
+          var type: string;
           if(res[i].cardType == "0"){
             type = "ECONOMIC";
           }
@@ -78,40 +75,36 @@ export class SeatsModifyComponent implements OnInit {
       },
       err => {
         if(err.error === "Currently this flight not have any ticket."){
-          alert("Currently this flight not have any ticket.");
+          alert("Currently, this flight not have any ticket.");
           this.tickets = [];
           this.selectedTicket = new Ticket("","","","","","","");
         }
       }
     );
   }
-
-  // metoda za selektovanje odredjene karte
+  //#endregion
+  //#region 3 - Metoda za selektovanje odredjene karte
   onSelect(ticket: any){
     this.selectedTicket = ticket;
     console.log(this.service.comboBoxFlightForm.value.Flight);
     console.log(this.selectedTicket);
     console.log(this.tickets);
   }
-
-  // metoda za brisanje jedne karte
+  //#endregion
+  //#region 4 - Metoda za brisanje selektovane karte
   deleteTicket(){
     if(this.tickets.length != 0){
       if(this.selectedTicket.ticketID != ""){
         this.service.deleteTicket(this.service.comboBoxFlightForm.value.Flight, this.selectedTicket.ticketID).subscribe(
           (res: any) => {
             alert("Deleting ticket successfuly.");
-
-            // refreshujem listu tiketa
             this.tickets = [];
             this.loadTickets();
-
-            // postavljam selektovani tiket na prazno..jer je izbrisan
             this.selectedTicket = new Ticket("","","","","","","");
           },
           err => {
             if(err.error === "Deleting unsuccessfuly because ticket is purchased."){
-              alert("Deleting unsuccessfuly because ticket is purchased.");
+              alert("Deleting failed because ticket is purchased.");
             }
             else{
               alert("Unknown error.");
@@ -129,33 +122,28 @@ export class SeatsModifyComponent implements OnInit {
       alert("You need to select flight and then ticket from ticket list");
     }
   }
-
-  // metoda za brisanje svih karata
+  //#endregion
+  //#region 5 - Metoda za brisanje svih karata
   deleteAllTickets(){
     if(this.tickets.length != 0){
       this.service.deleteAllTickets(this.service.comboBoxFlightForm.value.Flight).subscribe(
         (res: any) => {
           alert("Deleting ticket successfuly.");
-
-            // ovde nema potrebe da ucitava nista, jer je sve obrisano
             this.tickets = [];
-            //this.loadTickets();
-
-            // postavljam selektovani tiket na prazno..jer je izbrisan
             this.selectedTicket = new Ticket("","","","","","","");
         },
         err => {
           console.log(err);
-          alert("Deleting tickets unsuccessfuly.");
+          alert("Deleting tickets failed.");
         }
       );
     }
     else{
-      alert("Deleting all ticket unsuccesfully because selected flight not have any ticket.");
+      alert("Deleting all ticket failed because selected flight not have any ticket.");
     }
   }
-  
-  // metoda za dodavanje nove karte
+  //#endregion
+  //#region 6 - Metoda za dodavanje nove karte
   addNewTicket(){
     //da li je selektovan let
     if(this.service.comboBoxFlightForm.value.Flight != null){
@@ -175,17 +163,13 @@ export class SeatsModifyComponent implements OnInit {
           (res: any) => {
             alert("Adding ticket successfuly.");
             this.service.newTicketForm.reset();
-    
-            // refreshujem listu tiketa
             this.tickets = [];
             this.loadTickets();
-            
-            // postavljam selektovani tiket na prazno..za svaki slucaj
             this.selectedTicket = new Ticket("","","","","","","");
           },
           err => {
             if(err.error === "Add ticket is unsuccessffully.Server not found selected flight."){
-              alert("Add ticket is unsuccessffully.Server not found selected flight.");
+              alert("Add ticket failed. Server not found selected flight.");
             }
             else{
               console.log(err);
@@ -202,14 +186,14 @@ export class SeatsModifyComponent implements OnInit {
       alert("You need to select flight.");
     }
   }
-
-  // metoda za menjanje karte
+  //#endregion
+  //#region 7 - Metoda za menjanje selektovane karte
   changeTicket(){
     if(this.service.comboBoxFlightForm.value.Flight != null){
       if(this.selectedTicket.ticketID != ""){
         if(this.service.changeTicketForm.value.TicketNumber == null && this.service.changeTicketForm.value.TicketType == null
           && this.service.changeTicketForm.value.TicketPrice == null && this.service.changeTicketForm.value.IsQuickBooking == null){
-            alert("Change unsuccessfuly because you not enter any new information.");
+            alert("Change failed because you not enter any new information.");
         }
         else{
           this.service.changeTicket(this.selectedTicket.ticketID, this.service.comboBoxFlightForm.value.Flight).subscribe(
@@ -222,7 +206,7 @@ export class SeatsModifyComponent implements OnInit {
             },
             err => {
               if(err.error === "Change unsuccessfuly because another ticket have entered new ticket number."){
-                alert("Change unsuccessfuly because another ticket have entered new ticket number.");
+                alert("Change ticket failed because another ticket have entered new ticket number.");
               }
               else{
                 console.log(err);
@@ -240,5 +224,5 @@ export class SeatsModifyComponent implements OnInit {
       alert("You need to select flight.");
     }
   }
-  
+  //#endregion
 }

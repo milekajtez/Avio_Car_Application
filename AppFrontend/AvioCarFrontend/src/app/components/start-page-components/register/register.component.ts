@@ -22,10 +22,9 @@ export class RegisterComponent implements OnInit {
     this.service.formModel.reset();
   }
 
+  //#region 1 - Metoda za registraciju korisnika
   onSubmit() {
     this.load = 1;
-    console.log(this.service.formModel.value);        // test za klik na regrister button
-
     this.service.register().subscribe(
       (res: any) => {
         if (res.succeeded) {
@@ -50,10 +49,11 @@ export class RegisterComponent implements OnInit {
       }
     );
   }
-
+  //#endregion
+  //#region 2 - Metoda za zatvaranje forme za registraciju
   cancel() {
     this.cancelRegister.emit(false);
     this.load = 0;
   }
-
+  //#endregion
 }

@@ -3,10 +3,10 @@
         <h2>FLIGHT CONFIGURATION</h2>
     </div>
     <div style="display: flex;">
+        <!--dodavanje leta-->
         <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
             <h3 style="text-align: center;"> ADD FLIGHT</h3>
             <form [formGroup]="service.newFlightForm" (ngSubmit)="onSubmit()">
-        
                 <!--start time-->
                 <div class="form-group">
                     <label>Start time</label>
@@ -16,7 +16,6 @@
                         This field is mandatory.
                     </label>
                 </div>
-        
                 <!--end time-->
                 <div class="form-group">
                     <label>End time</label>
@@ -26,7 +25,6 @@
                         This field is mandatory.
                     </label>
                 </div>
-        
                 <!--start location-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="startlocation" formControlName="StartLocation" placeholder="StartLocation">
@@ -35,7 +33,6 @@
                         This field is mandatory.
                     </label>
                 </div>
-        
                 <!--end location-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="endlocation" formControlName="EndLocation" placeholder="EndLocation">
@@ -44,7 +41,6 @@
                         This field is mandatory.
                     </label>
                 </div>
-                
                 <!--flight length-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="flighttime" formControlName="FlightLength" placeholder="FlightLength(km)">
@@ -57,7 +53,6 @@
                         Please insert a valid km.
                     </label>
                 </div>
-        
                  <!--aditional information-->
                  <div class="form-group">
                     <textarea class="form-control" id="additionalinformation" formControlName="AdditionalInformation" placeholder="AdditionalInformation" rows="5" cols="50"></textarea>
@@ -66,7 +61,6 @@
                       This field is mandatory.
                     </label>
                 </div>
-        
                 <!--number od transfers-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="numberoftransfers" formControlName="NumberOfTransfers" placeholder="NumberOfTransfers">
@@ -79,7 +73,6 @@
                         Please insert a valid number.
                     </label>
                 </div>
-        
                 <!--all transfers-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="alltransfers" formControlName="AllTransfers" placeholder="AllTransfers">
@@ -89,7 +82,6 @@
                         This field is mandatory.
                     </label>
                 </div>
-        
                 <!--plane name-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="planename" formControlName="PlaneName" placeholder="PlaneName">
@@ -98,7 +90,6 @@
                         This field is mandatory.
                     </label>
                 </div>
-        
                 <!--lugage weight-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="lugageweight" formControlName="LugageWeight" placeholder="LugageWeight">
@@ -111,7 +102,6 @@
                         Please insert a valid number.
                     </label>
                 </div>
-        
                 <!--airline-->
                 <div class="form-group">
                     <label>Airline</label>
@@ -122,18 +112,16 @@
                     *ngIf="service.newFlightForm.get('Airline').touched && service.newFlightForm.get('Airline').errors?.required">
                     This field is mandatory.</label>
                 </div>
-        
                 <div class="form-group text-center">
                     <button [disabled]="!service.newFlightForm.valid" class="btn btn-success" type="submit">Add Flight</button>
                     <p>&nbsp;</p>
                 </div>
             </form>
         </span>
-
+        <!--brisanje leta-->
         <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
             <h3 style="text-align: center;"> DELETE FLIGHT</h3>
             <form [formGroup]="loadService.deleteFlightForm" (ngSubmit)="deleteSubmit()" autocomplete="off">
-
                 <!--flight-->
                 <div class="form-group">
                     <label>Flight</label>
@@ -144,18 +132,16 @@
                         *ngIf="loadService.deleteFlightForm.get('Flight').touched && loadService.deleteFlightForm.get('Flight').errors?.required">
                         This field is mandatory.</label>
                 </div>
-
                 <div class="form-group text-center">
                     <button [disabled]="!loadService.deleteFlightForm.valid" class="btn btn-success" type="submit">Delete Flight</button>
                     <p>&nbsp;</p>
                 </div>
             </form>
         </span>
-
+        <!--izmena leta-->
         <span style="width: 25%; margin-top: 2%; margin-left: 5%; margin-right: 5%;">
             <h3 style="text-align: center;"> CHANGE FLIGHT</h3>
             <form [formGroup]="loadService.changeFlightForm" (ngSubmit)="changeSubmit()" autocomplete="off">
-
                 <!--flight-->
                 <div class="form-group">
                     <label>Flight</label>
@@ -166,7 +152,6 @@
                         *ngIf="loadService.changeFlightForm.get('Flight').touched && loadService.changeFlightForm.get('Flight').errors?.required">
                         This field is mandatory.</label>
                 </div>
-
                 <!--start time-->
                 <div class="form-group">
                     <label>Start time</label>
@@ -176,7 +161,6 @@
                         This field is mandatory.
                     </label>
                 </div>
-        
                 <!--end time-->
                 <div class="form-group">
                     <label>End time</label>
@@ -186,7 +170,6 @@
                         This field is mandatory.
                     </label>
                 </div>
-        
                 <!--start location-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="startlocation" formControlName="StartLocation" placeholder="StartLocation">
@@ -195,7 +178,6 @@
                         This field is mandatory.
                     </label>
                 </div>
-        
                 <!--end location-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="endlocation" formControlName="EndLocation" placeholder="EndLocation">
@@ -204,7 +186,6 @@
                         This field is mandatory.
                     </label>
                 </div>
-                
                 <!--flight length-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="flighttime" formControlName="FlightLength" placeholder="FlightLength(km)">
@@ -213,7 +194,6 @@
                         Please insert a valid km.
                     </label>
                 </div>
-        
                  <!--aditional information-->
                  <div class="form-group">
                     <textarea class="form-control" id="additionalinformation" formControlName="AdditionalInformation" placeholder="AdditionalInformation" rows="5" cols="50"></textarea>
@@ -222,7 +202,6 @@
                       This field is mandatory.
                     </label>
                 </div>
-        
                 <!--number od transfers-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="numberoftransfers" formControlName="NumberOfTransfers" placeholder="NumberOfTransfers">
@@ -231,7 +210,6 @@
                         Please insert a valid number.
                     </label>
                 </div>
-        
                 <!--all transfers-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="alltransfers" formControlName="AllTransfers" placeholder="AllTransfers">
@@ -241,7 +219,6 @@
                         This field is mandatory.
                     </label>
                 </div>
-        
                 <!--plane name-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="planename" formControlName="PlaneName" placeholder="PlaneName">
@@ -250,7 +227,6 @@
                         This field is mandatory.
                     </label>
                 </div>
-        
                 <!--lugage weight-->
                 <div class="form-group">
                     <input type="text" class="form-control" id="lugageweight" formControlName="LugageWeight" placeholder="LugageWeight">
@@ -259,8 +235,6 @@
                         Please insert a valid number.
                     </label>
                 </div>
-
-
                 <div class="form-group text-center">
                     <button [disabled]="!loadService.changeFlightForm.valid" class="btn btn-success" type="submit">Change Flight</button>
                     <p>&nbsp;</p>

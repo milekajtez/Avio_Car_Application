@@ -2,8 +2,8 @@
     <div class="text-block">
         <h2>CAR ADMIN PROFILE</h2>
     </div>
-
     <div style="display: flex;">
+        <!--ispis podataka adminstratora-->
         <span style="width: 30%;">
             <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar" style="margin-left: 28%; margin-top: 5%;">
             <h6 style="text-align: center;">{{username}}</h6>
@@ -18,12 +18,13 @@
             </ul>
         </span>
         <span style="width: 10.5%;"></span>
+
+        <!--menajnje podataka adminstratora-->
         <span style="width: 20%; margin-top: 1%;">
             <div><b><h4 style="margin-left: 2%;">CHANGE PROFILE DATA</h4></b></div>
             <div class="tab-content">
                 <div class="tab-pane active" style="margin-left: 2%; margin-right: 5%;">
                     <form [formGroup]="service.changeAdmin" autocomplete="off" (ngSubmit)="onSubmit()">
-
                         <!--username-->
                         <div class="form-group">
                             <div class="col-xs-6">
@@ -31,7 +32,6 @@
                                 <input type="text" class="form-control"id="username" placeholder="UserName" formControlName="UserName">
                             </div>
                         </div>
-
                         <!--email-->
                         <div class="form-group">
                             <div class="col-xs-6">
@@ -41,7 +41,6 @@
                                     *ngIf="service.changeAdmin.get('Email').errors?.email">Invalid email address.</label>
                             </div>
                         </div>
-
                         <!--phone number-->
                         <div class="form-group">
                             <div class="col-xs-6">
@@ -51,7 +50,6 @@
                                     *ngIf="service.changeAdmin.get('PhoneNumber').errors?.pattern">Minimum 9 characters required.</label>
                             </div>
                         </div>
-
                         <!--first name-->
                         <div class="form-group">
                             <div class="col-xs-6">
@@ -59,7 +57,6 @@
                                 <input type="text" class="form-control"id="firstname" placeholder="FirstName" formControlName="FirstName">
                             </div>
                         </div>
-
                         <!--last name-->
                         <div class="form-group">
                             <div class="col-xs-6">
@@ -67,7 +64,6 @@
                                 <input type="text" class="form-control" id="lastname" placeholder="LastName" formControlName="LastName">
                             </div>
                         </div>
-
                         <!--city-->
                         <div class="form-group">
                             <div class="col-xs-6">
@@ -75,7 +71,6 @@
                                 <input type="text" class="form-control" id="city" placeholder="City" formControlName="City">
                             </div>
                         </div>
-
                         <div class="form-group text-center">
                             <button [disabled]="!service.changeAdmin.valid" class="btn btn-success" type="submit">Change</button>
                             <button class="btn btn-default" type="reset">Reset</button>
@@ -85,11 +80,12 @@
             </div>
         </span>
         <span style="width: 10.5%;"></span>
+        
+        <!--menajnje sifre-->
         <span style="width: 20%;  margin-top: 1%;">
             <div><b><h4 style="margin-left: 2%;">CHANGE PASSWORD</h4></b>
                 <div class="tab-content">
                     <form [formGroup]="service.changeAdminPassword" autocomplete="off" (ngSubmit)="changePassword()">
-
                         <!--current password-->
                         <div class="form-group">
                             <div class="col-xs-6">
@@ -100,7 +96,6 @@
                                         field is mandatory.</label>
                             </div>
                         </div>
-
                         <!--new password and confirm new password-->
                         <div formGroupName="Passwords">
                             <div class="form-group">
@@ -128,7 +123,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group text-center">
                             <button [disabled]="!service.changeAdminPassword.valid" class="btn btn-success" type="submit">Change</button>
                         </div>

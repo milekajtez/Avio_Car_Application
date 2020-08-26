@@ -20,6 +20,7 @@ export class DiscountSettingsComponent implements OnInit {
     this.initializeData();
   }
 
+  //#region 1 - Metoda za ucitavanje popusta
   initializeData(){
     this.service.loadDiscounts().subscribe(
       (res: any) => {
@@ -30,11 +31,12 @@ export class DiscountSettingsComponent implements OnInit {
       },
       err => {
         console.log(err);
-        alert("Loading current discounts is unsuccessfully.");
+        alert("Loading current discounts failed.");
       }
     );
   }
-
+  //#endregion
+  //#region 2 - Metoda za izmenu popusta
   onSubmit(discountType) : void {
     var newValue;
     if(discountType === "plus"){
@@ -50,7 +52,6 @@ export class DiscountSettingsComponent implements OnInit {
       newValue = this.service.form4.value.Points1200;
     }
 
-    console.log(discountType);
     var body = {
       Value: newValue,
       Type: discountType
@@ -58,7 +59,7 @@ export class DiscountSettingsComponent implements OnInit {
 
     this.service.changeDiscount(body).subscribe(
       (res) => {
-        alert("Dicount changed successfully.");
+        alert("Changing discount successfully.");
         this.initializeData();
 
       },
@@ -80,4 +81,5 @@ export class DiscountSettingsComponent implements OnInit {
       }
     );
   }
+  //#endregion
 }

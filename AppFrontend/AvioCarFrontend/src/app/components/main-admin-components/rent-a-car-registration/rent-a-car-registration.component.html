@@ -15,7 +15,7 @@
         <!--rent-a-car address-->
         <div class="form-group">
             <input type="text" class="form-control" id="rentacaraddress" formControlName="RentACarAddress" placeholder="RentACarAddress">
-            <label>*example: Djordja Isakova,33,Kac,Serbia</label><br>
+            <label>*example: Djordja Isakova,33,Kac</label><br>
             <label class="text-danger"
               *ngIf="service.regRentACarForm.get('RentACarAddress').touched && service.regRentACarForm.get('RentACarAddress').errors?.required">This
               field is mandatory.</label>

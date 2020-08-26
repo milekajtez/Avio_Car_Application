@@ -48,7 +48,6 @@ namespace AvioCarBackend.Controllers
         #region 1 - Metoda za registraciju novog korisnika
         [HttpPost]
         [Route("Register")]
-        //POST : /api/ApplicationUser/Register
         public async Task<Object> PostApplicationUser(RegisteredUserModel model)
         {
             // provera da korisnik ne unese username glavnog admina i sprecim da imam vise korisnika sa istim username-om
@@ -119,7 +118,6 @@ namespace AvioCarBackend.Controllers
         #region 3 - Metoda za izmenu korisnika pri potvrdi registracije
         [HttpPost]
         [Route("RegisterConfirm")]
-        //POST : /api/ApplicationUser/RegisterConfirm
         public async Task<Object> PostConfirmUser(RegisteredUserModel model)
         {
             var resultFind = await _userManager.FindByIdAsync(model.Jmbg.ToString());
@@ -160,7 +158,6 @@ namespace AvioCarBackend.Controllers
         #region 4 - Metoda za obicno logovanje regularnog korisnika
         [HttpPost]
         [Route("Login")]
-        //POST : /api/ApplicationUser/Login
         public async Task<IActionResult> Login(LoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
@@ -205,7 +202,7 @@ namespace AvioCarBackend.Controllers
         [Route("SocialLogin")]
         public IActionResult SocialLogin([FromBody] LoginModel loginModel)
         {
-            var test = _appSettings.JWT_Secret;
+            //var test = _appSettings.JWT_Secret;
 
             if (VerifyToken(loginModel.IdToken))
             {
@@ -261,7 +258,6 @@ namespace AvioCarBackend.Controllers
         #region 7 - Metoda za registraciju administratora
         [HttpPost]
         [Route("AdminRegistration")]
-        //POST : /api/ApplicationUser/AdminRegistration
         public async Task<Object> PostRegistrationOfAdministrator(AdminModel model)
         {
             // provera da korisnik ne unese username glavnog admina i sprecim da imam vise korisnika sa istim username-om
@@ -314,7 +310,6 @@ namespace AvioCarBackend.Controllers
         #region 8 - Metoda za izmenu FirstLogin-a i sifre pri prvom logovanju administratora
         [HttpPost]
         [Route("ChangeAdminPassword")]
-        //POST : /api/ApplicationUser/ChangeAdminPassword
         public async Task<Object> PostFirstLoginChangePass(LoginModel model)
         {
             var resultFind = await _userManager.FindByIdAsync(model.Id);
@@ -342,7 +337,6 @@ namespace AvioCarBackend.Controllers
         #region 9 - Metoda za registraciju nove avikompanije
         [HttpPost]
         [Route("AirlineRegistration")]
-        //POST : /api/ApplicationUser/AirlineRegistration
         public async Task<Object> AirlineRegistration(NewModel model)
         {
             var airlines = _context.Airlines;
@@ -380,7 +374,6 @@ namespace AvioCarBackend.Controllers
         #region 10 - Metoda za registraciju novog rent-a-car servisa
         [HttpPost]
         [Route("RentACarRegistration")]
-        //POST : /api/ApplicationUser/RentACarRegistration
         public async Task<Object> RentACarRegistration(NewModel model)
         {
             var carServices = _context.RentACarServices;
