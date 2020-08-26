@@ -31,6 +31,11 @@ import { CarProfileComponent } from './components/car-admin-components/car-profi
 import { AddBranchOfficeComponent } from './components/car-admin-components/add-branch-office/add-branch-office.component';
 import { AddCarComponent } from './components/car-admin-components/add-car/add-car.component';
 import { ViewRentACarServicesComponent } from './components/car-admin-components/view-rent-a-car-services/view-rent-a-car-services.component';
+import { ReservationHistoryComponent } from './components/regular-user-components/reservation-history/reservation-history.component';
+import { FlightReservationComponent } from './components/regular-user-components/flight-reservation/flight-reservation.component';
+import { CarReservationComponent } from './components/regular-user-components/car-reservation/car-reservation.component';
+import { RegularProfileComponent } from './components/regular-user-components/regular-profile/regular-profile.component';
+import { FriendshipConfigurationComponent } from './components/regular-user-components/friendship-configuration/friendship-configuration.component';
 
 let config = new AuthServiceConfig([
   {
@@ -69,6 +74,11 @@ export function provideConfig()
     AddBranchOfficeComponent,
     AddCarComponent,
     ViewRentACarServicesComponent,
+    ReservationHistoryComponent,
+    FlightReservationComponent,
+    CarReservationComponent,
+    RegularProfileComponent,
+    FriendshipConfigurationComponent,
   ],
   imports: [
     BrowserModule,
