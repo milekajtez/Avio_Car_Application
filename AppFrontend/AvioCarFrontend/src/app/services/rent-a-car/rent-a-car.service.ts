@@ -85,6 +85,7 @@ export class RentACarService {
   }
 
   loadRentACarServiceBranchOffices(serviceID: string){
+    console.log(serviceID);
     return this.http.get(this.BaseURI + '/RentACar/GetRentACarServiceBranchOffices/' + serviceID);
   }
 

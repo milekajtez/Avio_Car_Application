@@ -69,7 +69,7 @@ export class ViewRentACarServicesComponent implements OnInit {
   //#endregion
   //#region 2 - Metoda za ucitavanje filijala odredjenog rent-a-car servisa
   viewBranchOffices(service: any){
-    this.service.loadRentACarServiceBranchOffices(service.branchOfficeID).subscribe(
+    this.service.loadRentACarServiceBranchOffices(service.carServiceID).subscribe(
       (res: any) => {
         this.branchOffices = [];
         for(var i = 0; i < res.length; i++){

@@ -36,6 +36,8 @@ import { FlightReservationComponent } from './components/regular-user-components
 import { CarReservationComponent } from './components/regular-user-components/car-reservation/car-reservation.component';
 import { RegularProfileComponent } from './components/regular-user-components/regular-profile/regular-profile.component';
 import { FriendshipConfigurationComponent } from './components/regular-user-components/friendship-configuration/friendship-configuration.component';
+import { AirlinesComponent } from './components/regular-user-components/airlines/airlines.component';
+import { RentACarServicesComponent } from './components/regular-user-components/rent-a-car-services/rent-a-car-services.component';
 
 let config = new AuthServiceConfig([
   {
@@ -79,6 +81,8 @@ export function provideConfig()
     CarReservationComponent,
     RegularProfileComponent,
     FriendshipConfigurationComponent,
+    AirlinesComponent,
+    RentACarServicesComponent,
   ],
   imports: [
     BrowserModule,
