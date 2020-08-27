@@ -5,6 +5,8 @@ import { Airline } from 'src/app/entities/avio-entities/airline/airline';
 import { AbstractFilterParam } from 'src/app/entities/abstract-filter-param/abstract-filter-param';
 import { StringFilterParam } from 'src/app/entities/string-filter-param/string-filter-param';
 import { NumberFilterParam } from 'src/app/entities/number-filter-param/number-filter-param';
+import { RentACarServiceComboBox } from 'src/app/entities/rent-a-car-service-combo-box/rent-a-car-service-combo-box';
+import { RentACarRegistrationComponent } from 'src/app/components/main-admin-components/rent-a-car-registration/rent-a-car-registration.component';
 
 @Injectable({
   providedIn: 'root'
@@ -94,6 +96,32 @@ export class RegularUserService {
       }
     }
     return filteredAirlines;
+  }
+  //#endregion
+  //#region 5 - Metode za filtriranje rent-a-car servisa
+  checkAirlineRentACarNameFilter(rentACarService: RentACarServiceComboBox, filterParam: AbstractFilterParam): boolean {
+    return filterParam instanceof StringFilterParam && filterParam.getFilterParamName() === 'rentACarServiceNameFilter' && !rentACarService.carServiceName.toLowerCase().includes(filterParam.getFilterParamValue().toLowerCase());
+  }
+  
+  checkRentACarRatingFilter(rentACarService: RentACarServiceComboBox, filterParam: AbstractFilterParam): boolean {
+    return filterParam instanceof NumberFilterParam && filterParam.getFilterParamName() === 'rentACarServiceRatingFilter' && !(Number(rentACarService.carServiceRating) == filterParam.getFilterParamValue());
+  }
+
+  filterRentACarService(rentACarServices: RentACarServiceComboBox[], filterParams: AbstractFilterParam[]): RentACarServiceComboBox[] {
+    let filteredServices = new Array<RentACarServiceComboBox>();
+    for (const service of rentACarServices) {
+      let addService = true;
+      for (const filterParam of filterParams) {
+        if (this.checkAirlineRentACarNameFilter(service, filterParam) || this.checkRentACarRatingFilter(service, filterParam)){
+          addService = false;
+        }
+      }
+
+      if (addService){
+        filteredServices.push(service);
+      }
+    }
+    return filteredServices;
   }
   //#endregion
 }
