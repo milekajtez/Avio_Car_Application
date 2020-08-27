@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Airline } from 'src/app/entities/avio-entities/airline/airline';
+import { AbstractFilterParam } from 'src/app/entities/abstract-filter-param/abstract-filter-param';
+import { StringFilterParam } from 'src/app/entities/string-filter-param/string-filter-param';
+import { NumberFilterParam } from 'src/app/entities/number-filter-param/number-filter-param';
 
 @Injectable({
   providedIn: 'root'
@@ -66,5 +70,30 @@ export class RegularUserService {
     return this.http.put(this.BaseURI + '/LoadData/ChangePassword', body);
   }
   //#endregion
+  //#region 4 - Metode za filtriranje aviokompanija
+  checkAirlineNameFilter(airline: Airline, filterParam: AbstractFilterParam): boolean {
+    return filterParam instanceof StringFilterParam && filterParam.getFilterParamName() === 'airlineNameFilter' && !airline.airlineName.toLowerCase().includes(filterParam.getFilterParamValue().toLowerCase());
+  }
+  
+  checkAirlineRatingFilter(airline: Airline, filterParam: AbstractFilterParam): boolean {
+    return filterParam instanceof NumberFilterParam && filterParam.getFilterParamName() === 'airlineRatingFilter' && !(Number(airline.airlineRating) == filterParam.getFilterParamValue());
+  }
 
+  filterAirlines(airlines: Airline[], filterParams: AbstractFilterParam[]): Airline[] {
+    let filteredAirlines = new Array<Airline>();
+    for (const airline of airlines) {
+      let addAirline = true;
+      for (const filterParam of filterParams) {
+        if (this.checkAirlineNameFilter(airline, filterParam) || this.checkAirlineRatingFilter(airline, filterParam)){
+          addAirline = false;
+        }
+      }
+
+      if (addAirline){
+        filteredAirlines.push(airline);
+      }
+    }
+    return filteredAirlines;
+  }
+  //#endregion
 }

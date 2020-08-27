@@ -2,4 +2,332 @@
     <div class="text-block">
         <h2>VIEW AIRLINES</h2>
     </div>
+    <div style="margin-top: 1%; margin-left: 2%; margin-right: 2%; size: 80%;">
+        <!--forma za filtriranje aviokompanija-->
+        <div class="form-row">
+            <div class="col-md-3">
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="material-icons"><b>Name:</b></i></span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="insert name" id="airlineNameFilter">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="material-icons"><b>Airline rating:</b></i></span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="insert rating" id="airlineRatingFilter">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-primary" style="margin-left: 30px;" (click)="filterAirlines()">SEARCH</button>
+                <button type="button" class="btn btn-secondary" style="margin-left: 5px;" (click)="resetFilter()">RESET</button>
+            </div>
+        </div>
+        
+        <!--ispis aviokompanija-->
+        <table class="table table-dark">
+            <thead style="text-align: center;">
+                <tr>
+                    <th>NAME</th>
+                    <th>ADDRESS</th>
+                    <th>PROMOTION DESCRIPTION</th>
+                    <th>PRICELIST</th>
+                    <th>NUMBER OF SOLD CARDS</th>
+                    <th>AIRLINE RATING</th>
+                    <th>DESTINATIONS</th>
+                    <th>FLIGHTS</th>
+                </tr>
+            </thead>
+            <tbody style="text-align: center;">
+                <tr *ngFor="let airline of filteredAirlines">
+                    <!--name-->
+                    <td>{{airline.airlineName}}</td>
+                    <!--address-->
+                    <td>
+                        <a role="button" data-toggle="modal" data-target="#addressModal"
+                        (click)="viewAirlineMapAddress(airline)">{{airline.airlineAddress}}</a>
+                    </td>
+                    <!--promotion description-->
+                    <td>
+                        <button class="btn btn-success" data-toggle="modal" data-target="#descriptionModal" 
+                        (click)="viewAirlinePromotionDescription(airline)">VIEW PROMOTION DECRIPTION</button>
+                    </td>
+                    <!--pricelist-->
+                    <td>
+                        <button class="btn btn-success" data-toggle="modal" data-target="#priceListModal" 
+                        (click)="viewAirlinePricelist(airline)">VIEW PRICELIST</button>
+                    </td>
+                    <!--number of sold ticket-->
+                    <td>{{airline.numberOfSoldTickets}}</td>
+                    <!--rating-->
+                    <td *ngIf="airline.airlineRating < 1.5">
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <div>{{airline.airlineRating}}</div>
+                    </td>
+                    <td *ngIf="airline.airlineRating >= 1.5 && airline.airlineRating < 2.5">
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <div>{{airline.airlineRating}}</div>
+                    </td>
+                    <td *ngIf="airline.airlineRating >= 2.5 && airline.airlineRating < 3.5">
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <div>{{airline.airlineRating}}</div>
+                    </td>
+                    <td *ngIf="airline.airlineRating >= 3.5 && airline.airlineRating < 4.5">
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                        <div>{{airline.airlineRating}}</div>
+                    </td>
+                    <td *ngIf="airline.airlineRating >= 4.5">
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <div>{{airline.airlineRating}}</div>
+                    </td>
+                    <td><button type="button" class="btn btn-success" data-toggle="modal" data-target=".bd-example-modal-xl"
+                        (click)="viewDestinations(airline)">VIEW AIRLINE DESTINATIONS</button>
+                    </td>
+                    <td><button type="button" class="btn btn-success" data-toggle="modal" data-target=".bd-example-modal-x2"
+                        (click)="viewFlights(airline)">VIEW AIRLINE FLIGHTS</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>&nbsp;</div>
+</div>
+
+<!--MODALS-->
+<!--promotion description-->
+<div class="modal fade" id="descriptionModal" tabindex="-1" role="dialog" aria-labelledby="descriptionModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:  powderblue;">
+                <h5 class="modal-title">AIRLINE PROMOTION DESCRIPTION</h5>
+                <button class="close" data-dismiss="modal" aria-label="Close" type="submit">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="white-space: pre;">
+                <div class="tab-content">
+                    <div>{{promotionDescription}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--pricelist-->
+<div class="modal fade" id="priceListModal" tabindex="-1" role="dialog" aria-labelledby="priceListModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:  powderblue;">
+                <h5 class="modal-title">AIRLINE PRICELIST</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="destroy">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="white-space: pre;">
+                <div class="tab-content">
+                    <div>{{priceList}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--address-->
+<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="height: 500px;">
+            <div class="modal-header" style="background-color:  powderblue;">
+                <h5 class="modal-title">AIRLINE LOCATION ADDRESS</h5>
+                <button type="submit" class="close" data-dismiss="modal" aria-label="Close" (click)="myFunction()" style="transition-timing-function: linear;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="destroy">
+                <div class="tab-content" id="destory1">
+                    <div id="map" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--airline destinations-->
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:  powderblue;">
+                <h5 class="modal-title">AIRLINE DESTINATIONS</h5>
+                <button type="submit" class="close" data-dismiss="modal" aria-label="Close" style="transition-timing-function: linear;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="white-space: pre;">
+                <div class="tab-content">
+                    <div>
+                        <table class="table table-dark">
+                            <thead style="text-align: center;">
+                                <tr>
+                                    <th>DESTINATION ID</th>
+                                    <th>AIRPORT NAME</th>
+                                    <th>CITY</th>
+                                    <th>COUNTRY</th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-align: center;">
+                                <tr *ngFor="let destination of destinations">
+                                    <td>{{destination.destinationID}}</td>
+                                    <td>{{destination.airportName}}</td>
+                                    <td>{{destination.city}}</td>
+                                    <td>{{destination.country}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--airline flights-->
+<div class="modal fade bd-example-modal-x2" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:  powderblue;">
+                <h5 class="modal-title">AIRLINE FLIGHTS</h5>
+                <button type="submit" class="close" data-dismiss="modal" aria-label="Close" style="transition-timing-function: linear;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="white-space: pre;">
+                <div class="tab-content" style="font-size: small;">
+                    <div>
+                        <table class="table table-dark">
+                            <thead style="text-align: center;">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>START/END TIME</th>
+                                    <th>START/END LOCATION</th>
+                                    <th>FLIGHT TIME (HOURS)</th>
+                                    <th>FLIGHT LENGTH (km)</th>
+                                    <th>FLIGHT RATING</th>
+                                    <th>MORE INFO</th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-align: center;">
+                                <tr *ngFor="let flight of flights">
+                                    <td>{{flight.flightID}}</td>
+                                    <td>Start: {{flight.startTime}}<br>Start: {{flight.endTime}}</td>
+                                    <td>From: {{flight.startLocation}}<br>To: {{flight.endLocation}}</td>
+                                    <td>{{flight.flightTime}}</td>
+                                    <td>{{flight.flightLength}}</td>
+
+                                    <td *ngIf="flight.flightRating < 1.5">
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                        <div>{{flight.flightRating}}</div>
+                                    </td>
+                                    <td *ngIf="flight.flightRating >= 1.5 && flight.flightRating < 2.5">
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                        <div>{{flight.flightRating}}</div>
+                                    </td>
+                                    <td *ngIf="flight.flightRating >= 2.5 && flight.flightRating < 3.5">
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                        <div>{{flight.flightRating}}</div>
+                                    </td>
+                                    <td *ngIf="flight.flightRating >= 3.5 && flight.flightRating < 4.5">
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star"></span>
+                                        <div>{{flight.flightRating}}</div>
+                                    </td>
+                                    <td *ngIf="flight.flightRating >= 4.5">
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <div>{{flight.flightRating}}</div>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bd-example-modal-x3"
+                                            (click)="flightMoreInfo(flight)">VIEW</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--more flight info -->
+<div class="modal fade bd-example-modal-x3" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:  powderblue;">
+                <h5 class="modal-title">MORE INFO</h5>
+                <button type="submit" class="close" data-dismiss="modal" aria-label="Close" style="transition-timing-function: linear;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="white-space: pre;">
+                <div class="tab-content">
+                    <div>
+                        <b>ADDITIONAL INFORMATION:</b><br><br>
+                        <div>{{additionalInfo}}</div><hr>
+
+                        <b>NUMBER OF TRANSFERS:</b><br><br>
+                        <div>{{numberOfTransfers}}</div><hr>
+
+                        <b>ALL TRASNFERS:</b><br><br>
+                        <div>{{allTransfers}}</div><hr>
+
+                        <b>PLANE NAME:</b><br><br>
+                        <div>{{planeName}}</div><hr>
+
+                        <b>LAGUAGE WEIGHT</b><br><br>
+                        <div>{{laguageWeight}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
