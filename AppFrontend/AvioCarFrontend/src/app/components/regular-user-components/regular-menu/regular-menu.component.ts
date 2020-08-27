@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { SharedDataService } from 'src/app/services/shared/shared-data.service';
 
 @Component({
   selector: 'app-regular-menu',
@@ -10,14 +11,17 @@ export class RegularMenuComponent implements OnInit {
   defaultComponent = 0;
   username: string;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private data: SharedDataService) {
     this.defaultComponent = 1;
-    route.params.subscribe(params => {
-      this.username = params['UserName'];
-    });
   }
 
   ngOnInit(): void {
+    this.data.currentMessage.subscribe(message => this.username = message);
+    if(this.username === "default message"){
+      this.route.params.subscribe(params => {
+        this.username = params['UserName'];
+      });
+    }
   }
 
   methodOption1(): void {
