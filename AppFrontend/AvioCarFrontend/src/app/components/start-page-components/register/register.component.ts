@@ -37,6 +37,7 @@ export class RegisterComponent implements OnInit {
       },
       err => {
         this.load = 0;
+        console.log(err);
         if(err.error === "Registration unsuccessfully. Please enter different jmbg.") {
           this.registrationLabel = err.error;
         }

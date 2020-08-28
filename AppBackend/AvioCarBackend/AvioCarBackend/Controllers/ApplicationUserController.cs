@@ -55,7 +55,7 @@ namespace AvioCarBackend.Controllers
             {
                 // jedinstveni identifikator korisnika je jmbg, ali ce mi biti dosta zgodnije da web aplikacija podrzava
                 // korisnike koji svi imaju razlicit username
-                return BadRequest(new { message = "Username is incorrect or has already been reserved." });
+                return BadRequest("Username is incorrect or has already been reserved.");
             }
 
             var resultFind = await _userManager.FindByIdAsync(model.Jmbg.ToString());
@@ -88,7 +88,7 @@ namespace AvioCarBackend.Controllers
             }
             else
             {
-                return BadRequest(new { message = "Registration unsuccessfully. Please enter different jmbg." });
+                return BadRequest("Registration unsuccessfully. Please enter different jmbg.");
             }
         }
         #endregion

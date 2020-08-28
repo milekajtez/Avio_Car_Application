@@ -6,10 +6,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./friendship-configuration.component.css']
 })
 export class FriendshipConfigurationComponent implements OnInit {
-
-  constructor() { }
+  profileDefaultPage: number;
+  
+  constructor() {
+    this.profileDefaultPage = 1;
+  }
 
   ngOnInit(): void {
+  }
+
+  profileOption1(): void {
+    this.profileDefaultPage = 1;
+  }
+
+  profileOption2(): void {
+    this.profileDefaultPage = 2;
   }
 
 }

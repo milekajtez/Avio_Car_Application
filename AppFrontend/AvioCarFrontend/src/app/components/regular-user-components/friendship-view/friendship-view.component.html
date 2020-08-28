@@ -1,0 +1,57 @@
+<div style="background-color: powderblue;">
+    <div class="text-block">
+        <h2>VIEW FIRENDSHIP LIST</h2>
+    </div>
+    <div style="margin-top: 1%; margin-left: 2%; margin-right: 2%; size: 80%;">
+        <!--forma za filtriranje prijatelja-->
+        <div class="form-row">
+            <div class="col-md-3">
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="material-icons"><b>First name:</b></i></span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="insert name" id="firstNameFilter">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="material-icons"><b>Last name:</b></i></span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="insert name" id="lastNameFilter">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-primary" style="margin-left: 30px;" (click)="filterFriends()">SEARCH</button>
+                <button type="button" class="btn btn-secondary" style="margin-left: 5px;" (click)="resetFilter()">RESET</button>
+            </div>
+        </div>
+        
+        <!--ispis aviokompanija-->
+        <table class="table table-dark">
+            <thead style="text-align: center;">
+                <tr>
+                    <th>USERNAME</th>
+                    <th>FIRST NAME</th>
+                    <th>LAST NAME</th>
+                    <th>PHONE NUMBER</th>
+                    <th>DELETE FRIEND</th>
+                </tr>
+            </thead>
+            <tbody style="text-align: center;">
+                <tr *ngFor="let friend of filteredFriends">
+                    <!--user name-->
+                    <td>{{friend.username}}</td>
+                    <!--first name-->
+                    <td>{{friend.firstname}}</td>
+                    <!--last name-->
+                    <td>{{friend.lastname}}</td>
+                    <!--phone number-->
+                    <td>{{friend.phonenumber}}</td>
+                    <td><button type="button" class="btn btn-danger" (click)="deleteFriend(friend)">DELETE FRIEND</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>&nbsp;</div>
+</div>

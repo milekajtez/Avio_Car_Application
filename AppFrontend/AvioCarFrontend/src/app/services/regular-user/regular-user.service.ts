@@ -6,7 +6,7 @@ import { AbstractFilterParam } from 'src/app/entities/abstract-filter-param/abst
 import { StringFilterParam } from 'src/app/entities/string-filter-param/string-filter-param';
 import { NumberFilterParam } from 'src/app/entities/number-filter-param/number-filter-param';
 import { RentACarServiceComboBox } from 'src/app/entities/rent-a-car-service-combo-box/rent-a-car-service-combo-box';
-import { RentACarRegistrationComponent } from 'src/app/components/main-admin-components/rent-a-car-registration/rent-a-car-registration.component';
+import { Friend } from 'src/app/entities/regular-user-entities/friend/friend';
 
 @Injectable({
   providedIn: 'root'
@@ -122,6 +122,75 @@ export class RegularUserService {
       }
     }
     return filteredServices;
+  }
+  //#endregion
+  //#region 6 - Forma za slanje zahteva za prijateljstvo
+  sendRequestForm = this.fb.group({
+    Username: ['', Validators.required]
+  });
+  //#endregion
+  //#region 7 - Metoda za ucitavanje zahteva
+  loadRequestsMethod(username: string, typeOfLoad: string){
+    return this.http.get(this.BaseURI + '/RegularUser/GetRequests/' + username + "/" + typeOfLoad);
+  }
+  //#endregion
+  //#region 8 - Metoda za slanje zahteva
+  sendRequestMethod(myUserName: string) {
+    var body = {
+      Username: this.sendRequestForm.value.Username,
+    }
+    return this.http.post(this.BaseURI + '/RegularUser/SendRequest/' + myUserName, body);
+  }
+  //#endregion
+  //#region 9 - Metoda za odustajanje od mog zahteva
+  deleteRequest(myUsername: string, friendUsername: string) {
+    return this.http.delete(this.BaseURI + '/RegularUser/DeleteMyRequest/' + myUsername + '/' + friendUsername);
+  }
+  //#endregion
+  //#region 10 - Metoda za potvrdu zahteva
+  confirmRequest(myUsername: string, friendUsername: string) {
+    return this.http.get(this.BaseURI + '/RegularUser/ConfirmRequest/' + myUsername + '/' + friendUsername);
+  }
+  //#endregion
+  //#region 11 - Metoda za odbijanje zahteva
+  rejectRequest(myUsername: string, friendUsername: string) {
+    return this.http.delete(this.BaseURI + '/RegularUser/DeleteMyRequest/' + myUsername + '/' + friendUsername);
+  }
+  //#endregion
+  //#region 12 - Metoda za ucitavanje prijatelja
+  loadMyFriends(myUserName){
+    return this.http.get(this.BaseURI + '/RegularUser/LoadMyFriends/' + myUserName);
+  }
+  //#endregion
+  //#region 13 - Metode za filtriranje prijatelja
+  checkFriendFirstNameFilter(friend: Friend, filterParam: AbstractFilterParam): boolean {
+    return filterParam instanceof StringFilterParam && filterParam.getFilterParamName() === 'firstNameFilter' && !friend.firstname.toLowerCase().includes(filterParam.getFilterParamValue().toLowerCase());
+  }
+  
+  checkFriendLastNameFilter(friend: Friend, filterParam: AbstractFilterParam): boolean {
+    return filterParam instanceof StringFilterParam && filterParam.getFilterParamName() === 'lastNameFilter' && !friend.lastname.toLowerCase().includes(filterParam.getFilterParamValue().toLowerCase());
+  }
+
+  filterFriends(friends: Friend[], filterParams: AbstractFilterParam[]): Friend[] {
+    let filteredFriends = new Array<Friend>();
+    for (const friend of friends) {
+      let addFriend = true;
+      for (const filterParam of filterParams) {
+        if (this.checkFriendFirstNameFilter(friend, filterParam) || this.checkFriendLastNameFilter(friend, filterParam)){
+          addFriend = false;
+        }
+      }
+
+      if (addFriend){
+        filteredFriends.push(friend);
+      }
+    }
+    return filteredFriends;
+  }
+  //#endregion
+  //#region 14 - Metoda za brisanje prijatelja
+  deleteFriend(myUsername: string, friendUsername: string){
+    return this.http.delete(this.BaseURI + '/RegularUser/DeleteFriend/' + myUsername + '/' + friendUsername);
   }
   //#endregion
 }

@@ -38,6 +38,8 @@ import { RegularProfileComponent } from './components/regular-user-components/re
 import { FriendshipConfigurationComponent } from './components/regular-user-components/friendship-configuration/friendship-configuration.component';
 import { AirlinesComponent } from './components/regular-user-components/airlines/airlines.component';
 import { RentACarServicesComponent } from './components/regular-user-components/rent-a-car-services/rent-a-car-services.component';
+import { FriendshipViewComponent } from './components/regular-user-components/friendship-view/friendship-view.component';
+import { FriendshipSettingsComponent } from './components/regular-user-components/friendship-settings/friendship-settings.component';
 
 let config = new AuthServiceConfig([
   {
@@ -83,6 +85,8 @@ export function provideConfig()
     FriendshipConfigurationComponent,
     AirlinesComponent,
     RentACarServicesComponent,
+    FriendshipViewComponent,
+    FriendshipSettingsComponent,
   ],
   imports: [
     BrowserModule,

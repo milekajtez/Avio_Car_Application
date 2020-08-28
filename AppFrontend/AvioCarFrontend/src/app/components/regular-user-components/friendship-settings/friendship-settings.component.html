@@ -1,0 +1,73 @@
+<div style="background-color: powderblue;">
+    <div class="text-block">
+        <h2>FRIENDSHIPS CONFIGURATION</h2>
+    </div>
+    <div style="display: flex;">
+        <!--slanje zahteva za prijateljstvo, ispis svojih zahteva i mogucnost brisanja istih-->
+        <span style="width: 50%; margin-top: 1%;">
+            <div><b><h4 style="margin-left: 2%; text-align: center;">SENDING FRIENDSHIP REQUEST</h4></b></div>
+            <div class="tab-content">
+                <div class="tab-pane active" style="margin-left: 25%; margin-right: 23%;">
+                    <form [formGroup]="service.sendRequestForm" autocomplete="off" (ngSubmit)="sendRequestMethod()">
+                        <!--username-->
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="username" formControlName="Username" placeholder="Username">
+                            <label class="text-danger"
+                            *ngIf="service.sendRequestForm.get('Username').touched && service.sendRequestForm.get('Username').errors?.required">This
+                            field is mandatory.</label>
+                        </div>
+                        <div class="form-group text-center">
+                            <button [disabled]="!service.sendRequestForm.valid" class="btn btn-success" type="submit">Send Request</button>
+                          </div>
+                    </form>
+                </div>
+            </div>
+            <hr style="margin-left: 25%; margin-right: 23%;">
+            <div><b><h4 style="margin-left: 2%; text-align: center;">LIST OF MY REQUESTS</h4></b></div>
+            <table class="table table-dark" style="margin-left: 2%; margin-right: 2%;">
+                <thead style="text-align: center;">
+                    <tr>
+                        <th>USER NAME</th>
+                        <th>FIRST NAME</th>
+                        <th>LAST NAME</th>
+                        <th>CANCEL REQUEST</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center;">
+                    <tr *ngFor="let request of listOfMyRequests">
+                        <td>{{request.username}}</td>
+                        <td>{{request.firstname}}</td>
+                        <td>{{request.lastname}}</td>
+                        <td><button type="button" class="btn btn-danger" (click)="deleteMyRequest(request)">DELETE</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </span>
+        <span style="width: 2%;"></span>
+
+        <!--ispis zahteva za prijateljstvo i mogucnst potvrde ili odbijanja prijateljstva-->
+        <span style="width: 48%; margin-top: 1%;">
+            <div><b><h4 style="margin-left: 2%; text-align: center;">VIEW A FRIENDSHIP REQUESTS</h4></b></div>
+            <table class="table table-dark" style="margin-right: 10%;">
+                <thead style="text-align: center;">
+                    <tr>
+                        <th>USER NAME</th>
+                        <th>FIRST NAME</th>
+                        <th>LAST NAME</th>
+                        <th>CONFIRM REQUEST</th>
+                        <th>REJECT REQUEST</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center;">
+                    <tr *ngFor="let request of requestList">
+                        <td>{{request.username}}</td>
+                        <td>{{request.firstname}}</td>
+                        <td>{{request.lastname}}</td>
+                        <td><button type="button" class="btn btn-success" (click)="confirmRequest(request)">CONFIRM</button></td>
+                        <td><button type="button" class="btn btn-danger" (click)="rejectRequest(request)">CANCEL</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </span>
+    </div>
+</div>

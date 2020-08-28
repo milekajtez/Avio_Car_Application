@@ -1,5 +1,12 @@
-<div style="background-color: powderblue;">
-    <div class="text-block">
-        <h2>FRIENDSHIP CONFIGURATION</h2>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <div class="collapse navbar-collapse">
+        <div>
+            <a class="fas fa-list-ol fa-lg" style="color:white" type="button" (click)="profileOption1()"> View My Friends</a>
+            <a class="fas fa-user-friends fa-lg" style="margin-left :25px; color:white" type="button" (click)="profileOption2()"> Sending/Accepting/Rejecting request for friendship</a>
+        </div>
     </div>
-</div>
+</nav>
+<div *ngIf="profileDefaultPage===1"><app-friendship-view></app-friendship-view></div> 
+<div *ngIf="profileDefaultPage===2"><app-friendship-settings></app-friendship-settings></div>
