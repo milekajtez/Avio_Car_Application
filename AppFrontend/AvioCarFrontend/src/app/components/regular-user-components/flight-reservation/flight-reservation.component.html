@@ -2,4 +2,102 @@
     <div class="text-block">
         <h2>FLIGHT RESERVATION</h2>
     </div>
+    <!--forma za pretragu letova-->
+    <form [formGroup]="service.searchFlightForm" (ngSubmit)="searchFlights()" style="margin-top: 1%; margin-left: 5%;">
+        <div class="form-row">
+            <div class="col-md-3">
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="material-icons"><b>Start location:</b></i></span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="insert name" id="startLocationSEARCH" formControlName="StartLocation">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="material-icons"><b>End location:</b></i></span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="insert start location" id="endLocationSEARCH" formControlName="EndLocation">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="material-icons"><b>End location:</b></i></span>
+                    </div>
+                    <input type="datetime-local" class="form-control" placeholder="insert start time" id="startTime" formControlName="StartTime">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <button [disabled]="!service.searchFlightForm.valid" class="btn btn-primary" type="submit" style="margin-left: 30px;">SEARCH</button>
+                <button type="button" class="btn btn-secondary" style="margin-left: 5px;" (click)="resetSearch()">RESET</button>
+            </div>
+        </div>
+    </form>
+    <hr style="background-color: darkslategrey; margin-left: 2%; margin-right: 2%;">
+
+    <!--filtriranje letova-->
+    <div class="form-row" style="margin-top: 1%; margin-left: 5%;">
+        <div class="col-md-3">
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons"><b>Laguage weight:</b></i></span>
+                </div>
+                <input type="text" class="form-control" placeholder="insert weight" id="laguageWeightFilter">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons"><b>Flight time:</b></i></span>
+                </div>
+                <input type="text" class="form-control" placeholder="insert hours" id="flightTimeFilter">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="material-icons"><b>Flight length:</b></i></span>
+                </div>
+                <input type="text" class="form-control" placeholder="insert length" id="flightLengthFilter">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <button type="button" class="btn btn-primary" style="margin-left: 30px;" (click)="filterFlight()">FILTER FLIGHTS</button>
+            <button type="button" class="btn btn-secondary" style="margin-left: 5px;" (click)="resetFilter()">RESET</button>
+        </div>
+    </div>
+    
+    <!--ispis letova-->
+    <div style="margin-left: 2%; margin-right: 2%; size: 80%;">
+        <table class="table table-dark">
+            <thead style="text-align: center;">
+                <tr>
+                    <th>START TIME</th>
+                    <th>END TIME</th>
+                    <th>NUMBER OF TRANSFERS</th>
+                    <th>FLIGHT TIME (hours)</th>
+                    <th>FLIGHT LENGTH (km)</th>
+                    <th>LAGUAGE WEIGHT</th>
+                    <th>RESERVATION</th>
+                </tr>
+            </thead>
+            <tbody style="text-align: center;">
+                <tr *ngFor="let flight of filteredFlights">
+                    <td>{{flight.startTime}}</td>
+                    <td>{{flight.endTime}}</td>
+                    <td>{{flight.numberOfTransfers}}</td>
+                    <td>{{flight.flightTime}}</td>
+                    <td>{{flight.flightLength}}</td>
+                    <td>{{flight.laguageWeight}}</td>
+                    <td>
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="..."
+                            (click)="flightReservation(flight)">BOOK A FLIGHT</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>&nbsp;</div>
 </div>

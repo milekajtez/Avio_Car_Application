@@ -7,6 +7,7 @@ import { StringFilterParam } from 'src/app/entities/string-filter-param/string-f
 import { NumberFilterParam } from 'src/app/entities/number-filter-param/number-filter-param';
 import { RentACarServiceComboBox } from 'src/app/entities/rent-a-car-service-combo-box/rent-a-car-service-combo-box';
 import { Friend } from 'src/app/entities/regular-user-entities/friend/friend';
+import { Flight } from 'src/app/entities/avio-entities/flight/flight';
 
 @Injectable({
   providedIn: 'root'
@@ -191,6 +192,45 @@ export class RegularUserService {
   //#region 14 - Metoda za brisanje prijatelja
   deleteFriend(myUsername: string, friendUsername: string){
     return this.http.delete(this.BaseURI + '/RegularUser/DeleteFriend/' + myUsername + '/' + friendUsername);
+  }
+  //#endregion
+
+  //#region 15 - Forma za pretragu letova
+  searchFlightForm = this.fb.group({
+    StartLocation: [''],
+    EndLocation: [''],
+    StartTime: ['']
+  });
+  //#endregion
+  //#region 16 - Metode za filtriranje prijatelja
+  checkFlightLaguageWeightFilter(flight: Flight, filterParam: AbstractFilterParam): boolean {
+    return filterParam instanceof NumberFilterParam && filterParam.getFilterParamName() === 'laguageWeightFilter' && !(Number(flight.laguageWeight) == filterParam.getFilterParamValue());
+  }
+  
+  checkFlightTimeFilter(flight: Flight, filterParam: AbstractFilterParam): boolean {
+    return filterParam instanceof NumberFilterParam && filterParam.getFilterParamName() === 'flightTimeFilter' && !(Number(flight.flightTime) == filterParam.getFilterParamValue());
+  }
+
+  checkFlightLengthFilter(flight: Flight, filterParam: AbstractFilterParam): boolean {
+    return filterParam instanceof NumberFilterParam && filterParam.getFilterParamName() === 'flightLengthFilter' && !(Number(flight.flightLength) == filterParam.getFilterParamValue());
+  }
+
+  filterFlights(flights: Flight[], filterParams: AbstractFilterParam[]): Flight[] {
+    let filteredFlights = new Array<Flight>();
+    for (const flight of flights) {
+      let addFlight = true;
+      for (const filterParam of filterParams) {
+        if (this.checkFlightLaguageWeightFilter(flight, filterParam) || this.checkFlightTimeFilter(flight, filterParam) ||
+          this.checkFlightLengthFilter(flight, filterParam)){
+          addFlight = false;
+        }
+      }
+
+      if (addFlight){
+        filteredFlights.push(flight);
+      }
+    }
+    return filteredFlights;
   }
   //#endregion
 }

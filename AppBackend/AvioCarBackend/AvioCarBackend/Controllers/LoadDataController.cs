@@ -319,7 +319,7 @@ namespace AvioCarBackend.Controllers
         {
             try
             {
-                var flights = _context.Flights;
+                var flights = _context.Flights.Include(d => d.Airline);
                 if (flights == null)
                 {
                     return NotFound();
