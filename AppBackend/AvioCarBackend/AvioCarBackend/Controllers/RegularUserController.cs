@@ -87,7 +87,7 @@ namespace AvioCarBackend.Controllers
                 if (typeOfLoad.Equals("myRequests"))
                 {
                     // ako sam ja sender i ako jos nije odgovoreno na zahtev
-                    if (request.SenderJMBG == long.Parse(jmbg) && request.RequestAccepted == false)
+                    if (request.SenderJMBG.ToString().Equals(jmbg) && request.RequestAccepted == false)
                     {
                         myPotentialFriends.Add(request.RecieverJMBG.ToString());
                     }
@@ -95,7 +95,7 @@ namespace AvioCarBackend.Controllers
                 else 
                 {
                     // ako sam ja receiver i ako jos nije odgovoreno na zahtev
-                    if (request.RecieverJMBG == long.Parse(jmbg) && request.RequestAccepted == false)
+                    if (request.RecieverJMBG.ToString().Equals(jmbg) && request.RequestAccepted == false)
                     {
                         myPotentialFriends.Add(request.SenderJMBG.ToString());
                     }
@@ -292,9 +292,9 @@ namespace AvioCarBackend.Controllers
 
             foreach (var request in allRequests) 
             {
-                if ((request.RecieverJMBG == long.Parse(userI.Id) || request.SenderJMBG == long.Parse(userI.Id)) && request.RequestAccepted) 
+                if ((request.RecieverJMBG.ToString().Equals(userI.Id) || request.SenderJMBG.ToString().Equals(userI.Id)) && request.RequestAccepted) 
                 {
-                    if (request.RecieverJMBG == long.Parse(userI.Id))
+                    if (request.RecieverJMBG.ToString().Equals(userI.Id))
                     {
                         var currentUser = await _userManager.FindByIdAsync(request.SenderJMBG.ToString());
                         result.Add(new Friend()

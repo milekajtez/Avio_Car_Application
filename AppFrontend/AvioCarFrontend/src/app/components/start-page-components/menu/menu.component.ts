@@ -157,7 +157,7 @@ export class MenuComponent implements OnInit {
     this.authService.signIn(socialPlatformProvider).then(socialusers => {
       this.service.externalLogin(socialusers).subscribe((res: any) => {
         localStorage.setItem('token', res.token);
-        this.router.navigateByUrl('/regularUserHomePage/' + this.service.formLoginModel.value.UserName);
+        this.router.navigateByUrl('/regularUserHomePage/' + socialusers.name);
       });
       console.log(socialusers);
     });

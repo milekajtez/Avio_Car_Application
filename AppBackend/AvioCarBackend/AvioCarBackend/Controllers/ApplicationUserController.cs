@@ -204,7 +204,7 @@ namespace AvioCarBackend.Controllers
         {
             //var test = _appSettings.JWT_Secret;
 
-            if (VerifyToken(loginModel.IdToken))
+            if (VerifyToken(loginModel.IdToken).Result)
             {
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -214,7 +214,7 @@ namespace AvioCarBackend.Controllers
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim(ClaimTypes.Role, "regular_user"),
-                        new Claim(ClaimTypes.PrimarySid, loginModel.Id)
+                        new Claim(ClaimTypes.PrimarySid, loginModel.Id.Substring(0, 13))
                     }),
                 };
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -228,7 +228,7 @@ namespace AvioCarBackend.Controllers
         }
         #endregion
         #region 6 - Metoda za validaciju tokena
-        public bool VerifyToken(string providerToken)
+        public async Task<bool> VerifyToken(string providerToken)
         {
             var httpClient = new HttpClient();
             var requestUri = new Uri(string.Format(GoogleApiTokenInfoUrl, providerToken));
@@ -251,6 +251,35 @@ namespace AvioCarBackend.Controllers
 
             var response = httpResponseMessage.Content.ReadAsStringAsync().Result;
             var googleApiTokenInfo = JsonConvert.DeserializeObject<GoogleApiTokenInfo>(response);
+
+            var resultFind = await _userManager.FindByIdAsync(googleApiTokenInfo.sub.ToString());
+            if (resultFind == null) 
+            {
+                // ne postoji korisnik i ubacujem ga u bazu
+                RegisteredUser registeredUser = new RegisteredUser() 
+                {
+                    UserName = googleApiTokenInfo.name,
+                    Email = googleApiTokenInfo.email,
+                    FirstName = googleApiTokenInfo.given_name,
+                    LastName = googleApiTokenInfo.family_name,
+                    Id = googleApiTokenInfo.sub.Substring(0, 13),
+                    City = "",
+                    PhoneNumber = "",
+                    NumberOfPassport = "",
+                    IsNewReservation = false,
+                    Points = 0
+                };
+
+                try
+                {
+                    var result = await _userManager.CreateAsync(registeredUser);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
 
             return true;
         }

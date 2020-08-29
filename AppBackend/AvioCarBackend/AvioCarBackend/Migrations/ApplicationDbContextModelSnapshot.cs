@@ -258,16 +258,16 @@ namespace AvioCarBackend.Migrations
 
             modelBuilder.Entity("AvioCarBackend.Model.FriendshipRequest", b =>
                 {
-                    b.Property<long>("SenderJMBG")
-                        .HasColumnType("bigint");
+                    b.Property<string>("SenderID")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<long>("RecieverJMBG")
-                        .HasColumnType("bigint");
+                    b.Property<string>("RecieverID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("RequestAccepted")
                         .HasColumnType("bit");
 
-                    b.HasKey("SenderJMBG", "RecieverJMBG");
+                    b.HasKey("SenderID", "RecieverID");
 
                     b.ToTable("FriendshipRequests");
                 });
