@@ -29,12 +29,16 @@ namespace AvioCarBackend.Data
         public DbSet<UserPointsDiscounts> UserPointsDiscounts { get; set; }
         public DbSet<RegisteredUserFlight> RegisteredUserFlights { get; set; }
         public DbSet<RegisteredUserCar> RegisteredUserCars { get; set; }
+        public DbSet<UserTickets> UserTickets { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.Entity<FriendshipRequest>().HasKey(o => new { o.SenderJMBG, o.RecieverJMBG });
+            builder.Entity<IdentityUserLogin<string>>().HasKey(o => o.UserId);
+
+            builder.Entity<UserTickets>().HasKey(o => new { o.UserName, o.TicketID });
             builder.Entity<IdentityUserLogin<string>>().HasKey(o => o.UserId);
 
 

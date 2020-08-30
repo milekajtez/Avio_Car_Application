@@ -15,6 +15,8 @@ import { AddDestinationComponent } from './components/avio-admin-components/add-
 import { AddFlightComponent } from './components/avio-admin-components/add-flight/add-flight.component';
 import { ViewAirlinesComponent } from './components/avio-admin-components/view-airlines/view-airlines.component';
 import { AvioProfileComponent } from './components/avio-admin-components/avio-profile/avio-profile.component';
+import { ReservationFlightYesComponent } from './components/regular-user-components/reservation-flight-yes/reservation-flight-yes.component';
+import { ReservationFlightNoComponent } from './components/regular-user-components/reservation-flight-no/reservation-flight-no.component';
 
 const routes: Routes = [
   {
@@ -44,6 +46,14 @@ const routes: Routes = [
   {
     path: "carAdminHomePage/:UserName",
     component: CarMenuComponent
+  },
+  {
+    path: "reservationFlightYES/:TicketID",
+    component: ReservationFlightYesComponent
+  },
+  {
+    path: "reservationFlightNO/:TicketID",
+    component: ReservationFlightNoComponent
   }
 ];
 

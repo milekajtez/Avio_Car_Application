@@ -40,6 +40,8 @@ import { AirlinesComponent } from './components/regular-user-components/airlines
 import { RentACarServicesComponent } from './components/regular-user-components/rent-a-car-services/rent-a-car-services.component';
 import { FriendshipViewComponent } from './components/regular-user-components/friendship-view/friendship-view.component';
 import { FriendshipSettingsComponent } from './components/regular-user-components/friendship-settings/friendship-settings.component';
+import { ReservationFlightYesComponent } from './components/regular-user-components/reservation-flight-yes/reservation-flight-yes.component';
+import { ReservationFlightNoComponent } from './components/regular-user-components/reservation-flight-no/reservation-flight-no.component';
 
 let config = new AuthServiceConfig([
   {
@@ -87,6 +89,8 @@ export function provideConfig()
     RentACarServicesComponent,
     FriendshipViewComponent,
     FriendshipSettingsComponent,
+    ReservationFlightYesComponent,
+    ReservationFlightNoComponent,
   ],
   imports: [
     BrowserModule,

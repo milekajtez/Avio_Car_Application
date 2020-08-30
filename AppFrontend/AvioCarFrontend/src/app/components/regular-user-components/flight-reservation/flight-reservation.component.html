@@ -105,7 +105,7 @@
 
 <!--MODALS-->
 <!--modal for -->
-<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" style="overflow: scroll !important;">
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" style="overflow: scroll !important;" id="myModal">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header" style="background-color:  powderblue;">
@@ -149,8 +149,12 @@
                                 </div>
                                 <ol class="cabin fuselage">
                                     <li class="row" style="margin-left: 3%;">
-                                        <ol class="seats" type="1" *ngFor="let ticket of flightSeats">
-                                            <li class="seat">
+                                        <ol class="seats" type="1" *ngFor="let ticket of flightSeats" name="seatsNAME">
+                                            <li class="seat" *ngIf="ticket.isTicketPurchased">
+                                                <input type="checkbox" disabled="disabled" id="{{ticket.ticketID}}"/>
+                                                <label for="{{ticket.ticketID}}">&nbsp;&nbsp;&nbsp;{{ticket.ticketNumber}}&nbsp;&nbsp;&nbsp;</label>
+                                            </li>
+                                            <li class="seat" *ngIf="!ticket.isTicketPurchased">
                                                 <input type="checkbox" id="{{ticket.ticketID}}"/>
                                                 <label for="{{ticket.ticketID}}">&nbsp;&nbsp;&nbsp;{{ticket.ticketNumber}}&nbsp;&nbsp;&nbsp;</label>
                                             </li>
@@ -159,6 +163,7 @@
                                 </ol>
                             </div>
                             <div style="text-align: center;">
+                                <h6 style="font-size: small;">*if you cannot mark a seats, it's already reserved</h6>
                                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="..."
                                     (click)="selectSeats()">RESERVE SELECTED TICKETS</button>
                             </div>
@@ -211,6 +216,13 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <hr style="color: darkslategrey;">
+                            <div style="text-align: center;">
+                                <button type="button" class="btn btn-success" (click)="reservationWithoutFriends()">RESERVATION WITHOUT FRIEND(S)</button>
+                                <br>
+                                <hr style="color: darkslategrey;">
+                                <button type="button" class="btn btn-success" (click)="reservationWithFriends()">RESERVATION WITH FRIEND(S)</button>
+                            </div>
                         </span>
                     </div>
                 </div>

@@ -8,6 +8,7 @@ import { NumberFilterParam } from 'src/app/entities/number-filter-param/number-f
 import { RentACarServiceComboBox } from 'src/app/entities/rent-a-car-service-combo-box/rent-a-car-service-combo-box';
 import { Friend } from 'src/app/entities/regular-user-entities/friend/friend';
 import { Flight } from 'src/app/entities/avio-entities/flight/flight';
+import { Ticket } from 'src/app/entities/avio-entities/ticket/ticket';
 
 @Injectable({
   providedIn: 'root'
@@ -194,7 +195,6 @@ export class RegularUserService {
     return this.http.delete(this.BaseURI + '/RegularUser/DeleteFriend/' + myUsername + '/' + friendUsername);
   }
   //#endregion
-
   //#region 15 - Forma za pretragu letova
   searchFlightForm = this.fb.group({
     StartLocation: [''],
@@ -233,7 +233,7 @@ export class RegularUserService {
     return filteredFlights;
   }
   //#endregion
-
+  //#region 17 - Forma za biranje prijatelja,za rezervaciju i metoda za proveru broja pasosa
   chooseFriendForm = this.fb.group({
     Friend: ['', Validators.required],
     FriendPassport: ['', [Validators.required, Validators.pattern("[0-9]{9}")]]
@@ -242,4 +242,42 @@ export class RegularUserService {
   checkPassport(username: string, passportNumber: string){
     return this.http.get(this.BaseURI + '/RegularUser/CheckPassport/' + username + "/" + passportNumber);
   }
+  //#endregion
+  //#region 18 - Metoda za rezervaciju leta (bez prijatelja)
+  bookFlight(username: string, ticketID: string){
+    return this.http.get(this.BaseURI + '/RegularUser/BookAFlight/' + username + "/" + ticketID)
+  }
+  //#endregion
+  //#region 19 - Metoda za rezervaciju leta (sa prijateljima)
+  bookingFlightForFriendAndMe(username: string, chosenFriends: Array<Friend>, selectedSeats: Array<Ticket>){
+    var friendsName = "";
+    var ticketIDs = "";
+
+    chosenFriends.forEach(element => {
+      friendsName += element.username;
+      friendsName += '|';
+    });
+
+    selectedSeats.forEach(element => {
+      ticketIDs += element.ticketID;
+      ticketIDs += '|';
+    });
+
+    friendsName = friendsName.substring(0, friendsName.length - 1);
+    ticketIDs = ticketIDs.substring(0, ticketIDs.length - 1);
+
+    var body = {
+      Username: username,
+      Tickets: ticketIDs,
+      Friends: friendsName
+    }
+
+    return this.http.post(this.BaseURI + '/RegularUser/FriendAndMeBookingFlight', body);
+  }
+  //#endregion
+  //#region 20 - Metoda za izmenu karte pri potvrdi/odbijanju rezervacije eta od strane prijatelja
+  changeTicket(ticketID: string, typeChange: string){
+    return this.http.get(this.BaseURI + '/RegularUser/ChangeReservationTicket/' + ticketID + "/" + typeChange);
+  }
+  //#endregion
 }

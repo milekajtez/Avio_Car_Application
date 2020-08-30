@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using AvioCarBackend.Data;
+using AvioCarBackend.Data.register_and_login;
 using AvioCarBackend.Data.regular_user;
 using AvioCarBackend.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Options;
 
 namespace AvioCarBackend.Controllers
 {
@@ -18,11 +23,14 @@ namespace AvioCarBackend.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<RegisteredUser> _userManager;
+        private readonly MailSettings _mailSettings;
 
-        public RegularUserController(ApplicationDbContext context, UserManager<RegisteredUser> userManager)
+        public RegularUserController(ApplicationDbContext context, UserManager<RegisteredUser> userManager,
+            IOptions<MailSettings> mailSettings)
         {
             _context = context;
             _userManager = userManager;
+            _mailSettings = mailSettings.Value;
         }
 
         #region 1 - Izmena korisnika na osnnovu prosledjenog username-a
@@ -380,7 +388,6 @@ namespace AvioCarBackend.Controllers
         }
         #endregion
         #region 8 - Metoda koja proverava ispravnost passport-a odredjenog korisnika
-        //CheckPassport
         [HttpGet]
         [Route("CheckPassport/{username}/{passportNumber}")]
         public async Task<Object> CheckPassport(string username, string passportNumber) 
@@ -408,6 +415,257 @@ namespace AvioCarBackend.Controllers
             }
         }
         #endregion
-    
+        #region 9 - Metoda za rezervaciju leta (samo za jednog korisnika)
+        [HttpGet]
+        [Route("BookAFlight/{username}/{ticketID}")]
+        public async Task<Object> BookAFlight(string username, string ticketID)
+        {
+            var userI = await _userManager.FindByNameAsync(username);
+            if (userI == null)
+            {
+                return NotFound("Booking flight failed. Server not found user in database.");
+            }
+
+            var reservedTickets = _context.UserTickets;
+            foreach (var ticket in reservedTickets) 
+            {
+                if (ticket.UserName.Equals(long.Parse(userI.Id)) && ticket.TicketID.Equals(long.Parse(ticketID))) 
+                {
+                    return NotFound("Booking flight failed. User already have this ticket in his reservated tickets.");
+                }
+            }
+
+            UserTickets userTicket = new UserTickets()
+            {
+                UserName = long.Parse(userI.Id),
+                TicketID = long.Parse(ticketID),
+                FriendConfirmed = true
+            };
+            // sam sebi sam prijatelj
+
+            _context.UserTickets.Add(userTicket);
+            _context.SaveChanges();
+
+            // sada je potrebno tu kartu postaviti da je rezervisana
+            try
+            {
+                var findTicket = await _context.Tickets.FindAsync(int.Parse(ticketID));
+                findTicket.IsTicketPurchased = true;
+                findTicket.TimeOfTicketPurchase = DateTime.Now;
+
+                try 
+                {
+                    _context.Tickets.Update(findTicket);
+                    _context.SaveChanges();
+                    return Ok();
+                }
+                catch (Exception e) 
+                {
+                    throw e;
+                }
+            }
+            catch (Exception e) 
+            {
+                throw e;
+            }
+        }
+        #endregion
+        #region 10 - Metoda za rezervaciju leta (korisnik + prijatelji)
+        [HttpPost]
+        [Route("FriendAndMeBookingFlight")]
+        public async Task<Object> FriendAndMeBookingFlight(FriendsAndMeModel model) 
+        {
+            string[] friends = model.Friends.Split('|');
+            List<string> ticketIDs = model.Tickets.Split('|').ToList();
+
+            #region 10.1 - Prvo sebe unesem u bazu
+            // prvo sebe unesem u bazu..metoda isti kod kao prethodna
+            var userI = await _userManager.FindByNameAsync(model.Username);
+            if (userI == null)
+            {
+                return NotFound("Booking flight failed. Server not found user in database.");
+            }
+
+            var reservedTickets = _context.UserTickets;
+            foreach (var ticket in reservedTickets)
+            {
+                if (ticket.UserName.Equals(long.Parse(userI.Id)) && ticket.TicketID.Equals(long.Parse(ticketIDs[0])))
+                {
+                    return NotFound("Booking flight failed. User already have this ticket in his reservated tickets.");
+                }
+            }
+
+            UserTickets userTicket = new UserTickets()
+            {
+                UserName = long.Parse(userI.Id),
+                TicketID = long.Parse(ticketIDs[0]),
+                FriendConfirmed = true
+            };
+            // sam sebi sam prijatelj
+
+            _context.UserTickets.Add(userTicket);
+            _context.SaveChanges();
+
+            // sada je potrebno tu kartu postaviti da je rezervisana
+            try
+            {
+                var findTicket = await _context.Tickets.FindAsync(int.Parse(ticketIDs[0]));
+                findTicket.IsTicketPurchased = true;
+                findTicket.TimeOfTicketPurchase = DateTime.Now;
+
+                try
+                {
+                    _context.Tickets.Update(findTicket);
+                    _context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            #endregion
+            #region 10.2 - Zatim ubacim i prijatelje
+
+            // prvo izbacim mene
+            ticketIDs.RemoveAt(0);
+
+            for (int i = 0; i < ticketIDs.Count; i++) 
+            {
+                var userFriend = await _userManager.FindByNameAsync(friends[i]);
+                if (userFriend == null)
+                {
+                    return NotFound("Booking flight failed. Server not found friend in database.");
+                }
+
+                //var reservedTickets = _context.UserTickets;
+                foreach (var ticket in reservedTickets)
+                {
+                    if (ticket.UserName.Equals(long.Parse(userFriend.Id)) && ticket.TicketID.Equals(long.Parse(ticketIDs[i])))
+                    {
+                        return NotFound("Booking flight failed. Friend already have this ticket in his reservated tickets.");
+                    }
+                }
+
+                UserTickets newTicket = new UserTickets()
+                {
+                    UserName = long.Parse(userFriend.Id),
+                    TicketID = long.Parse(ticketIDs[i]),
+                    FriendConfirmed = false
+                };
+                // prijatelji ce trebati potvrditi. i pored toga...karta ce biti na cekanju i samim tim je za sada zauzeta
+
+                _context.UserTickets.Add(newTicket);
+                _context.SaveChanges();
+
+                // sada je potrebno tu kartu postaviti da je rezervisana
+                try
+                {
+                    var findTicket = await _context.Tickets.FindAsync(int.Parse(ticketIDs[i]));
+                    findTicket.IsTicketPurchased = true;
+                    findTicket.TimeOfTicketPurchase = DateTime.Now;
+
+                    try
+                    {
+                        _context.Tickets.Update(findTicket);
+                        _context.SaveChanges();
+
+                        //ako je sve u redu..pronadjem mejl od korisnika tj prijatelja i poslajem mu mejl
+
+                        await SendEmailAsync(model.Username, userFriend.Email, findTicket);
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+            }
+
+            #endregion
+
+            return Ok();
+        }
+        #endregion
+        #region 11 - Metoda za slanje mejl prijatelju pri rezervaciji leta
+        public async Task SendEmailAsync(string username, string friendMailID, Ticket ticket)
+        {
+            MailMessage message = new MailMessage();
+            SmtpClient smtp = new SmtpClient();
+            message.From = new MailAddress(_mailSettings.Mail, _mailSettings.DisplayName);
+            message.To.Add(new MailAddress(friendMailID));
+            message.Subject = "Confirm flight reservation";
+            message.Priority = MailPriority.Normal;
+
+            message.IsBodyHtml = false;
+
+            string ticketInfo = "TicketID: " + ticket.TicketID + "\n" + 
+                "Ticket number: " + ticket.TicketNumber + "\n" +
+                "Ticket price: " + ticket.TicketPrice + "\n\n\n";
+
+            message.Body = ticketInfo + "Your friend " + username + " was send reuqest for reservation flight.\nIf you want to accept this request" + 
+                " please click on this link: http://localhost:4200/reservationFlightYES/" + ticket.TicketID + "\n" + "If you want to reject this request" + 
+                " please click on this link: http://localhost:4200/reservationFlightNO/" + ticket.TicketID + "\n\n" + "Thanks for using AvioCarApplication.";
+
+            smtp.Port = _mailSettings.Port;
+            smtp.Host = _mailSettings.Host;
+            smtp.EnableSsl = true;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials = new NetworkCredential(_mailSettings.Mail, _mailSettings.Password);
+            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            await smtp.SendMailAsync(message);
+        }
+        #endregion
+        #region 12 - Metoda za potvrdu/odbijanje zahteva za za rezervaciju leta od strane prijatelja
+        //ChangeReservationTicket
+        [HttpGet]
+        [Route("ChangeReservationTicket/{ticketID}/{typeChange}")]
+        public async Task<Object> ChangeReservationTicket(string ticketID, string typeChange) 
+        {
+            string defaultTime = "1/1/0001 00:00:00";
+
+            var ticket = await _context.Tickets.FindAsync(int.Parse(ticketID));
+            if (ticket == null)
+            {
+                return NotFound("Changing failed. Server not found ticket in data base.");
+            }
+
+            var userTicket = new UserTickets();
+            var userTickets = _context.UserTickets;
+            foreach (var ut in userTickets) 
+            {
+                if (ut.TicketID.Equals(long.Parse(ticketID))) 
+                {
+                    userTicket = ut;
+                    break;
+                }
+            }
+            
+            if (typeChange.Equals("yes"))
+            {
+
+                userTicket.FriendConfirmed = true;
+                _context.UserTickets.Update(userTicket);
+                _context.SaveChanges();
+            }
+            else 
+            {
+                ticket.IsTicketPurchased = false;
+                ticket.TimeOfTicketPurchase = DateTime.Parse(defaultTime);
+                _context.Tickets.Update(ticket);
+                _context.SaveChanges();
+
+                _context.UserTickets.Remove(userTicket);
+                _context.SaveChanges();
+            }
+            return Ok();
+        }
+        #endregion
     }
 }

@@ -19,7 +19,7 @@ export class FlightReservationComponent implements OnInit {
   searchedFlights = new Array<Flight>();          // lista svih pronadjenih letova
   filteredFlights = new Array<Flight>();          // lista filtriranih letova
   flightSeats = new Array<Ticket>();              // lista mesta izabranog leta
-  selectedSeats = new Array<Ticket>();            // lista selektovanih mesta
+  selectedSeats = new Array<Ticket>();            // lista selektovanih mesta..id-jevi selektovanih mesta
   myFriends = new Array<Friend>();                // lista svih prijatelja
   chosenFriends = new Array<Friend>();            // lista izabranih prijatelja
   flightID: string;
@@ -154,7 +154,6 @@ export class FlightReservationComponent implements OnInit {
     return new NumberFilterParam("flightLengthFilter", +this.getFilterFieldValue("flightLengthFilter"));
   }
   //#endregion
-
   //#region 4 - Metoda za otvaranje modala za rezervaciju leta
   flightReservation(flight: any){
     this.flightID = flight.flightID;
@@ -250,11 +249,10 @@ export class FlightReservationComponent implements OnInit {
     this.service.chooseFriendForm.reset();
   }
   //#endregion
-
   //#region 7 - Metoda za dodavanje prijatelja u listu selektovanih prijatelja (ukoliko je dobro ukucan passport i username)
   chooseFriend(){
-    // treba <= ()stavio sam > da vidim da li radi else deo !!!
-    if(this.selectedSeats.length > 1){
+    console.log(this.selectedSeats);
+    if(this.selectedSeats.length <= 1){
       alert("You must select 2 or more seats.");
     }
     else{
@@ -300,12 +298,89 @@ export class FlightReservationComponent implements OnInit {
     this.myFriends.push(friend);
   }
   //#endregion
-  
-  
-  
+  //#region 9 - Metoda za selektovanje sedista
   selectSeats(){
-    // metoda za selektovanje polja
-  }
+    var selectedIDs = new Array<string>();
+    var elements = <HTMLLIElement[]><any> document.getElementsByName("seatsNAME");
 
-  
+    for(let i = 0; i< elements.length; i++) {
+      if((elements[i].children[0].children[0] as HTMLInputElement).type == "checkbox" && 
+         (elements[i].children[0].children[0] as HTMLInputElement).checked){
+        selectedIDs.push((elements[i].children[0].children[0] as HTMLInputElement).id)
+      }
+    }
+
+    this.selectedSeats = [];
+
+    for(let i = 0; i < this.flightSeats.length; i++){
+      if(selectedIDs.indexOf(this.flightSeats[i].ticketID.toString()) !== -1){
+        this.selectedSeats.push(this.flightSeats[i]);
+      }
+    }
+
+    if(this.selectedSeats.length == 0){
+      alert("You not selected any seat.");
+    }
+    else{
+      alert("Selecting seats successfuly.");
+    }
+  }
+  //#endregion
+  //#region 10 - Metoda za rezervaciju karata (sedista) - BEZ PRIJATELJA
+  reservationWithoutFriends(): void {
+    if(this.chosenFriends.length > 0){
+      alert("You selected your friends. If you want a reservation without friends, please delete all friend from chosen friends list.")
+    }
+    else{
+      if(this.selectedSeats.length < 1 || this.selectedSeats.length > 1){
+        alert("If you want a reservation without friends, please select only one seats.");
+      }
+      else{
+        this.service.bookFlight(this.myUsername, this.selectedSeats[0].ticketID).subscribe(
+          (res: any) => {
+            alert("Booking flight successfuly.");
+            this.clearModalData();
+            this.service.chooseFriendForm.reset();
+          },
+          err => {
+            if(err.error === "Booking flight failed. Server not found user in database."){
+              alert("Booking flight failed. Server not found user in database.");
+            }
+            else if(err.error === "Booking flight failed. User already have this ticket in his reservated tickets."){
+              alert("Booking flight failed. User already have this ticket in his reservated tickets.");
+            }
+            else{
+              alert("Unknown error");
+            }
+          }
+        );
+      }
+    }
+  }
+  //#endregion
+  //#region 10 - Metoda za rezervaciju karata (sedista) - SA PRIJATELJIMA
+  reservationWithFriends(): void {
+    if(this.chosenFriends.length == 0){
+      alert("You must select at least one friend.");
+    }
+    else{
+      if(this.chosenFriends.length + 1 != this.selectedSeats.length){
+        alert("Number of selected seats must be for one larger then the number of selected friends. One seats for you and other for your friends.");
+      }
+      else{
+        this.service.bookingFlightForFriendAndMe(this.myUsername, this.chosenFriends, this.selectedSeats).subscribe(
+          (res: any) => {
+            alert("Reservation with friends successfully. Enjoy in flight!");
+            this.clearModalData();
+            document.getElementById("myModal").click();
+
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      }
+    }
+  }
+  //#endregion
 }
