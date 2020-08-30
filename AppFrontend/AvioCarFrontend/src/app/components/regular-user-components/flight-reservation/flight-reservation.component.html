@@ -24,7 +24,7 @@
             <div class="col-md-3">
                 <div class="input-group form-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="material-icons"><b>End location:</b></i></span>
+                        <span class="input-group-text"><i class="material-icons"><b>Start time:</b></i></span>
                     </div>
                     <input type="datetime-local" class="form-control" placeholder="insert start time" id="startTime" formControlName="StartTime">
                 </div>
@@ -92,7 +92,7 @@
                     <td>{{flight.flightLength}}</td>
                     <td>{{flight.laguageWeight}}</td>
                     <td>
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="..."
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bd-example-modal-xl"
                             (click)="flightReservation(flight)">BOOK A FLIGHT</button>
                     </td>
                 </tr>
@@ -100,4 +100,140 @@
         </table>
     </div>
     <div>&nbsp;</div>
+</div>
+
+
+<!--MODALS-->
+<!--modal for -->
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" style="overflow: scroll !important;">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:  powderblue;">
+                <h5 class="modal-title">BOOK A FLIGHT</h5>
+                <button type="submit" class="close" data-dismiss="modal" aria-label="Close" style="transition-timing-function: linear;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="white-space: pre;">
+                <div class="tab-content">
+                    <div style="display: flex;">
+                        <!--ispis podataka regularnog usera-->
+                        <span style="width: 40%;">
+                            <ul class="list-group">
+                                <li class="list-group-item text-muted" style="text-align: center;"><b>FLIGHT INFO</b><i class="fa fa-dashboard fa-1x"></i></li>
+                                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Flight ID: </strong>{{flightID}}<i class="fa fa-dashboard fa-1x"></i></li>
+                                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Start time </strong>{{startTime}}<i class="fa fa-dashboard fa-1x"></i></li>
+                                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>End time: </strong>{{endTime}}<i class="fa fa-dashboard fa-1x"></i></li>
+                                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Start location: </strong>{{startLocation}}<i class="fa fa-dashboard fa-1x"></i></li>
+                                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>End location: </strong>{{endLocation}}<i class="fa fa-dashboard fa-1x"></i></li>
+                                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Flight time: </strong>{{flightTime}}<i class="fa fa-dashboard fa-1x"></i></li>
+                                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Flight length: </strong>{{flightLength}}<i class="fa fa-dashboard fa-1x"></i></li>
+                                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Flight rating: </strong>{{flightRating}}<i class="fa fa-dashboard fa-1x"></i></li>
+                                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Adittional info: </strong>
+                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target=".bd-example-modal-x2" style="float: right;">VIEW ADITTIONAL INFO</button>
+                                    <i class="fa fa-dashboard fa-1x"></i>
+                                </li>
+                                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Number of transfers: </strong>{{numberOfTransfers}}<i class="fa fa-dashboard fa-1x"></i></li>
+                                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>All transfers: </strong>{{allTransfers}}<i class="fa fa-dashboard fa-1x"></i></li>
+                                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Plane name: </strong>{{planeName}}<i class="fa fa-dashboard fa-1x"></i></li>
+                                <li class="list-group-item text-left" style="margin-left: 5%; margin-right: 5%;"><strong>Laguage weight: </strong>{{laguageWeight}}<i class="fa fa-dashboard fa-1x"></i></li>
+                            </ul>
+                        </span> 
+
+                        <!--ispis sedista sa mogucnoscu biranja-->
+                        <span style="width: 30%;">
+                            <div style="text-align: center;"><b>DISPLAY OF AIRCRAFT SEATS</b></div>
+                            <div class="plane" style="size: 70%;">
+                                <div>
+                                  <h6 style="text-align: center;">PLEASE SELECT A SEAT(S)</h6>
+                                </div>
+                                <ol class="cabin fuselage">
+                                    <li class="row" style="margin-left: 3%;">
+                                        <ol class="seats" type="1" *ngFor="let ticket of flightSeats">
+                                            <li class="seat">
+                                                <input type="checkbox" id="{{ticket.ticketID}}"/>
+                                                <label for="{{ticket.ticketID}}">&nbsp;&nbsp;&nbsp;{{ticket.ticketNumber}}&nbsp;&nbsp;&nbsp;</label>
+                                            </li>
+                                        </ol>
+                                    </li>
+                                </ol>
+                            </div>
+                            <div style="text-align: center;">
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="..."
+                                    (click)="selectSeats()">RESERVE SELECTED TICKETS</button>
+                            </div>
+                        </span>
+
+                        <!--biranje prijatelja-->
+                        <span style="width: 40%;">
+                            <div style="text-align: center;"><b>CHOOSE FRIENDS</b></div>
+                            <div style="text-align: center; font-size: small;">*first you must to select free seat(s)</div>
+                            <form [formGroup]="service.chooseFriendForm" autocomplete="off" (ngSubmit)="chooseFriend()" style="margin-left: 5%; margin-right: 5%; margin-top: 2%;">
+                                <!-- friend username-->
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="friend" formControlName="Friend" placeholder="Friend Username">
+                                    <label class="text-danger"
+                                    *ngIf="service.chooseFriendForm.get('Friend').touched && service.chooseFriendForm.get('Friend').errors?.required">This
+                                    field is mandatory.</label>
+                                </div>
+                                <!--number of passport-->
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="friendpassport" formControlName="FriendPassport" placeholder="FriendPassport">
+                                    <label class="text-danger"
+                                    *ngIf="service.chooseFriendForm.get('FriendPassport').touched && service.chooseFriendForm.get('FriendPassport').errors?.required">
+                                    This field is mandatory.</label>
+                                    <label class="text-danger" 
+                                    *ngIf="service.chooseFriendForm.get('FriendPassport').touched && service.chooseFriendForm.get('FriendPassport').errors?.minlength">
+                                    Minimum 9 characters required.
+                                    </label>
+                                </div>
+                                <div class="form-group text-center">
+                                    <button [disabled]="!service.chooseFriendForm.valid" class="btn btn-success" type="submit">Add Friend</button>
+                                    <button type="reset" class="btn btn-secondary" (click)="resetChooseFriendForm()" style="margin-left: 2%;">Reset</button>
+                                    <p>&nbsp;</p>
+                                </div>
+                            </form>
+                            <hr style="color: darkslategrey;">
+                            <div style="text-align: center;"><b>CHOSEN FRIENDS</b></div>
+                            <!--ispis prijatelja-->
+                            <table class="table table-dark" style="font-size: small;">
+                                <thead style="text-align: center;">
+                                    <tr>
+                                        <th>USER NAME</th>
+                                        <th>DELETE CHOSEN FRIEND</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="text-align: center;">
+                                    <tr *ngFor="let friend of chosenFriends">
+                                        <!--username-->
+                                        <td data-toggle="tooltip" data-placement="top" title="{{friend.firstname}}/{{friend.lastname}}/{{friend.phonenumber}}">{{friend.username}}</td>
+                                        <td><button type="button" class="btn btn-danger" (click)="deleteChosenFriend(friend)">DELETE CHOSEN FRIEND</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--additional info-->
+<div class="modal fade bd-example-modal-x2" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:  powderblue;">
+                <h5 class="modal-title">FLIGHT ADITTIONAL INFO</h5>
+                <button type="submit" class="close" data-dismiss="modal" aria-label="Close" style="transition-timing-function: linear;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="white-space: pre;">
+                <div class="tab-content">
+                    <div>{{adittionalInformation}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

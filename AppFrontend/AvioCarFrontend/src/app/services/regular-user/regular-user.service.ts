@@ -233,4 +233,13 @@ export class RegularUserService {
     return filteredFlights;
   }
   //#endregion
+
+  chooseFriendForm = this.fb.group({
+    Friend: ['', Validators.required],
+    FriendPassport: ['', [Validators.required, Validators.pattern("[0-9]{9}")]]
+  });
+
+  checkPassport(username: string, passportNumber: string){
+    return this.http.get(this.BaseURI + '/RegularUser/CheckPassport/' + username + "/" + passportNumber);
+  }
 }

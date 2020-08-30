@@ -379,6 +379,35 @@ namespace AvioCarBackend.Controllers
             }
         }
         #endregion
+        #region 8 - Metoda koja proverava ispravnost passport-a odredjenog korisnika
+        //CheckPassport
+        [HttpGet]
+        [Route("CheckPassport/{username}/{passportNumber}")]
+        public async Task<Object> CheckPassport(string username, string passportNumber) 
+        {
+            var findResult = await _userManager.FindByNameAsync(username);
+            if (findResult == null) 
+            {
+                return NotFound("Checking passport failed. Server not found user with this username.");
+            }
 
+            if (findResult.NumberOfPassport != null)
+            {
+                if (findResult.NumberOfPassport.Equals(passportNumber))
+                {
+                    return Ok(findResult);
+                }
+                else
+                {
+                    return NotFound("Passport is incorrect. Please enter a different number of passport.");
+                }
+            }
+            else 
+            {
+                return NotFound("Current user not has passport number yet.");
+            }
+        }
+        #endregion
+    
     }
 }
