@@ -4,6 +4,9 @@ import { Airline } from 'src/app/entities/avio-entities/airline/airline';
 import { HttpClient } from '@angular/common/http';
 import { Destination } from 'src/app/entities/avio-entities/destination/destination';
 import { Flight } from 'src/app/entities/avio-entities/flight/flight';
+import { Chart } from 'node_modules/chart.js';
+import { Ticket } from 'src/app/entities/avio-entities/ticket/ticket';
+import { ReservationHistoryComponent } from '../../regular-user-components/reservation-history/reservation-history.component';
 
 declare var ol: any;
 
@@ -29,7 +32,44 @@ export class ViewAirlinesComponent implements OnInit {
   lat: number;
   map: any;
 
-  constructor(public loadService: LoadDataService, private http: HttpClient) { }
+  numberOfSoldTickets: number;
+
+  // for hours
+  hours0_4: number;
+  hours4_8: number;
+  hours8_12: number;
+  hours12_16: number;
+  hours16_20: number;
+  hours20_0: number;
+
+  // for days
+  monday: number;
+  tuesday: number;
+  wednesday: number;
+  thursday: number;
+  friday: number;
+  saturday: number;
+  sunday: number;
+
+  // for mounts
+  january: number;
+  february: number;
+  march: number;
+  april: number;
+  may: number;
+  juni: number;
+  july: number;
+  august: number;
+  september: number;
+  october: number;
+  november: number;
+  december: number;
+
+  purchasedTickets = new Array<Ticket>();
+
+  constructor(public loadService: LoadDataService, private http: HttpClient) {
+    this.initData();
+   }
 
   ngOnInit(): void {
     this.loadInitializeData();
@@ -257,6 +297,441 @@ export class ViewAirlinesComponent implements OnInit {
         }
       }
     );
+  }
+  //#endregion
+  //#region 8 - Metoda za definiciju grafika u modal
+  drawChart(airline: any){
+    this.numberOfSoldTickets = airline.numberOfSoldTickets;
+    this.loadService.loadPurchasedTickets(airline.airlineID).subscribe(
+      (res: any) => {
+        this.purchasedTickets = [];
+        for(var i = 0; i < res.length; i++){
+          var type: string;
+          if(res[i].cardType == "0"){
+            type = "ECONOMIC";
+          }
+          else if(res[i].cardType == "1"){
+            type = "FIRST";
+          }
+          else{
+            type = "BUSINESS";
+          }
+
+          this.purchasedTickets.push(new Ticket(res[i].ticketID, res[i].ticketNumber, res[i].ticketPrice, type, res[i].timeOfTicketPurchase,
+            res[i].isTicketPurchased, res[i].isQuickBooking));
+        }
+        
+        this.initData();
+        this.defineChartsData();
+
+        var myChart1 = new Chart("myChart1", { 
+          type: 'bar',
+          data: {
+            labels: ["00:00 - 04:00", "04:00 - 08:00", "08:00 - 12:00", "12:00 - 16:00", "16:00 - 20:00", "20:00 - 00:00"],
+            datasets: [{
+              label: '# of sold tickets (hours)',
+              data: [this.hours0_4, this.hours4_8, this.hours8_12, this.hours12_16, this.hours16_20, this.hours20_0],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
+            }
+          }
+        });
+
+        var myChart2 = new Chart("myChart2", { 
+          type: 'bar',
+          data: {
+            labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            datasets: [{
+              label: '# of sold tickets (days)',
+              data: [this.monday, this.tuesday, this.wednesday, this.thursday, this.friday, this.saturday, this.sunday],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
+            }
+          }
+        });
+
+        var myChart3 = new Chart("myChart3", { 
+          type: 'bar',
+          data: {
+            labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+            datasets: [{
+              label: '# of sold tickets (days)',
+              data: [this.january, this.february, this.march, this.april, this.may, this.juni, this.july, this.august, this.september, this.october, this.november, this.december],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
+            }
+          }
+        });
+
+      },
+      err => {
+        console.log(err);
+        if(err.error === "Loading failed. Server not found any flight."){
+          alert("Loading failed. Server not found any flight.");
+        }
+        else if(err.error === "Loading failed. Server not found any ticket."){
+          alert("Loading failed. Server not found any ticket.");
+        }
+        else if(err.error === "This airline not have any purchased ticket yet."){
+          alert("This airline not have any purchased ticket yet.");
+        }
+        else{
+          alert("Unknown error.");
+        }
+
+        this.initData();
+        this.purchasedTickets = [];
+
+        var chart1 = document.getElementById("myChart1");
+        chart1.remove();
+        var chart2 = document.getElementById("myChart2");
+        chart2.remove();
+        var chart3 = document.getElementById("myChart3");
+        chart3.remove();
+        
+        var newChart1 = document.createElement("CANVAS");
+        newChart1.id = "myChart1";
+        newChart1.style.maxWidth = "500px";
+        document.getElementById("parent1").appendChild(newChart1);
+        
+        var newChart2 = document.createElement("CANVAS");
+        newChart2.id = "myChart2";
+        newChart2.style.maxWidth = "500px";
+        document.getElementById("parent2").appendChild(newChart2);
+
+        var newChart3 = document.createElement("CANVAS");
+        newChart3.id = "myChart3";
+        newChart3.style.maxWidth = "500px";
+        document.getElementById("parent3").appendChild(newChart3);
+
+        var myChart1 = new Chart("myChart1", { 
+          type: 'bar',
+          data: {
+            labels: ["00:00 - 04:00", "04:00 - 08:00", "08:00 - 12:00", "12:00 - 16:00", "16:00 - 20:00", "20:00 - 00:00"],
+            datasets: [{
+              label: '# of sold tickets (hours)',
+              data: [this.hours0_4, this.hours4_8, this.hours8_12, this.hours12_16, this.hours16_20, this.hours20_0],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
+            }
+          }
+        });
+
+        var myChart2 = new Chart("myChart2", { 
+          type: 'bar',
+          data: {
+            labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            datasets: [{
+              label: '# of sold tickets (days)',
+              data: [this.monday, this.tuesday, this.wednesday, this.thursday, this.friday, this.saturday, this.sunday],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
+            }
+          }
+        });
+
+        var myChart3 = new Chart("myChart3", { 
+          type: 'bar',
+          data: {
+            labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+            datasets: [{
+              label: '# of sold tickets (days)',
+              data: [this.january, this.february, this.march, this.april, this.may, this.juni, this.july, this.august, this.september, this.october, this.november, this.december],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+              ],
+              borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 99, 132, 1)',
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
+            }
+          }
+        });
+      }
+    );
+  }
+  //#endregion
+  //#region 9 - Metoda za unosenje podataka u promenljive za grafik
+  defineChartsData(){
+    this.purchasedTickets.forEach(element => {
+      let newDate = new Date(element.timeOfTicketPurchase);
+      var day = newDate.getDay();
+      if(day == 1){
+        this.monday += 1;
+      }
+      else if(day == 2){
+        this.tuesday += 1;
+      }
+      else if(day == 3){
+        this.wednesday += 1;
+      }
+      else if(day == 4){
+        this.thursday += 1;
+      }
+      else if(day == 5){
+        this.friday += 1;
+      }
+      else if(day == 6){
+        this.saturday += 1;
+      }
+      else{
+        this.sunday += 1;
+      }
+
+      var hour = newDate.getHours();
+      if(hour >= 0 && hour < 4){
+        this.hours0_4 += 1;
+      }
+      else if(hour >= 4 && hour < 8){
+        this.hours4_8 += 1;
+      }
+      else if(hour >= 8 && hour < 12){
+        this.hours8_12 += 1;
+      }
+      else if(hour >= 12 && hour < 16){
+        this.hours12_16 += 1;
+      }
+      else if(hour >= 16 && hour < 20){
+        this.hours16_20 += 1;
+      }
+      else{
+        this.hours20_0 += 1;
+      }
+
+      var month = newDate.getMonth();
+      if(month == 0){
+        this.january += 1;
+      }
+      else if(month == 1){
+        this.february += 1;
+      }
+      else if(month == 2){
+        this.march += 1;
+      }
+      else if(month == 3){
+        this.april += 1;
+      }
+      else if(month == 4){
+        this.may += 1;
+      }
+      else if(month == 5){
+        this.juni += 1;
+      }
+      else if(month == 6){
+        this.july += 1;
+      }
+      else if(month == 7){
+        this.august += 1;
+      }
+      else if(month == 8){
+        this.september += 1;
+      }
+      else if(month == 9){
+        this.october += 1;
+      }
+      else if(month == 10){
+        this.november += 1;
+      }
+      else{
+        this.december +=1;
+      }
+    });
+  }
+  //#endregion
+  //#region 10 - Inicjializacija promenljivih za grafik
+  initData(){
+    this.hours0_4 = 0;
+    this.hours4_8 = 0;
+    this.hours8_12 = 0;
+    this.hours12_16 = 0;
+    this.hours16_20 = 0;
+    this.hours20_0 = 0;
+    this.monday = 0;
+    this.tuesday = 0;
+    this.wednesday = 0;
+    this.thursday = 0;
+    this.friday = 0;
+    this.saturday = 0;
+    this.sunday = 0;
+    this.january = 0;
+    this.february = 0;
+    this.march = 0;
+    this.april = 0;
+    this.may = 0;
+    this.juni = 0;
+    this.july = 0;
+    this.august = 0;
+    this.september = 0;
+    this.october = 0;
+    this.november = 0;
+    this.december = 0;
   }
   //#endregion
 }

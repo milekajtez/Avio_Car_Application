@@ -226,4 +226,9 @@ export class LoadDataService {
     return this.http.get(this.BaseURI + '/LoadData/GetFlightTickets/' + flightID);
   }
   //#endregion
+  //#region 14 - Metoda za ucitavanje svih rezervisanih krata odredjene aviokompanije
+  loadPurchasedTickets(airlineID: string){
+    return this.http.get(this.BaseURI + '/LoadData/GetPurchasedTickets/' + airlineID);
+  }
+  //#endregion
 }

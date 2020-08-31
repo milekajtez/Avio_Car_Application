@@ -104,7 +104,7 @@ export function provideConfig()
       progressBar: true
     }),
     BrowserAnimationsModule,
-    SocialLoginModule.initialize(config)
+    SocialLoginModule.initialize(config),
   ],
   providers: [
    {

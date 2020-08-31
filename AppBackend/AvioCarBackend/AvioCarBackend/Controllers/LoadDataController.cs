@@ -868,6 +868,60 @@ namespace AvioCarBackend.Controllers
             }
         }
         #endregion
+        #region 24 - Metoda za ucitavanje svih rezervisanih krata odredjene aviokompanije
+        [HttpGet]
+        [Route("GetPurchasedTickets/{airlineID}")]
+        public IActionResult GetPurchasedTickets(string airlineID)
+        {
+            // pronadjem sve letove aviokompanije tj njihove id-jeve
+            // onda pronadjem sve karte koje su rezervisane u tim letovima
+
+            var flights = _context.Flights.Include(a => a.Airline);
+            if (flights == null) 
+            {
+                return NotFound("Loading failed. Server not found any flight.");
+            }
+
+            List<int> flightsID = new List<int>();
+
+            foreach (var f in flights) 
+            {
+                if (f.Airline.AirlineID == int.Parse(airlineID)) 
+                {
+                    flightsID.Add(f.FlightID);
+                }
+            }
+
+            var tickets = _context.Tickets.Include(f => f.Flight);
+            if (tickets == null)
+            {
+                return NotFound("Loading failed. Server not found any ticket.");
+            }
+
+            List<Ticket> purchasedTickets = new List<Ticket>();
+
+            for (int i = 0; i < flightsID.Count; i++) 
+            {
+                foreach (var t in tickets) 
+                {
+                    if (t.IsTicketPurchased && t.Flight.FlightID == flightsID[i]) 
+                    {
+                        purchasedTickets.Add(t);
+                    }
+                }
+            }
+
+            if (purchasedTickets.Count == 0)
+            {
+                return NotFound("This airline not have any purchased ticket yet.");
+            }
+            else 
+            {
+                return Ok(purchasedTickets);
+            }
+        }
+        #endregion
+    
     }
 }
 

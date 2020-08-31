@@ -39,7 +39,10 @@
                     </td>
                     <!--number of sold ticket-->
                     <!--<td>{{airline.numberOfSoldTickets}}</td>-->
-                    <td><button class="btn btn-success">VIEW AIRLINE SOLD TICKET(kasnije uraditi)</button></td>
+                    <td>
+                        <button class="btn btn-success" data-toggle="modal" data-target="#graphicsModal" 
+                        (click)="drawChart(airline)">VIEW AIRLINE SOLD TICKET</button
+                            ></td>
                     <!--rating-->
                     <td *ngIf="airline.airlineRating < 1.5">
                         <span class="fa fa-star checked"></span>
@@ -352,6 +355,38 @@
                             <p>&nbsp;</p>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--print graphics-->
+<div class="modal fade" id="graphicsModal" tabindex="-1" role="dialog" aria-labelledby="graphicsModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:  powderblue;">
+                <h5 class="modal-title">AIRLINE GRAPHICS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="destroyGraphic">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="white-space: pre; text-align: center;">
+                <div class="tab-content">
+                    <h3>Number of sold tickets: {{numberOfSoldTickets}}</h3>
+                </div>
+                <div>&nbsp;</div>
+                <div class="tab-content" id="parent1">
+                    <canvas id="myChart1" style="max-width: 500px;"></canvas>
+                </div>
+                <div>&nbsp;</div>
+                <div class="tab-content" id="parent2">
+                    <canvas id="myChart2" style="max-width: 500px;"></canvas>
+                </div>
+                <div>&nbsp;</div>
+                <div class="tab-content" id="parent3">
+                    <canvas id="myChart3" style="max-width: 500px;"></canvas>
                 </div>
             </div>
         </div>

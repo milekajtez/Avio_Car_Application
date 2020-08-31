@@ -451,7 +451,7 @@ namespace AvioCarBackend.Controllers
             return Ok(result);
         }
         #endregion
-        #region 12- Metoda za izmenu odredjenog rent-a-car servisa
+        #region 12 - Metoda za izmenu odredjenog rent-a-car servisa
         [HttpPut]
         [Route("ChangeRentACar/{serviceID}")]
         public async Task<Object> ChangeRentACar(string serviceID, RentACarModel model)
