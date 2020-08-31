@@ -152,11 +152,11 @@
                                         <ol class="seats" type="1" *ngFor="let ticket of flightSeats" name="seatsNAME">
                                             <li class="seat" *ngIf="ticket.isTicketPurchased">
                                                 <input type="checkbox" disabled="disabled" id="{{ticket.ticketID}}"/>
-                                                <label for="{{ticket.ticketID}}">&nbsp;&nbsp;&nbsp;{{ticket.ticketNumber}}&nbsp;&nbsp;&nbsp;</label>
+                                                <label for="{{ticket.ticketID}}" title="{{ticket.timeOfTicketPurchase}}">&nbsp;&nbsp;&nbsp;{{ticket.ticketNumber}}&nbsp;&nbsp;&nbsp;</label>
                                             </li>
                                             <li class="seat" *ngIf="!ticket.isTicketPurchased">
                                                 <input type="checkbox" id="{{ticket.ticketID}}"/>
-                                                <label for="{{ticket.ticketID}}">&nbsp;&nbsp;&nbsp;{{ticket.ticketNumber}}&nbsp;&nbsp;&nbsp;</label>
+                                                <label for="{{ticket.ticketID}}" title="{{ticket.timeOfTicketPurchase}}">&nbsp;&nbsp;&nbsp;{{ticket.ticketNumber}}&nbsp;&nbsp;&nbsp;</label>
                                             </li>
                                         </ol>
                                     </li>

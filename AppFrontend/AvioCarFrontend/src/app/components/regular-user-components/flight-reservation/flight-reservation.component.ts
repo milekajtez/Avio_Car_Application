@@ -35,11 +35,18 @@ export class FlightReservationComponent implements OnInit {
   allTransfers: string;
   planeName:string;
   laguageWeight: string;
+  avioPlusCar: number;
+  disc300: number;
+  dics600: number;
+  disc1200: number;
+  myPoints: number;
 
   constructor(public service: RegularUserService, public loadService: LoadDataService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.loadFlights();
+    this.loadFlights();         // ucitavanje letova
+    this.loadDiscounts();       // ucitavanje popusta
+
     this.route.params.subscribe(params => {
       this.myUsername = params['UserName'];
     });
@@ -51,6 +58,7 @@ export class FlightReservationComponent implements OnInit {
     this.chosenFriends = [];
     this.flightSeats = [];
     this.selectedSeats = [];
+    this.loadUser();              // ucitavam korisnika zbog uvida u njegove poene
   }
 
   //#region 1 - Metoda za ucitavanje svih letova
@@ -198,7 +206,19 @@ export class FlightReservationComponent implements OnInit {
             type = "BUSINESS";
           }
 
-          this.flightSeats.push(new Ticket(res[i].ticketID, res[i].ticketNumber, res[i].ticketPrice, type, res[i].timeOfTicketPurchase,
+
+          var discountValue;
+          if(this.myPoints < 300){
+            discountValue = res[i].ticketPrice + " € / dicount: 0%";
+          }
+          else{
+            discountValue = this.discountCaluclate(res[i].ticketPrice);
+          }
+           
+          console.log(discountValue);
+
+          // u jedno polje koja mi se na prikazuje...postavljam discountValue...kog cu ispisivati u tooltip-u
+          this.flightSeats.push(new Ticket(res[i].ticketID, res[i].ticketNumber, res[i].ticketPrice, type, discountValue,
             res[i].isTicketPurchased, res[i].isQuickBooking));
 
           this.flightSeats.sort(function(a: any, b: any){
@@ -359,7 +379,7 @@ export class FlightReservationComponent implements OnInit {
     }
   }
   //#endregion
-  //#region 10 - Metoda za rezervaciju karata (sedista) - SA PRIJATELJIMA
+  //#region 11 - Metoda za rezervaciju karata (sedista) - SA PRIJATELJIMA
   reservationWithFriends(): void {
     if(this.chosenFriends.length == 0){
       alert("You must select at least one friend.");
@@ -382,6 +402,58 @@ export class FlightReservationComponent implements OnInit {
         );
       }
     }
+  }
+  //#endregion
+  //#region 12 - Metoda za ucitavanje popusta
+  loadDiscounts(){
+    this.loadService.loadDiscounts().subscribe(
+      (res: any) => {
+        this.avioPlusCar = res.avioPlusCarReservationDiscounts;
+        this.disc300 = res.dicount300;
+        this.dics600 = res.dicount600;
+        this.disc1200 = res.dicount1200;
+      },
+      err => {
+        console.log(err);
+        alert("Loading current discounts failed.");
+      }
+    );
+  }
+  //#endregion
+  //#region 13 - Metoda za ucitavanje user-a radi uvida u njegove trenutne poene
+  loadUser(){
+    this.loadService.loadAdmin(this.myUsername).subscribe(
+      (res: any) => {
+        this.myPoints = res.points;
+        console.log(this.myPoints);
+      },
+      err => {
+        alert("Loading current avio admin is failed.");
+      }
+    );
+  }
+  //#endregion
+  //#region 14 - Metoda za proracun popusta na osnovnu cenu karte
+  discountCaluclate(ticketPrice: number): number {
+    var result;
+    if(this.myPoints >= 300 && this.myPoints < 600){
+      var difference = ticketPrice * this.disc300 / 100;
+      result = ticketPrice - difference;
+      result += " € / dicount: " + this.disc300 + "%";
+    }
+    else if(this.myPoints >= 600 && this.myPoints < 1200){
+      var difference = ticketPrice * this.dics600 / 100;
+      result = ticketPrice - difference;
+      result += " € / dicount: " + this.dics600 + "%";
+    }
+    else
+    {
+      var difference = ticketPrice * this.disc1200 / 100;
+      result = ticketPrice - difference;
+      result += " € / dicount: " + this.disc1200 + "%";
+    }
+
+    return result;
   }
   //#endregion
 }
