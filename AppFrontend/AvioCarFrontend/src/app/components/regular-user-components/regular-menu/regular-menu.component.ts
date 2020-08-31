@@ -52,6 +52,10 @@ export class RegularMenuComponent implements OnInit {
     this.defaultComponent = 7;
   }
 
+  methodOption8(): void {
+    this.defaultComponent = 8;
+  }
+
   logout(): void {
     localStorage.removeItem("token");
   }

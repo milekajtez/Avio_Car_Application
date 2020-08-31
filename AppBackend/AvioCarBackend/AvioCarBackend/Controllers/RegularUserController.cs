@@ -79,19 +79,19 @@ namespace AvioCarBackend.Controllers
         #region 2 - Metoda za ucitavanje zahteva
         [HttpGet]
         [Route("GetRequests/{username}/{typeOfLoad}")]
-        public async Task<Object> GetRequests(string username, string typeOfLoad) 
+        public async Task<Object> GetRequests(string username, string typeOfLoad)
         {
             var findUserResult = await _userManager.FindByNameAsync(username);
-            if (findUserResult == null) 
+            if (findUserResult == null)
             {
                 return NotFound("Loading requests failed. Server not found you on database.");
             }
-            
+
             string jmbg = findUserResult.Id;                                    // moj jmbg
             var allRequests = _context.FriendshipRequests;                      // sve veze izmedju prijatelja i potencijalnih prijatelja
             List<string> myPotentialFriends = new List<string>();               // lista jmng-a kojima sam poslao zahtev koji je aktivan
 
-            foreach (var request in allRequests) 
+            foreach (var request in allRequests)
             {
                 if (typeOfLoad.Equals("myRequests"))
                 {
@@ -101,7 +101,7 @@ namespace AvioCarBackend.Controllers
                         myPotentialFriends.Add(request.RecieverJMBG.ToString());
                     }
                 }
-                else 
+                else
                 {
                     // ako sam ja receiver i ako jos nije odgovoreno na zahtev
                     if (request.RecieverJMBG.ToString().Equals(jmbg) && request.RequestAccepted == false)
@@ -113,14 +113,14 @@ namespace AvioCarBackend.Controllers
 
             // sada je u listi myPotentialFriends jbmg- ovi drugih user-a koji su samnom u nekoj vezi
             // (sve zavisi od vrste request-ova koji mi trebaju)
-            if (myPotentialFriends.Count == 0) 
+            if (myPotentialFriends.Count == 0)
             {
                 return NotFound("Current user haven't any request in active mode.");
             }
 
             // sada cu da kreiram objekte koje saljem sa front (username + firstname + lastname)
             List<Friend> result = new List<Friend>();
-            foreach (var potJMBG in myPotentialFriends) 
+            foreach (var potJMBG in myPotentialFriends)
             {
                 try
                 {
@@ -132,7 +132,7 @@ namespace AvioCarBackend.Controllers
                         Lastname = user.LastName
                     });
                 }
-                catch (Exception e) 
+                catch (Exception e)
                 {
                     throw e;
                 }
@@ -144,10 +144,10 @@ namespace AvioCarBackend.Controllers
         #region 3 - Metoda za slanje zahteva
         [HttpPost]
         [Route("SendRequest/{myUserName}")]
-        public async Task<Object> SendRequest(string myUserName, Friend model) 
+        public async Task<Object> SendRequest(string myUserName, Friend model)
         {
             var userI = await _userManager.FindByNameAsync(myUserName);
-            if (userI == null) 
+            if (userI == null)
             {
                 return NotFound("Sending request failed. Server not found current user.");
             }
@@ -158,7 +158,7 @@ namespace AvioCarBackend.Controllers
                 return NotFound("Sending request failed. Server not found entered user. Please enter different username.");
             }
 
-            if (myUserName.Equals(model.Username)) 
+            if (myUserName.Equals(model.Username))
             {
                 return NotFound("Sending request failed. Disabling sending requests to yourself.");
             }
@@ -171,9 +171,9 @@ namespace AvioCarBackend.Controllers
             };
 
             var find1 = _context.FriendshipRequests.Find(friendshipRequest.SenderJMBG, friendshipRequest.RecieverJMBG);
-            if (find1 != null) 
+            if (find1 != null)
             {
-                if (find1.RequestAccepted == false) 
+                if (find1.RequestAccepted == false)
                 {
                     // ne moze jer sam mu vec poslao zahtev
                     return NotFound("Sending request failed because you already send requst to entered user.");
@@ -188,7 +188,7 @@ namespace AvioCarBackend.Controllers
             var find2 = _context.FriendshipRequests.Find(friendshipRequest.SenderJMBG, friendshipRequest.RecieverJMBG);
             if (find2 != null)
             {
-                if (find2.RequestAccepted == false) 
+                if (find2.RequestAccepted == false)
                 {
                     // ne moze jer je on meni posalo zahtev
                     return NotFound("Sending request failed because entered user already send request to you.");
@@ -206,8 +206,8 @@ namespace AvioCarBackend.Controllers
                 _context.FriendshipRequests.Add(friendshipRequest);
                 _context.SaveChanges();
                 return Ok();
-            } 
-            catch (Exception e) 
+            }
+            catch (Exception e)
             {
                 throw e;
             }
@@ -225,7 +225,7 @@ namespace AvioCarBackend.Controllers
             }
 
             var userFriend = await _userManager.FindByNameAsync(friendUsername);
-            if (userFriend == null) 
+            if (userFriend == null)
             {
                 return NotFound("Deleting failed. Server not found friend for deleting.");
             }
@@ -237,7 +237,7 @@ namespace AvioCarBackend.Controllers
             {
                 return NotFound("Deleting failed. You not friend with selected user.");
             }
-            else 
+            else
             {
                 if (resultI != null)
                 {
@@ -245,7 +245,7 @@ namespace AvioCarBackend.Controllers
                     _context.SaveChanges();
                     return resultI;
                 }
-                else 
+                else
                 {
                     _context.FriendshipRequests.Remove(resultF);
                     _context.SaveChanges();
@@ -257,7 +257,7 @@ namespace AvioCarBackend.Controllers
         #region 5 - Metoda za potvrdu zahteva za prijateljstvo
         [HttpGet]
         [Route("ConfirmRequest/{myUsername}/{friendUsername}")]
-        public async Task<Object> ConfirmRequest(string myUsername, string friendUsername) 
+        public async Task<Object> ConfirmRequest(string myUsername, string friendUsername)
         {
             var userI = await _userManager.FindByNameAsync(myUsername);
             if (userI == null)
@@ -276,7 +276,7 @@ namespace AvioCarBackend.Controllers
             {
                 return NotFound("Confirm request failed. Server not found request in base.");
             }
-            else 
+            else
             {
                 result.RequestAccepted = true;
                 _context.FriendshipRequests.Update(result);
@@ -288,10 +288,10 @@ namespace AvioCarBackend.Controllers
         #region 6 - Metoda za ucitavanje svih prijatelja odredjenog korisnika
         [HttpGet]
         [Route("LoadMyFriends/{myUserName}")]
-        public async Task<Object> LoadMyFriends(string myUserName) 
+        public async Task<Object> LoadMyFriends(string myUserName)
         {
             var userI = await _userManager.FindByNameAsync(myUserName);
-            if (userI == null) 
+            if (userI == null)
             {
                 return NotFound("Loading friends failed. Server not found you in database");
             }
@@ -299,9 +299,9 @@ namespace AvioCarBackend.Controllers
             var allRequests = _context.FriendshipRequests;
             List<Friend> result = new List<Friend>();
 
-            foreach (var request in allRequests) 
+            foreach (var request in allRequests)
             {
-                if ((request.RecieverJMBG.ToString().Equals(userI.Id) || request.SenderJMBG.ToString().Equals(userI.Id)) && request.RequestAccepted) 
+                if ((request.RecieverJMBG.ToString().Equals(userI.Id) || request.SenderJMBG.ToString().Equals(userI.Id)) && request.RequestAccepted)
                 {
                     if (request.RecieverJMBG.ToString().Equals(userI.Id))
                     {
@@ -314,7 +314,7 @@ namespace AvioCarBackend.Controllers
                             Phonenumber = currentUser.PhoneNumber
                         });
                     }
-                    else 
+                    else
                     {
                         var currentUser = await _userManager.FindByIdAsync(request.RecieverJMBG.ToString());
                         result.Add(new Friend()
@@ -328,7 +328,7 @@ namespace AvioCarBackend.Controllers
                 }
             }
 
-            if (result.Count == 0) 
+            if (result.Count == 0)
             {
                 return NotFound("Loading frineds failed becaouse current user not have any friend.");
             }
@@ -339,7 +339,7 @@ namespace AvioCarBackend.Controllers
         #region 7 - Metoda za brisanje prijatelja
         [HttpDelete]
         [Route("DeleteFriend/{myUsername}/{friendUsername}")]
-        public async Task<ActionResult<FriendshipRequest>> DeleteFriend(string myUsername, string friendUsername) 
+        public async Task<ActionResult<FriendshipRequest>> DeleteFriend(string myUsername, string friendUsername)
         {
             var userI = await _userManager.FindByNameAsync(myUsername);
             if (userI == null)
@@ -356,11 +356,11 @@ namespace AvioCarBackend.Controllers
             var allRequests = _context.FriendshipRequests;
             var findFriend = new FriendshipRequest();
             bool isFind = false;
-            foreach (var request in allRequests) 
+            foreach (var request in allRequests)
             {
                 if (request.RequestAccepted && ((request.SenderJMBG == long.Parse(userI.Id) &&
                     request.RecieverJMBG == long.Parse(userFriend.Id)) || (request.RecieverJMBG == long.Parse(userI.Id) &&
-                    request.SenderJMBG == long.Parse(userFriend.Id)))) 
+                    request.SenderJMBG == long.Parse(userFriend.Id))))
                 {
                     findFriend = request;
                     isFind = true;
@@ -376,12 +376,12 @@ namespace AvioCarBackend.Controllers
                     _context.SaveChanges();
                     return Ok();
                 }
-                catch (Exception e) 
+                catch (Exception e)
                 {
                     throw e;
                 }
             }
-            else 
+            else
             {
                 return NotFound("Deleting failed. These two user are not friends.");
             }
@@ -390,10 +390,10 @@ namespace AvioCarBackend.Controllers
         #region 8 - Metoda koja proverava ispravnost passport-a odredjenog korisnika
         [HttpGet]
         [Route("CheckPassport/{username}/{passportNumber}")]
-        public async Task<Object> CheckPassport(string username, string passportNumber) 
+        public async Task<Object> CheckPassport(string username, string passportNumber)
         {
             var findResult = await _userManager.FindByNameAsync(username);
-            if (findResult == null) 
+            if (findResult == null)
             {
                 return NotFound("Checking passport failed. Server not found user with this username.");
             }
@@ -409,7 +409,7 @@ namespace AvioCarBackend.Controllers
                     return NotFound("Passport is incorrect. Please enter a different number of passport.");
                 }
             }
-            else 
+            else
             {
                 return NotFound("Current user not has passport number yet.");
             }
@@ -427,9 +427,9 @@ namespace AvioCarBackend.Controllers
             }
 
             var reservedTickets = _context.UserTickets;
-            foreach (var ticket in reservedTickets) 
+            foreach (var ticket in reservedTickets)
             {
-                if (ticket.UserName.Equals(long.Parse(userI.Id)) && ticket.TicketID.Equals(long.Parse(ticketID))) 
+                if (ticket.UserName.Equals(long.Parse(userI.Id)) && ticket.TicketID.Equals(long.Parse(ticketID)))
                 {
                     return NotFound("Booking flight failed. User already have this ticket in his reservated tickets.");
                 }
@@ -453,7 +453,7 @@ namespace AvioCarBackend.Controllers
                 findTicket.IsTicketPurchased = true;
                 findTicket.TimeOfTicketPurchase = DateTime.Now;
 
-                try 
+                try
                 {
                     _context.Tickets.Update(findTicket);
                     _context.SaveChanges();
@@ -462,18 +462,18 @@ namespace AvioCarBackend.Controllers
                     //PlusPointsForUser(username, "only_flight");
                     var user = await _userManager.FindByNameAsync(username);
                     user.Points += 70;
-                    var result =  await _userManager.UpdateAsync(user);
+                    var result = await _userManager.UpdateAsync(user);
 
                     // avikompanija povecava svoj broj prodatih karata
                     AirlineNumberOfTicketMethod(ticketID, "plus");
                     return Ok();
                 }
-                catch (Exception e) 
+                catch (Exception e)
                 {
                     throw e;
                 }
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 throw e;
             }
@@ -482,7 +482,7 @@ namespace AvioCarBackend.Controllers
         #region 10 - Metoda za rezervaciju leta (korisnik + prijatelji)
         [HttpPost]
         [Route("FriendAndMeBookingFlight")]
-        public async Task<Object> FriendAndMeBookingFlight(FriendsAndMeModel model) 
+        public async Task<Object> FriendAndMeBookingFlight(FriendsAndMeModel model)
         {
             string[] friends = model.Friends.Split('|');
             List<string> ticketIDs = model.Tickets.Split('|').ToList();
@@ -549,7 +549,7 @@ namespace AvioCarBackend.Controllers
             // prvo izbacim mene
             ticketIDs.RemoveAt(0);
 
-            for (int i = 0; i < ticketIDs.Count; i++) 
+            for (int i = 0; i < ticketIDs.Count; i++)
             {
                 var userFriend = await _userManager.FindByNameAsync(friends[i]);
                 if (userFriend == null)
@@ -621,12 +621,12 @@ namespace AvioCarBackend.Controllers
 
             message.IsBodyHtml = false;
 
-            string ticketInfo = "TicketID: " + ticket.TicketID + "\n" + 
+            string ticketInfo = "TicketID: " + ticket.TicketID + "\n" +
                 "Ticket number: " + ticket.TicketNumber + "\n" +
                 "Ticket price: " + ticket.TicketPrice + "\n\n\n";
 
-            message.Body = ticketInfo + "Your friend " + username + " was send reuqest for reservation flight.\nIf you want to accept this request" + 
-                " please click on this link: http://localhost:4200/reservationFlightYES/" + ticket.TicketID + "\n" + "If you want to reject this request" + 
+            message.Body = ticketInfo + "Your friend " + username + " was send reuqest for reservation flight.\nIf you want to accept this request" +
+                " please click on this link: http://localhost:4200/reservationFlightYES/" + ticket.TicketID + "\n" + "If you want to reject this request" +
                 " please click on this link: http://localhost:4200/reservationFlightNO/" + ticket.TicketID + "\n\n" + "Thanks for using AvioCarApplication.";
 
             smtp.Port = _mailSettings.Port;
@@ -641,7 +641,7 @@ namespace AvioCarBackend.Controllers
         #region 12 - Metoda za potvrdu/odbijanje zahteva za za rezervaciju leta od strane prijatelja
         [HttpGet]
         [Route("ChangeReservationTicket/{ticketID}/{typeChange}")]
-        public async Task<Object> ChangeReservationTicket(string ticketID, string typeChange) 
+        public async Task<Object> ChangeReservationTicket(string ticketID, string typeChange)
         {
             string defaultTime = "1/1/0001 00:00:00";
 
@@ -653,15 +653,15 @@ namespace AvioCarBackend.Controllers
 
             var userTicket = new UserTickets();
             var userTickets = _context.UserTickets;
-            foreach (var ut in userTickets) 
+            foreach (var ut in userTickets)
             {
-                if (ut.TicketID.Equals(long.Parse(ticketID))) 
+                if (ut.TicketID.Equals(long.Parse(ticketID)))
                 {
                     userTicket = ut;
                     break;
                 }
             }
-            
+
             if (typeChange.Equals("yes"))
             {
                 long jmbg = -1;
@@ -685,7 +685,7 @@ namespace AvioCarBackend.Controllers
                 // avikompanija smanjuje svoj broj prodatih karata
                 AirlineNumberOfTicketMethod(ticketID, "plus");
             }
-            else 
+            else
             {
                 long jmbg = -1;
                 foreach (var tic in userTickets)
@@ -755,19 +755,19 @@ namespace AvioCarBackend.Controllers
         #region 14 - Metoda za ucitavanje aktivnih/proslih rezervacija
         [HttpGet]
         [Route("LoadReservations/{username}/{loadType}")]
-        public async Task<Object> LoadReservations(string username, string loadType) 
+        public async Task<Object> LoadReservations(string username, string loadType)
         {
             var userI = await _userManager.FindByNameAsync(username);
-            if (userI == null) 
+            if (userI == null)
             {
                 return NotFound("Loading failed. Server not found user in data base.");
             }
 
             List<long> ticketsID = new List<long>();
             var ticketUsers = _context.UserTickets;
-            foreach (var tu in ticketUsers) 
+            foreach (var tu in ticketUsers)
             {
-                if (tu.UserName.ToString().Equals(userI.Id)) 
+                if (tu.UserName.ToString().Equals(userI.Id))
                 {
                     ticketsID.Add(tu.TicketID);
                 }
@@ -776,12 +776,12 @@ namespace AvioCarBackend.Controllers
             List<FlightReservationModel> flightReservations = new List<FlightReservationModel>();
             var allTickets = _context.Tickets.Include(f => f.Flight);
 
-            for (int i = 0; i < ticketsID.Count; i++) 
+            for (int i = 0; i < ticketsID.Count; i++)
             {
                 foreach (var ticket in allTickets)
                 {
                     // nasao sam tam tiket sa tim id-jem
-                    if (ticket.TicketID == (int)ticketsID[i]) 
+                    if (ticket.TicketID == (int)ticketsID[i])
                     {
                         if (loadType.Equals("active"))
                         {
@@ -814,7 +814,7 @@ namespace AvioCarBackend.Controllers
                                 flightReservations.Add(newReservation);
                             }
                         }
-                        else 
+                        else
                         {
                             if ((ticket.Flight.StartTime - DateTime.Now).TotalHours < 3)
                             {
@@ -845,7 +845,7 @@ namespace AvioCarBackend.Controllers
                                 flightReservations.Add(newReservation);
                             }
                         }
-                        
+
                         break;
                     }
                 }
@@ -862,7 +862,7 @@ namespace AvioCarBackend.Controllers
         #region 15 - Metoda za otkazivanje rezervacije
         [HttpDelete]
         [Route("DeleteReservation/{username}/{ticketID}")]
-        public async Task<ActionResult<Object>> DeleteReservation(string username, string ticketID) 
+        public async Task<ActionResult<Object>> DeleteReservation(string username, string ticketID)
         {
             var findResult = await _userManager.FindByNameAsync(username);
             if (findResult == null)
@@ -871,13 +871,13 @@ namespace AvioCarBackend.Controllers
             }
 
             var ticketUser = _context.UserTickets.Find(long.Parse(findResult.Id), long.Parse(ticketID));
-            if (ticketUser == null) 
+            if (ticketUser == null)
             {
                 return NotFound("Deleting failed. User not have this reserved ticket.");
             }
 
             var ticket = _context.Tickets.Find(int.Parse(ticketID));
-            if (ticket == null) 
+            if (ticket == null)
             {
                 return NotFound("Deleting failed. Server not found this ticket in data base.");
             }
@@ -906,12 +906,12 @@ namespace AvioCarBackend.Controllers
                     AirlineNumberOfTicketMethod(ticketID, "minus");
                     return Ok(ticket);
                 }
-                catch (Exception e) 
+                catch (Exception e)
                 {
                     throw e;
                 }
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 throw e;
             }
@@ -920,14 +920,14 @@ namespace AvioCarBackend.Controllers
         #region 16 - Metoda za ocenjivanje leta odredjene karte tj rezervacije
         [HttpGet]
         [Route("RatingFlight/{ticketID}/{rating}")]
-        public async Task<Object> RatingFlight(string ticketID, string rating) 
+        public async Task<Object> RatingFlight(string ticketID, string rating)
         {
             var tickets = _context.Tickets.Include(f => f.Flight);
             int flightID = -1;
 
-            foreach (var ticket in tickets) 
+            foreach (var ticket in tickets)
             {
-                if (ticket.TicketID == int.Parse(ticketID)) 
+                if (ticket.TicketID == int.Parse(ticketID))
                 {
                     flightID = ticket.Flight.FlightID;
                     break;
@@ -944,9 +944,9 @@ namespace AvioCarBackend.Controllers
 
                 var flights = _context.Flights.Include(a => a.Airline);
                 int airlineID = -1;
-                foreach (var f in flights) 
+                foreach (var f in flights)
                 {
-                    if (f.FlightID == flightID) 
+                    if (f.FlightID == flightID)
                     {
                         airlineID = f.Airline.AirlineID;
                         break;
@@ -958,14 +958,80 @@ namespace AvioCarBackend.Controllers
                 airline.NumberOfAirlineGrades += 1;
                 _context.Airlines.Update(airline);
                 _context.SaveChanges();
-                
+
 
                 return Ok();
             }
-            else 
+            else
             {
                 return NotFound("Rating flight failed. Server not found flight in data base.");
             }
+        }
+        #endregion
+        #region 17 - Metoda za ucitavanje svih brzih rezervacija leta
+        [HttpGet]
+        [Route("LoadQuickReservations/{username}")]
+        public async Task<Object> LoadQuickReservations(string username)
+        {
+            var userI = await _userManager.FindByNameAsync(username);
+            if (userI == null)
+            {
+                return NotFound("Loading quick reservation failed. Server not user in data base.");
+            }
+
+            double userPoints = userI.Points;
+
+            var tickets = _context.Tickets.Include(f => f.Flight);
+            if (tickets == null)
+            {
+                return NotFound("Loading quick reservation failed. Server not found any ticket in data base.");
+            }
+
+            var discount = _context.UserPointsDiscounts.Find("discID");
+
+            List<QuickFlightReservationModel> result = new List<QuickFlightReservationModel>();
+            // uzimam sve tikete koji su isQuickBooking
+            foreach (var ticket in tickets)
+            {
+                if (ticket.IsQuickBooking)
+                {
+                    QuickFlightReservationModel newModel = new QuickFlightReservationModel()
+                    {
+                        TicketID = ticket.TicketID.ToString(),
+                        StartTime = ticket.Flight.StartTime.ToString(),
+                        EndTime = ticket.Flight.EndTime.ToString(),
+                        StartLocation = ticket.Flight.StartLocation,
+                        EndLocation = ticket.Flight.EndLocation,
+                        TicketNumber = ticket.TicketNumber.ToString(),
+                        TicketPrice = ticket.TicketPrice.ToString()
+                    };
+
+                    if (ticket.CardType == CardType.ECONOMIC_CLASS)
+                    {
+                        newModel.TicketType = "ECONOMIC_CLASS";
+                    }
+                    else if (ticket.CardType == CardType.FIRST_CLASS)
+                    {
+                        newModel.TicketType = "FIRST_CLASS";
+                    }
+                    else
+                    {
+                        newModel.TicketType = "BUSINESS_CLASS";
+                    }
+
+                    double difference = double.Parse(newModel.TicketPrice) * discount.AvioPlusCarReservationDiscounts / 100;
+                    newModel.TicketDisountedPrice = (double.Parse(newModel.TicketPrice) - difference).ToString() + "€ / disocunt: " + discount.AvioPlusCarReservationDiscounts + "%";
+
+                    result.Add(newModel);
+                }
+            }
+
+            if (result.Count == 0) 
+            {
+                return NotFound("Loading quick reservation flights failed. Server not found any reservation of this type.");
+            }
+
+            return Ok(result);
         }
         #endregion
     }

@@ -58,7 +58,7 @@ export class FlightReservationComponent implements OnInit {
     this.chosenFriends = [];
     this.flightSeats = [];
     this.selectedSeats = [];
-    this.loadUser();              // ucitavam korisnika zbog uvida u njegove poene
+    this.loadUser();            // ucitavam korisnika zbog uvida u njegove poene
   }
 
   //#region 1 - Metoda za ucitavanje svih letova
@@ -425,7 +425,6 @@ export class FlightReservationComponent implements OnInit {
     this.loadService.loadAdmin(this.myUsername).subscribe(
       (res: any) => {
         this.myPoints = res.points;
-        console.log(this.myPoints);
       },
       err => {
         alert("Loading current avio admin is failed.");
@@ -436,6 +435,7 @@ export class FlightReservationComponent implements OnInit {
   //#region 14 - Metoda za proracun popusta na osnovnu cenu karte
   discountCaluclate(ticketPrice: number): number {
     var result;
+    console.log(this.myPoints);
     if(this.myPoints >= 300 && this.myPoints < 600){
       var difference = ticketPrice * this.disc300 / 100;
       result = ticketPrice - difference;

@@ -150,11 +150,11 @@
                                 <ol class="cabin fuselage">
                                     <li class="row" style="margin-left: 3%;">
                                         <ol class="seats" type="1" *ngFor="let ticket of flightSeats" name="seatsNAME">
-                                            <li class="seat" *ngIf="ticket.isTicketPurchased">
+                                            <li class="seat" *ngIf="ticket.isTicketPurchased || ticket.isQuickBooking">
                                                 <input type="checkbox" disabled="disabled" id="{{ticket.ticketID}}"/>
                                                 <label for="{{ticket.ticketID}}" title="{{ticket.timeOfTicketPurchase}}">&nbsp;&nbsp;&nbsp;{{ticket.ticketNumber}}&nbsp;&nbsp;&nbsp;</label>
                                             </li>
-                                            <li class="seat" *ngIf="!ticket.isTicketPurchased">
+                                            <li class="seat" *ngIf="!ticket.isTicketPurchased && !ticket.isQuickBooking">
                                                 <input type="checkbox" id="{{ticket.ticketID}}"/>
                                                 <label for="{{ticket.ticketID}}" title="{{ticket.timeOfTicketPurchase}}">&nbsp;&nbsp;&nbsp;{{ticket.ticketNumber}}&nbsp;&nbsp;&nbsp;</label>
                                             </li>
@@ -163,7 +163,7 @@
                                 </ol>
                             </div>
                             <div style="text-align: center;">
-                                <h6 style="font-size: small;">*if you cannot mark a seats, it's already reserved</h6>
+                                <h6 style="font-size: small;">*if you cannot mark a seats, it's already reserved or is in quick booking list</h6>
                                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="..."
                                     (click)="selectSeats()">RESERVE SELECTED TICKETS</button>
                             </div>

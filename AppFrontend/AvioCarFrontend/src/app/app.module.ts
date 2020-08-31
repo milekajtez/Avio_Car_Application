@@ -42,6 +42,7 @@ import { FriendshipViewComponent } from './components/regular-user-components/fr
 import { FriendshipSettingsComponent } from './components/regular-user-components/friendship-settings/friendship-settings.component';
 import { ReservationFlightYesComponent } from './components/regular-user-components/reservation-flight-yes/reservation-flight-yes.component';
 import { ReservationFlightNoComponent } from './components/regular-user-components/reservation-flight-no/reservation-flight-no.component';
+import { QuickBookingComponent } from './components/regular-user-components/quick-booking/quick-booking.component';
 
 let config = new AuthServiceConfig([
   {
@@ -91,6 +92,7 @@ export function provideConfig()
     FriendshipSettingsComponent,
     ReservationFlightYesComponent,
     ReservationFlightNoComponent,
+    QuickBookingComponent,
   ],
   imports: [
     BrowserModule,

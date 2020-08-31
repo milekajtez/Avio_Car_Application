@@ -295,4 +295,9 @@ export class RegularUserService {
     return this.http.get(this.BaseURI + '/RegularUser/RatingFlight/' + ticketID + '/' + rating);
   }
   //#endregion
+  //#region 24 - Metoda za ucitavanje svih letova tj mestau njima koja su za przu rezervaciju
+  loadQuickReservations(username: string){
+    return this.http.get(this.BaseURI + '/RegularUser/LoadQuickReservations/' + username);
+  }
+  //#endregion
 }

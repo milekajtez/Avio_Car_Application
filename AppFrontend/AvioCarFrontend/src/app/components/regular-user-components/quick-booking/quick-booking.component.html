@@ -1,0 +1,40 @@
+<div style="background-color: powderblue;">
+    <div class="text-block">
+        <h2>LIST OF QUICK BOOKING FLIGHTS</h2>
+    </div>
+    <div>
+        <!--ispis isQuickReservation letova tj mesta u njima-->
+        <div style="margin-top: 1%; margin-left: 2%; margin-right: 2%; size: 80%;">
+            <table class="table table-dark">
+                <thead style="text-align: center;">
+                    <tr>
+                        <th>START TIME</th>
+                        <th>END TIME</th>
+                        <th>START LOCATION</th>
+                        <th>END LOCATION</th>
+                        <th>TICKET NUMBER</th>
+                        <th>TICKET TYPE</th>
+                        <th>ORIGINAL PRICE</th>
+                        <th>DISCOUNTED PRICE</th>
+                        <th>BOOKING FLIGHT</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center;">
+                    <tr *ngFor="let reservation of quickReservations">
+                        <td>{{reservation.startTime}}</td>
+                        <td>{{reservation.endTime}}</td>
+                        <td>{{reservation.startLocation}}</td>
+                        <td>{{reservation.endLocation}}</td>
+                        <td>{{reservation.ticketNumber}}</td>
+                        <td>{{reservation.ticketType}}</td>
+                        <td>{{reservation.ticketPrice}}</td>
+                        <td>{{reservation.ticketDisountedPrice}}</td>
+                        <td>
+                            <button type="button" class="btn btn-success" (click)="bookingQucikFlight(reservation)">BOOKING FLIGHT</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
