@@ -2,4 +2,72 @@
     <div class="text-block">
         <h2>RESERVATION HISTORY</h2>
     </div>
+    <div style="display: flex;">
+        <!--ispis aktivnih rezervacija-->
+        <span style="width: 49%;">
+            <div style="text-align: center; font-size: large;"><b>ACTIVE FLIGHT RESERVATION</b></div>
+            <div style="margin-left: 2%; font-size: x-small;">
+                <table class="table table-dark">
+                    <thead style="text-align: center;">
+                        <tr>
+                            <th>START TIME</th>
+                            <th>END TIME</th>
+                            <th>START LOCATION</th>
+                            <th>END LOCATION</th>
+                            <th>TICKET NUMBER</th>
+                            <th>TICKET TYPE</th>
+                            <th>FLIGHT CANCELLATION</th>
+                        </tr>
+                    </thead>
+                    <tbody style="text-align: center;">
+                        <tr *ngFor="let reservation of activeFlightReservation">
+                            <td>{{reservation.startTime}}</td>
+                            <td>{{reservation.endTime}}</td>
+                            <td>{{reservation.startLocation}}</td>
+                            <td>{{reservation.endLocation}}</td>
+                            <td>{{reservation.ticketNumber}}</td>
+                            <td>{{reservation.ticketType}}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger" (click)="deleteReservation(reservation)" style="font-size: 10px;">FLIGHT CANCELLATION</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </span>
+        <span style="width: 2%;"></span>
+
+        <!--ispis prethodnih rezervacija-->
+        <span style="width: 49%;">
+            <div style="text-align: center; font-size: large;"><b>HISTORY OF PREVIOUS FLIGHT RESERVATIONS</b></div>
+            <div style="margin-right: 2%; font-size: x-small;">
+                <table class="table table-dark">
+                    <thead style="text-align: center;">
+                        <tr>
+                            <th>START TIME</th>
+                            <th>END TIME</th>
+                            <th>START LOCATION</th>
+                            <th>END LOCATION</th>
+                            <th>TICKET NUMBER</th>
+                            <th>TICKET TYPE</th>
+                            <th>FLIGHT ASSESSSMENT</th>
+                        </tr>
+                    </thead>
+                    <tbody style="text-align: center;">
+                        <tr *ngFor="let reservation of historyflightReservation">
+                            <td>{{reservation.startTime}}</td>
+                            <td>{{reservation.endTime}}</td>
+                            <td>{{reservation.startLocation}}</td>
+                            <td>{{reservation.endLocation}}</td>
+                            <td>{{reservation.ticketNumber}}</td>
+                            <td>{{reservation.ticketType}}</td>
+                            <td>
+                                <button type="button" class="btn btn-success" (click)="ratingFlight(reservation)" style="font-size: 10px;">ENTER A FLIGHT RATING</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </span>
+    </div>
 </div>

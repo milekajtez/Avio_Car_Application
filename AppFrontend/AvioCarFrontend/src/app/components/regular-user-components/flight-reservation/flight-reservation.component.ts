@@ -341,6 +341,7 @@ export class FlightReservationComponent implements OnInit {
             alert("Booking flight successfuly.");
             this.clearModalData();
             this.service.chooseFriendForm.reset();
+            document.getElementById("myModal").click();
           },
           err => {
             if(err.error === "Booking flight failed. Server not found user in database."){

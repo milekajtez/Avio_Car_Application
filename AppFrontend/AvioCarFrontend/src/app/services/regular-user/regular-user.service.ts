@@ -280,4 +280,15 @@ export class RegularUserService {
     return this.http.get(this.BaseURI + '/RegularUser/ChangeReservationTicket/' + ticketID + "/" + typeChange);
   }
   //#endregion
+  //#region 21 - Metoda za ucitavanje aktivnih/proslih rezervacija odredjenog korisnika
+  loadReservations(username: string, loadType: string){
+    return this.http.get(this.BaseURI + '/RegularUser/LoadReservations/' + username + '/' + loadType);
+  }
+  //#endregion
+  //#region  22 - Metoda za otkazivanje aktivnih rezervacija
+  deleteReservation(username: string, ticketID: string){
+    return this.http.delete(this.BaseURI + '/RegularUser/DeleteReservation/' + username + '/' + ticketID);
+  }
+  //#endregion
+
 }

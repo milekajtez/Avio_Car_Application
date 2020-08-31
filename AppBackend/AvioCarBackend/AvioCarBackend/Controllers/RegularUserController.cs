@@ -457,6 +457,15 @@ namespace AvioCarBackend.Controllers
                 {
                     _context.Tickets.Update(findTicket);
                     _context.SaveChanges();
+
+                    // poeni se dodeljuju useru
+                    //PlusPointsForUser(username, "only_flight");
+                    var user = await _userManager.FindByNameAsync(username);
+                    user.Points += 70;
+                    var result =  await _userManager.UpdateAsync(user);
+
+                    // avikompanija povecava svoj broj prodatih karata
+                    AirlineNumberOfTicketMethod(ticketID, "plus");
                     return Ok();
                 }
                 catch (Exception e) 
@@ -517,6 +526,13 @@ namespace AvioCarBackend.Controllers
                 {
                     _context.Tickets.Update(findTicket);
                     _context.SaveChanges();
+
+                    var user = await _userManager.FindByNameAsync(model.Username);
+                    user.Points += 70;
+                    var result = await _userManager.UpdateAsync(user);
+
+                    // avikompanija povecava svoj broj prodatih karata
+                    AirlineNumberOfTicketMethod(ticketIDs[0], "plus");
                 }
                 catch (Exception e)
                 {
@@ -623,7 +639,6 @@ namespace AvioCarBackend.Controllers
         }
         #endregion
         #region 12 - Metoda za potvrdu/odbijanje zahteva za za rezervaciju leta od strane prijatelja
-        //ChangeReservationTicket
         [HttpGet]
         [Route("ChangeReservationTicket/{ticketID}/{typeChange}")]
         public async Task<Object> ChangeReservationTicket(string ticketID, string typeChange) 
@@ -649,13 +664,38 @@ namespace AvioCarBackend.Controllers
             
             if (typeChange.Equals("yes"))
             {
+                long jmbg = -1;
+                foreach (var tic in userTickets)
+                {
+                    if (tic.TicketID == long.Parse(ticketID))
+                    {
+                        jmbg = tic.UserName;
+                    }
+                }
 
                 userTicket.FriendConfirmed = true;
                 _context.UserTickets.Update(userTicket);
                 _context.SaveChanges();
+
+                // povecanje poena
+                var user = await _userManager.FindByIdAsync(jmbg.ToString());
+                user.Points += 70;
+                await _userManager.UpdateAsync(user);
+
+                // avikompanija smanjuje svoj broj prodatih karata
+                AirlineNumberOfTicketMethod(ticketID, "plus");
             }
             else 
             {
+                long jmbg = -1;
+                foreach (var tic in userTickets)
+                {
+                    if (tic.TicketID == long.Parse(ticketID))
+                    {
+                        jmbg = tic.UserName;
+                    }
+                }
+
                 ticket.IsTicketPurchased = false;
                 ticket.TimeOfTicketPurchase = DateTime.Parse(defaultTime);
                 _context.Tickets.Update(ticket);
@@ -663,9 +703,220 @@ namespace AvioCarBackend.Controllers
 
                 _context.UserTickets.Remove(userTicket);
                 _context.SaveChanges();
+
+                // umanjenje poena i smanjenje broja prodatih arat, kod odbijanja ne treba..jer nikom nista !!!
             }
             return Ok();
         }
+        #endregion        
+        #region 13 - Metoda za povecanje/smanjenje broja prodatih karata avikompanije
+        public void AirlineNumberOfTicketMethod(string ticketID, string typeOperation)
+        {
+            var tickets = _context.Tickets.Include(f => f.Flight);
+            int flightID = -1;
+
+            foreach (var ticket in tickets)
+            {
+                if (ticket.TicketID.Equals(int.Parse(ticketID)))
+                {
+                    flightID = ticket.Flight.FlightID;
+                    break;
+                }
+            }
+
+            int airlineID = -1;
+            var flights = _context.Flights.Include(a => a.Airline);
+
+            foreach (var flight in flights)
+            {
+                if (flight.FlightID.Equals(flightID))
+                {
+                    airlineID = flight.Airline.AirlineID;
+                    break;
+                }
+            }
+
+            var airline = _context.Airlines.Find(airlineID);
+            if (typeOperation.Equals("plus"))
+            {
+                // povecanje
+                airline.NumberOfSoldTickets += 1;
+            }
+            else
+            {
+                //smanjenje
+                airline.NumberOfSoldTickets -= 1;
+            }
+
+            _context.Airlines.Update(airline);
+            _context.SaveChanges();
+        }
         #endregion
+        #region 14 - Metoda za ucitavanje aktivnih/proslih rezervacija
+        [HttpGet]
+        [Route("LoadReservations/{username}/{loadType}")]
+        public async Task<Object> LoadReservations(string username, string loadType) 
+        {
+            var userI = await _userManager.FindByNameAsync(username);
+            if (userI == null) 
+            {
+                return NotFound("Loading failed. Server not found user in data base.");
+            }
+
+            List<long> ticketsID = new List<long>();
+            var ticketUsers = _context.UserTickets;
+            foreach (var tu in ticketUsers) 
+            {
+                if (tu.UserName.ToString().Equals(userI.Id)) 
+                {
+                    ticketsID.Add(tu.TicketID);
+                }
+            }
+
+            List<FlightReservationModel> flightReservations = new List<FlightReservationModel>();
+            var allTickets = _context.Tickets.Include(f => f.Flight);
+
+            for (int i = 0; i < ticketsID.Count; i++) 
+            {
+                foreach (var ticket in allTickets)
+                {
+                    // nasao sam tam tiket sa tim id-jem
+                    if (ticket.TicketID == (int)ticketsID[i]) 
+                    {
+                        if (loadType.Equals("active"))
+                        {
+                            if ((ticket.Flight.StartTime - DateTime.Now).TotalHours >= 3)
+                            {
+                                // trebaju mi samo oni aktivni tj oni koji mogu da se otkazu
+                                FlightReservationModel newReservation = new FlightReservationModel()
+                                {
+                                    TicketID = ticket.TicketID.ToString(),
+                                    StartTime = ticket.Flight.StartTime.ToString(),
+                                    EndTime = ticket.Flight.EndTime.ToString(),
+                                    StartLocation = ticket.Flight.StartLocation,
+                                    EndLocation = ticket.Flight.EndLocation,
+                                    TicketNumber = ticket.TicketNumber.ToString()
+                                };
+
+                                if (ticket.CardType == CardType.ECONOMIC_CLASS)
+                                {
+                                    newReservation.TicketType = "ECONOMIC_CLASS";
+                                }
+                                else if (ticket.CardType == CardType.FIRST_CLASS)
+                                {
+                                    newReservation.TicketType = "FIRST_CLASS";
+                                }
+                                else
+                                {
+                                    newReservation.TicketType = "BUSINESS_CLASS";
+                                }
+
+                                flightReservations.Add(newReservation);
+                            }
+                        }
+                        else 
+                        {
+                            if ((ticket.Flight.StartTime - DateTime.Now).TotalHours < 3)
+                            {
+                                // trebaju mi samo oni koji vise ne mogu da se otkazu
+                                FlightReservationModel newReservation = new FlightReservationModel()
+                                {
+                                    TicketID = ticket.TicketID.ToString(),
+                                    StartTime = ticket.Flight.StartTime.ToString(),
+                                    EndTime = ticket.Flight.EndTime.ToString(),
+                                    StartLocation = ticket.Flight.StartLocation,
+                                    EndLocation = ticket.Flight.EndLocation,
+                                    TicketNumber = ticket.TicketNumber.ToString()
+                                };
+
+                                if (ticket.CardType == CardType.ECONOMIC_CLASS)
+                                {
+                                    newReservation.TicketType = "ECONOMIC_CLASS";
+                                }
+                                else if (ticket.CardType == CardType.FIRST_CLASS)
+                                {
+                                    newReservation.TicketType = "FIRST_CLASS";
+                                }
+                                else
+                                {
+                                    newReservation.TicketType = "BUSINESS_CLASS";
+                                }
+
+                                flightReservations.Add(newReservation);
+                            }
+                        }
+                        
+                        break;
+                    }
+                }
+            }
+
+            if (flightReservations.Count == 0)
+            {
+                return NotFound("Loading failed. User not have any active flight reservation.");
+            }
+
+            return Ok(flightReservations);
+        }
+        #endregion
+        #region 15 - Metoda za otkazivanje rezervacije
+        [HttpDelete]
+        [Route("DeleteReservation/{username}/{ticketID}")]
+        public async Task<ActionResult<Object>> DeleteReservation(string username, string ticketID) 
+        {
+            var findResult = await _userManager.FindByNameAsync(username);
+            if (findResult == null)
+            {
+                return NotFound("Deleting failed. Server not found current user in data base.");
+            }
+
+            var ticketUser = _context.UserTickets.Find(long.Parse(findResult.Id), long.Parse(ticketID));
+            if (ticketUser == null) 
+            {
+                return NotFound("Deleting failed. User not have this reserved ticket.");
+            }
+
+            var ticket = _context.Tickets.Find(int.Parse(ticketID));
+            if (ticket == null) 
+            {
+                return NotFound("Deleting failed. Server not found this ticket in data base.");
+            }
+
+            string defaultTime = "1/1/0001 00:00:00";
+
+            try
+            {
+                _context.UserTickets.Remove(ticketUser);
+                _context.SaveChanges();
+
+                ticket.IsTicketPurchased = false;
+                ticket.TimeOfTicketPurchase = DateTime.Parse(defaultTime);
+
+                try
+                {
+                    _context.Tickets.Update(ticket);
+                    _context.SaveChanges();
+
+                    //smanjujem poene..posto je otkazana rezervacija
+                    var user = await _userManager.FindByNameAsync(username);
+                    user.Points -= 70;
+                    var result = await _userManager.UpdateAsync(user);
+
+                    // avikompanija smanjuje svoj broj prodatih karata
+                    AirlineNumberOfTicketMethod(ticketID, "minus");
+                    return Ok(ticket);
+                }
+                catch (Exception e) 
+                {
+                    throw e;
+                }
+            }
+            catch (Exception e) 
+            {
+                throw e;
+            }
+        }
+        #endregion
+
     }
 }
