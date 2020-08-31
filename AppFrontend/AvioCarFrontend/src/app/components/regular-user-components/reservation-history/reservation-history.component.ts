@@ -99,10 +99,59 @@ export class ReservationHistoryComponent implements OnInit {
     );
   }
   //#endregion
+  //#region 4 - Metoda za inicijalizaciju podataka pri otvaranju modala za ocenjivanje i metoda za ocenjivanje leta
+  currentReservation: any;
+  saveReservation(reservation: any){
+    this.currentReservation = reservation;
+  }
 
-  //#region 4 - Metoda za ocenjivanje leta
-  ratingFlight(reservation: any){
+  ratingFlight(){
+    var rating = "";
+    var star1 = document.getElementsByName("rating1");
+    var star2 = document.getElementsByName("rating2");
+    var star3 = document.getElementsByName("rating3");
+    var star4 = document.getElementsByName("rating4");
+    var star5 = document.getElementsByName("rating5");
 
+
+    if((star1[0] as HTMLInputElement).checked){
+      rating = "1";
+    }
+    else if((star2[0] as HTMLInputElement).checked){
+      rating = "2"
+    }
+    else if((star3[0] as HTMLInputElement).checked){
+      rating = "3"
+    }
+    else if((star4[0] as HTMLInputElement).checked){
+      rating = "4"
+    }
+    else if((star5[0] as HTMLInputElement).checked){
+      rating = "5"
+    }
+    else{
+      rating = "-1"
+    }
+
+    if(rating === "-1")
+    {
+      alert("Adding rating to flight failed. User did not rate it.");
+    }
+    else{
+      this.service.ratingFlight(this.currentReservation.ticketID, rating).subscribe(
+        (res: any) => {
+          alert("Flight assessment successful.");
+        },
+        err => {
+          if(err.error === "Rating flight failed. Server not found flight in data base."){
+            alert("Rating flight failed. Server not found flight in data base.");
+          }
+          else{
+            alert("Unknown error.");
+          }
+        }
+      );
+    }
   }
   //#endregion
 }

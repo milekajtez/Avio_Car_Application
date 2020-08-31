@@ -62,7 +62,8 @@
                             <td>{{reservation.ticketNumber}}</td>
                             <td>{{reservation.ticketType}}</td>
                             <td>
-                                <button type="button" class="btn btn-success" (click)="ratingFlight(reservation)" style="font-size: 10px;">ENTER A FLIGHT RATING</button>
+                                <button type="button" class="btn btn-success" (click)="saveReservation(reservation)" style="font-size: 10px;"
+                                data-toggle="modal" data-target="#descriptionModal" >ENTER A FLIGHT RATING</button>
                             </td>
                         </tr>
                     </tbody>
@@ -71,3 +72,33 @@
         </span>
     </div>
 </div>
+
+<!--davanje ocene-->
+<div class="modal fade" id="descriptionModal" tabindex="-1" role="dialog" aria-labelledby="descriptionModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" style="white-space: pre;">
+                <div class="tab-content">
+                    <h2 style="text-align: center;">STAR RATING</h2>
+                    <div class="rating" id="ratios"> 
+                        <input type="radio" name="rating5" value="5" id="5">
+                        <label for="5">☆</label> 
+                        <input type="radio" name="rating4" value="4" id="4">
+                        <label for="4">☆</label> 
+                        <input type="radio" name="rating3" value="3" id="3">
+                        <label for="3">☆</label> 
+                        <input type="radio" name="rating2" value="2" id="2">
+                        <label for="2">☆</label> 
+                        <input type="radio" name="rating1" value="1" id="1">
+                        <label for="1">☆</label>
+                    </div>
+                    <div style="text-align: center;">
+                        <button type="button" class="btn btn-success" (click)="ratingFlight()"
+                                data-toggle="modal" data-target="#descriptionModal">ADD RATING</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

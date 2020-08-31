@@ -474,7 +474,7 @@ export class MenuComponent implements OnInit {
     parent.appendChild(node);
   }
   //#endregion
-  //#region 15 - Metoda za ubacivanje podatak u modal (prmotivni opis)
+  //#region 15 - Metoda za ubacivanje podataka u modal (prmotivni opis)
   viewRentACarPromotionDescription(service: any){
     this.promotionDescription = service.carServicePromotionDescription;
   }

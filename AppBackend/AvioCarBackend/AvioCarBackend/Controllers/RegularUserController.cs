@@ -917,6 +917,56 @@ namespace AvioCarBackend.Controllers
             }
         }
         #endregion
+        #region 16 - Metoda za ocenjivanje leta odredjene karte tj rezervacije
+        [HttpGet]
+        [Route("RatingFlight/{ticketID}/{rating}")]
+        public async Task<Object> RatingFlight(string ticketID, string rating) 
+        {
+            var tickets = _context.Tickets.Include(f => f.Flight);
+            int flightID = -1;
 
+            foreach (var ticket in tickets) 
+            {
+                if (ticket.TicketID == int.Parse(ticketID)) 
+                {
+                    flightID = ticket.Flight.FlightID;
+                    break;
+                }
+            }
+
+            if (flightID != -1)
+            {
+                var flight = await _context.Flights.FindAsync(flightID);
+                flight.FlightPrice += int.Parse(rating);
+                flight.NumberOfFlightGrades += 1;
+                _context.Flights.Update(flight);
+                _context.SaveChanges();
+
+                var flights = _context.Flights.Include(a => a.Airline);
+                int airlineID = -1;
+                foreach (var f in flights) 
+                {
+                    if (f.FlightID == flightID) 
+                    {
+                        airlineID = f.Airline.AirlineID;
+                        break;
+                    }
+                }
+
+                var airline = await _context.Airlines.FindAsync(airlineID);
+                airline.AirlinePrice += int.Parse(rating);
+                airline.NumberOfAirlineGrades += 1;
+                _context.Airlines.Update(airline);
+                _context.SaveChanges();
+                
+
+                return Ok();
+            }
+            else 
+            {
+                return NotFound("Rating flight failed. Server not found flight in data base.");
+            }
+        }
+        #endregion
     }
 }

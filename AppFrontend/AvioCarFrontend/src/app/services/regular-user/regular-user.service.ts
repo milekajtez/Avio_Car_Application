@@ -285,10 +285,14 @@ export class RegularUserService {
     return this.http.get(this.BaseURI + '/RegularUser/LoadReservations/' + username + '/' + loadType);
   }
   //#endregion
-  //#region  22 - Metoda za otkazivanje aktivnih rezervacija
+  //#region 22 - Metoda za otkazivanje aktivnih rezervacija
   deleteReservation(username: string, ticketID: string){
     return this.http.delete(this.BaseURI + '/RegularUser/DeleteReservation/' + username + '/' + ticketID);
   }
   //#endregion
-
+  //#region 23 - Metoda za ocenjivanje leta, odrejdene rezervacije
+  ratingFlight(ticketID: string, rating: string){
+    return this.http.get(this.BaseURI + '/RegularUser/RatingFlight/' + ticketID + '/' + rating);
+  }
+  //#endregion
 }
