@@ -12,6 +12,5 @@ namespace AvioCarBackend.Data.register_and_login
         public string Password { get; set; }
         public string Jmbg { get; set; }
         public string Telephone { get; set; }
-        public string AdminType { get; set; }
     }
 }

@@ -8,7 +8,9 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class RegisterService {
-  readonly BaseURI = 'http://localhost:57382/api';
+  //readonly BaseURI = 'https://localhost:44319/api';
+  readonly BaseURI = 'http://localhost:80/api';
+  //readonly BaseURI = 'https://kubernetes.docker.internal:6443'
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
@@ -54,15 +56,7 @@ export class RegisterService {
     AirlinePriceList: ['', Validators.required]
   });
   //#endregion
-  //#region 4 - Forma za registraciju rent-a-car servisa
-  regRentACarForm = this.fb.group({
-    RentACarName: ['', Validators.required],
-    RentACarAddress: ['', [Validators.required, Validators.pattern("[a-z A-Z]+,\[0-9]+,\[a-z A-Z]+")]],
-    RentACarPromotionDescription: ['', Validators.required],
-    RentACarPriceList: ['', Validators.required]
-  });
-  //#endregion
-  //#region 5 - Metoda za proveru identicnosti sifri
+  //#region 4 - Metoda za proveru identicnosti sifri
   comparePasswords(fb: FormGroup) {
     let confirmPswrdCtrl = fb.get('ConfirmPassword');
     //passwordMismatch
@@ -75,7 +69,7 @@ export class RegisterService {
     }
   }
   //#endregion
-  //#region 6 - Metoda za slanje zahteva za registraciju i metoda za potvrdu registracije
+  //#region 5 - Metoda za slanje zahteva za registraciju i metoda za potvrdu registracije
   register() {
     var body = {
       UserName: this.formModel.value.UserName,
@@ -108,7 +102,7 @@ export class RegisterService {
     return this.http.post(this.BaseURI + '/ApplicationUser/RegisterConfirm', body);
   }
   //#endregion
-  //#region 7 - Metoda za slanje zahteva za obicno logovanje i metoda za slanje zahteva za logovanje preko mreze
+  //#region 6 - Metoda za slanje zahteva za obicno logovanje i metoda za slanje zahteva za logovanje preko mreze
   login() {
     var body = {
       UserName: this.formLoginModel.value.UserName,
@@ -121,15 +115,14 @@ export class RegisterService {
     return this.http.post(this.BaseURI + '/ApplicationUser/SocialLogin', formData);
   }
   //#endregion
-  //#region 8 - Metoda za registraciju adminstratora i metoda za izmenu sifre pri prvom logovanju administratora
+  //#region 7 - Metoda za registraciju adminstratora i metoda za izmenu sifre pri prvom logovanju administratora
   adminRegister() {
     var body = {
       UserName: this.regAdminForm.value.UserName,
       Email: this.regAdminForm.value.Email,
       Password: this.regAdminForm.value.Passwords.Password,
       Jmbg: this.regAdminForm.value.Jmbg,
-      Telephone: this.regAdminForm.value.Telephone,
-      AdminType: this.regAdminForm.value.AdminType
+      Telephone: this.regAdminForm.value.Telephone
     }
     return this.http.post(this.BaseURI + '/ApplicationUser/AdminRegistration', body);
   }
@@ -138,7 +131,7 @@ export class RegisterService {
     return this.http.post(this.BaseURI + '/ApplicationUser/ChangeAdminPassword', body);
   }
   //#endregion
-  //#region 9 - Metoda za regsitraciju nove aviokompanije i metoda za registraciju novog rent-a-car servisa
+  //#region 8 - Metoda za regsitraciju nove aviokompanije
   airlineRegister() {
     var body = {
       Name: this.regAirlineForm.value.AirlineName,
@@ -147,16 +140,6 @@ export class RegisterService {
       PriceList: this.regAirlineForm.value.AirlinePriceList
     }
     return this.http.post(this.BaseURI + '/ApplicationUser/AirlineRegistration', body);
-  }
-
-  rentACarRegister() {
-    var body = {
-      Name: this.regRentACarForm.value.RentACarName,
-      Address: this.regRentACarForm.value.RentACarAddress,
-      PromotionDescription: this.regRentACarForm.value.RentACarPromotionDescription,
-      PriceList: this.regRentACarForm.value.RentACarPriceList
-    }
-    return this.http.post(this.BaseURI + '/ApplicationUser/RentACarRegistration', body);
   }
   //#endregion
 }

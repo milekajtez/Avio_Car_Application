@@ -195,6 +195,9 @@ export class ViewAirlinesComponent implements OnInit {
   }
 
   addressLookup(formatedAddress: string) : void {
+    if(formatedAddress.charAt(0) === ","){
+      formatedAddress = formatedAddress.substring(1,formatedAddress.length - 1);
+    }
     var splited = formatedAddress.split(",", 3);
     var houseNumber = (splited[0]).replace(' ', '%20');
     var street = (splited[1]).replace(' ', '%20');
@@ -218,7 +221,6 @@ export class ViewAirlinesComponent implements OnInit {
   }
 
   defineMap(longitude: any, latitude: any){
-    console.log("definisanje mape");
     this.map = new ol.Map({
       target: 'map',
       layers: [

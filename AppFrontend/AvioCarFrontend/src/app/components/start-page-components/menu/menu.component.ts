@@ -13,10 +13,6 @@ import { AbstractFilterParam } from 'src/app/entities/abstract-filter-param/abst
 import { StringFilterParam } from 'src/app/entities/string-filter-param/string-filter-param';
 import { NumberFilterParam } from 'src/app/entities/number-filter-param/number-filter-param';
 import { FlightService } from 'src/app/services/flight/flight.service';
-import { RentACarServiceComboBox } from 'src/app/entities/rent-a-car-service-combo-box/rent-a-car-service-combo-box';
-import { BranchOffice } from 'src/app/entities/car-entities/branch-office/branch-office';
-import { Car } from 'src/app/entities/car-entities/car/car';
-import { RentACarService } from 'src/app/services/rent-a-car/rent-a-car.service';
 
 declare var ol: any;
 
@@ -31,10 +27,6 @@ export class MenuComponent implements OnInit {
   destinations = new Array<Destination>();
   flights = new Array<Flight>();
   filteredFlights = new Array<Flight>();
-  rentACarServices = new Array<RentACarServiceComboBox>();
-  branchOffices = new Array<BranchOffice>();
-  cars = new Array<Car>();
-  filteredCars = new Array<Car>();
   lon: number;
   lat: number;
   map: any;
@@ -44,17 +36,11 @@ export class MenuComponent implements OnInit {
   allTransfers: string;
   planeName: string;
   laguageWeight: string;
-  yearOdManufacture: string;
-  carType: string;
-  lugageWeightCar: string;
-  timeOfCarPurchase: string;
-  isCarPurchased: string;
-  isQuickBooking: string;
-  carPrice: string;
+  
 
   constructor(public service: RegisterService, private router: Router, private toastr: ToastrService,
     private authService: AuthService, private loadService: LoadDataService, private http: HttpClient,
-    private flightService: FlightService, private carService: RentACarService) { }
+    private flightService: FlightService) { }
 
   ngOnInit(): void { }
 
@@ -102,37 +88,6 @@ export class MenuComponent implements OnInit {
             this.router.navigateByUrl('/avioAdminHomePage/' + this.service.formLoginModel.value.UserName);
           }
         }
-        else if(decodedToken.role === "car_admin") {
-          if(decodedToken.FirstLogin === "True") {
-            var tenure = prompt("This is your first login.Please enter your new password.","");
-            if(tenure != null) {
-              console.log(tenure);
-
-              var body = {
-                Id: decodedToken.primarysid,
-                Password: tenure
-              }
-              
-              this.service.changePasswordFirstLogin(body).subscribe(
-                (res: any) => {
-                  if (res.succeeded) {
-                    alert("Changing password succesfully.");
-                    this.router.navigateByUrl('/carAdminHomePage/' + this.service.formLoginModel.value.UserName);
-                  }
-                },
-                err => {
-                  if(err.error === "Username or password is incorrect or user not confirmed registration with mail") {
-                    alert("Username or password is incorrect or user not confirmed registration with mail");
-                  }
-                }
-              );
-            }
-          }
-          else
-          {
-            this.router.navigateByUrl('/carAdminHomePage/' + this.service.formLoginModel.value.UserName);
-          }
-        }
       },
       err => {
         if(err.error.message == "Username is incorrect."){
@@ -146,6 +101,8 @@ export class MenuComponent implements OnInit {
         }
         else{
           alert("Unknown error.");
+          console.log(err.error);
+          
         }
       }
     );
@@ -185,8 +142,8 @@ export class MenuComponent implements OnInit {
         }
       },
       err => {
-        console.log(err);
         alert("Loading airlines unsuccessfuly.");
+        console.log(err);
       }
     );
   }
@@ -203,6 +160,7 @@ export class MenuComponent implements OnInit {
       },
       err => {
         alert("Loading airlines is unsuccessfully. This airline not have any destination.");
+        console.log(err.error);
       }
     );
   }
@@ -235,6 +193,7 @@ export class MenuComponent implements OnInit {
         }
         else{
           alert("Unkonwn error.");
+          console.log(err.error);
         }
       }
     );
@@ -265,7 +224,6 @@ export class MenuComponent implements OnInit {
           ulica += splitted[i] + " ";
         }
         else{
-          console.log("city");
           grad += splitted[i] + " ";
         }
       }
@@ -278,6 +236,7 @@ export class MenuComponent implements OnInit {
     ulica = ulica.substring(0, ulica.length - 1);
     grad = grad.substring(0, grad.length - 1);
     var formatedAddress = broj + "," + ulica + "," + grad;
+
     this.addressLookup(formatedAddress);
   }
 
@@ -332,188 +291,13 @@ export class MenuComponent implements OnInit {
     return new NumberFilterParam("flightRatingFilter", +this.getFilterFieldValue("flightRatingFilter"));
   }
   //#endregion
-  //#region 10 - Metoda za ucitavanje rent-a-car servisa
-  loadRentACarServices(): void {
-    this.rentACarServices = [];
-    this.carService.loadRentACarServices().subscribe(
-      (res: any) => {
-        console.log(res);
-        for(var i = 0; i < res.length; i++){
-          var rating;
-          if(res[i].numberOfCarServiceGrades == "0"){
-            rating = 0;
-          }
-          else{
-            rating = Number(res[i].carServicePrice) / Number(res[i].numberOfCarServiceGrades);
-          }
-
-          this.rentACarServices.push(new RentACarServiceComboBox(res[i].carServiceID, res[i].carServiceName, 
-            res[i].carServiceAddress, res[i].carServicePromotionDescription, rating, res[i].servicePriceList, 
-            res[i].serviceEarnings));
-        }
-      },
-      err => {
-        console.log(err);
-        alert("Loading rent-a-car services is unsuccessfully.");
-      }
-    );
-  }
-  //#endregion
-  //#region 11 - Metoda za ucitavanje filijala
-  loadBranchOffices(service: any): void {
-    this.branchOffices = [];
-    this.carService.loadRentACarServiceBranchOffices(service.carServiceID).subscribe(
-      (res: any) => {
-        this.branchOffices = [];
-        for(var i = 0; i < res.length; i++){
-          this.branchOffices.push(new BranchOffice(res[i].branchOfficeID, res[i].branchOfficeAddress, res[i].city, 
-            res[i].country));
-        }
-      },
-      err => {
-        alert("Loading branch office unsuccessfuly.");
-      }
-    );
-  }
-  //#endregion
-  //#region 12 - Metoda za ucitavanje kola
-  loadcars(service: any): void {
-    this.cars = [];
-    this.carService.loadRentACarServiceCars(service.carServiceID).subscribe(
-      (res: any) => {
-        console.log(res);
-        for(var i = 0; i < res.length; i++){
-          var rating;
-          if(res[i].numberOfCarGrades == "0"){
-            rating = 0;
-          }
-          else{
-            rating = Number(res[i].overallGrade) / Number(res[i].numberOfCarGrades);
-          }
-
-          var carType;
-          if(res[i].carType == "0"){
-            carType = "GASOLINE";
-          }
-          else if(res[i].carType == "1"){
-            carType = "DIESEL";
-          }
-          else{
-            carType = "GAS";
-          }
-
-          this.cars.push(new Car(res[i].carID, res[i].carName, res[i].carBrand, res[i].carModel, res[i].yearOdManufacture,
-            res[i].numberOfSeats, carType, rating, res[i].lugageWeight, res[i].timeOfCarPurchase, 
-            res[i].isCarPurchased, res[i].isQuickBooking, res[i].carPrice));
-
-          this.filteredCars = this.cars;
-        }
-      },
-      err => {
-        if(err.error === "Currentlly this rent-a-car service not have any cars."){
-          alert("Currentlly this rent-a-car service not have any cars.");
-          this.filteredCars = [];
-        }
-        else{
-          alert("Unkonwn error.");
-        }
-      }
-    );
-  }
-  //#endregion
-  //#region 13 - More info za car
-  viewCarMoreInfo(car: any){
-    this.yearOdManufacture = car.yearOdManufacture;
-    this.carType = car.carType;
-    this.lugageWeightCar = car.lugageWeight;
-    this.timeOfCarPurchase = car.timeOfCarPurchase;
-    this.isCarPurchased = car.isCarPurchased;
-    this.isQuickBooking = car.isQuickBooking;
-    this.carPrice = car.carPrice;
-  }
-  //#endregion
-  //#region 14 - Metoda za pravljenje stringa adrese i metoda za ubacivanje mape u modal
-  viewRentACarMapAddress(service: any){
-    var address = service.carServiceAddress;
-    var broj = "";
-    var ulica = "";
-    var grad = "";
-    var identficator = false;
-    var splitted = address.split(" ");
-
-    for(var i = 0; i < splitted.length; i++){
-      var n = Number(splitted[i]);
-      if(n.toString() === "NaN"){
-        if(identficator === false){
-          ulica += splitted[i] + " ";
-        }
-        else{
-          console.log("city");
-          grad += splitted[i] + " ";
-        }
-      }
-      else{
-        broj = splitted[i];
-        identficator = true;
-      }
-    }
-
-    ulica = ulica.substring(0, ulica.length - 1);
-    grad = grad.substring(0, grad.length - 1);
-    var formatedAddress = broj + "," + ulica + "," + grad;
-    this.addressLookup(formatedAddress);
-  }
-
-  myFunctionCar(){
-    var element = document.getElementById("map");
-    element.parentNode.removeChild(element);
-    var node  = document.createElement("div");
-    node.setAttribute("id", "map");
-    node.setAttribute("style", "height: 400px;");
-    var parent = document.getElementById("destory1Car");
-    parent.appendChild(node);
-  }
-  //#endregion
-  //#region 15 - Metoda za ubacivanje podataka u modal (prmotivni opis)
-  viewRentACarPromotionDescription(service: any){
-    this.promotionDescription = service.carServicePromotionDescription;
-  }
-  //#endregion
-  //#region 16 - Metoda za filtriranje automobila
-  filterCars(): void {
-    let filterParams = new Array<AbstractFilterParam>();
-    if (this.getFilterFieldValue("carNameFilter")) {
-      filterParams.push(this.addCarNameFilterParam());
-    }
-    if (this.getFilterFieldValue("numberOfSeatsFilter")) {
-      filterParams.push(this.addNumberOfSeatsFilterParam());
-    }
-    if (this.getFilterFieldValue("carRatingFilter")) {
-      filterParams.push(this.addCarRatingFilterParam());
-    }
-
-    this.filteredCars = this.carService.filterCars(this.cars, filterParams);
-  }
-
-  addCarNameFilterParam(): ReturnType<any> {
-    return new StringFilterParam("carNameFilter", this.getFilterFieldValue("carNameFilter"));
-  }
-
-  addNumberOfSeatsFilterParam(): ReturnType<any> {
-    return new NumberFilterParam("numberOfSeatsFilter", +this.getFilterFieldValue("numberOfSeatsFilter"));
-  }
-
-  addCarRatingFilterParam(): ReturnType<any> {
-    return new NumberFilterParam("carRatingFilter", +this.getFilterFieldValue("carRatingFilter"));
-  }
-
-  resetFilterCar(){
-    this.filteredCars = this.cars;
-  }
-  //#endregion
-  //#region 17 - Metode za racunanje koordinata, inicijalizaciju mape i markera
+  //#region 10 - Metode za racunanje koordinata, inicijalizaciju mape i markera
   addressLookup(formatedAddress: string) : void {
+    if(formatedAddress.charAt(0) === ","){
+      formatedAddress = formatedAddress.substring(1,formatedAddress.length - 1);
+    }
     var splited = formatedAddress.split(",", 3);
+    
     var houseNumber = (splited[0]).replace(' ', '%20');
     var street = (splited[1]).replace(' ', '%20');
     var city = (splited[2]).replace(' ', '%20');
@@ -536,7 +320,6 @@ export class MenuComponent implements OnInit {
   }
 
   defineMap(longitude: any, latitude: any){
-    console.log("definisanje mape");
     this.map = new ol.Map({
       target: 'map',
       layers: [

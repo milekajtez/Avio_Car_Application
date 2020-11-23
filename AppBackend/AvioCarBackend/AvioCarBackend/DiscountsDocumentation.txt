@@ -1,16 +1,28 @@
-﻿U zavisnosti od broja poena koje korisnik osvoji, prethodnim rezervacijama, ostvaruje sledece popuste:
+﻿Vrste popusta:
+    1. Popust pri brzoj rezervaciji
+    2. Popust na osnovu poena koje je korisnik osvojio pri prethodnim rezervacijama
+
+1. Popust pri brzoj rezervaciji
+Sami administratori aviokomanije, pri definisanju leta i mesta (karata) koje postoje za taj let, imaju mogućnost da određeno mesto ili 
+mesta označe kao mesta za brzu rezervaciju. Regularni korisnik, rezervacijom mesta ovog tipa, dobija određeni bonus tj. popust.
+
+2. Popust na osnovu poena koje je korisnik osvojio pri prethodnih rezervacijama
+U zavisnosti od broja poena koje korisnik osvoji, prethodnim rezervacijama, ostvaruje sledeće popuste:
     - Points >= 300 ----------- x% na sve registracije
     - Points >= 600 ----------- y% na sve registracije
     - Points >= 1200 ---------- z% na sve registracije
 
 Gde je:
     - Rezervacija leta = 70 poena
-    - Rezervacija kola = 40 poena
-    - Rezervacija let+kola = 150 poena
 
 Sama pravila za granice poena kao i broj poena koji se osvajaju pri registracijama je fiksiran, 
-dok se moze manjati vrednosti procenata, po pravilu x < y < z
+dok se mogu manjati vrednosti procenata, po pravilu x < y < z
 Primer:
     x = 5%
     y = 10%
     z = 20%
+
+
+
+
+

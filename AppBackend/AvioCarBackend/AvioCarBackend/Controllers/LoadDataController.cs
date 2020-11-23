@@ -629,18 +629,77 @@ namespace AvioCarBackend.Controllers
                 return NotFound();
             }
 
-            if (model.Name.Trim().Equals("") && model.Address.Trim().Equals("") && model.PromotionDescription.Trim().Equals("")
-                && model.PriceList.Trim().Equals(""))
+            int emptyIndicator = 0;
+            if (model.Name != null)
+            {
+                if (!model.Name.Trim().Equals(""))
+                {
+                    resultFind.AirlineName = model.Name;
+                }
+                else
+                {
+                    ++emptyIndicator;
+                }
+            }
+            else
+            {
+                ++emptyIndicator;
+            }
+
+            if (model.Address != null)
+            {
+                if (!model.Address.Trim().Equals(""))
+                {
+                    resultFind.AirlineAddress = model.Address;
+                }
+                else
+                {
+                    ++emptyIndicator;
+                }
+            }
+            else
+            {
+                ++emptyIndicator;
+            }
+
+            if (model.PromotionDescription != null)
+            {
+                if (!model.PromotionDescription.Trim().Equals(""))
+                {
+                    resultFind.AirlinePromotionDescription = model.PromotionDescription;
+                }
+                else
+                {
+                    ++emptyIndicator;
+                }
+            }
+            else
+            {
+                ++emptyIndicator;
+            }
+
+            if (model.PriceList != null)
+            {
+                if (!model.PriceList.Trim().Equals(""))
+                {
+                    resultFind.AirlinePriceList = model.PriceList;
+                }
+                else
+                {
+                    ++emptyIndicator;
+                }
+            }
+            else
+            {
+                ++emptyIndicator;
+            }
+
+            if (emptyIndicator == 4)
             {
                 return NotFound("You not entered any new data.");
             }
-            else 
+            else
             {
-                resultFind.AirlineName = model.Name == null || model.Name.Trim().Equals("") ? resultFind.AirlineName : model.Name;
-                resultFind.AirlineAddress = model.Address == null || model.Address.Trim().Equals("") ? resultFind.AirlineAddress : model.Address;
-                resultFind.AirlinePromotionDescription = model.PromotionDescription == null || model.PromotionDescription.Trim().Equals("") ? resultFind.AirlinePromotionDescription : model.PromotionDescription;
-                resultFind.AirlinePriceList = model.PriceList == null || model.PriceList.Trim().Equals("") ? resultFind.AirlinePriceList : model.PriceList;
-
                 try
                 {
                     _context.Airlines.Update(resultFind);

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aviocarbackend-deployment
+  labels:
+    app: aviocarbackend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aviocarbackend
+  template:
+    metadata:
+      labels:
+        app: aviocarbackend
+    spec:
+      containers:
+      - name: aviocarbackend
+        image: milekajtez/aviocarbackend:v1
+        ports:
+        - containerPort: 80     
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aviocarbackend-svc    
+spec:
+  type: LoadBalancer
+  selector:
+    app: aviocarbackend
+  ports:
+    - protocol: TCP
+      port: 80
+    
+      

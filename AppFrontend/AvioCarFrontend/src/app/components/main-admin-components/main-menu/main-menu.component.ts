@@ -24,10 +24,6 @@ export class MainMenuComponent implements OnInit {
     this.defaultComponent = 1;
   }
 
-  methodOption2(): void {
-    this.defaultComponent = 2;
-  }
-
   methodOption3(): void {
     this.defaultComponent = 3;
   }

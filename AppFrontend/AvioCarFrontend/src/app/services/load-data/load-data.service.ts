@@ -6,7 +6,9 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class LoadDataService {
-  readonly BaseURI = 'http://localhost:57382/api';
+  //readonly BaseURI = 'https://localhost:44319/api';
+  readonly BaseURI = 'http://localhost:80/api';
+  //readonly BaseURI = 'https://kubernetes.docker.internal:6443'
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 

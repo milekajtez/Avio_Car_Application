@@ -32,16 +32,8 @@ export class RegularMenuComponent implements OnInit {
     this.defaultComponent = 2;
   }
 
-  methodOption3(): void {
-    this.defaultComponent = 3;
-  }
-
   methodOption4(): void {
     this.defaultComponent = 4;
-  }
-
-  methodOption5(): void {
-    this.defaultComponent = 5;
   }
 
   methodOption6(): void {

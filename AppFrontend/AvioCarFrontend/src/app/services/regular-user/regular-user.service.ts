@@ -5,7 +5,6 @@ import { Airline } from 'src/app/entities/avio-entities/airline/airline';
 import { AbstractFilterParam } from 'src/app/entities/abstract-filter-param/abstract-filter-param';
 import { StringFilterParam } from 'src/app/entities/string-filter-param/string-filter-param';
 import { NumberFilterParam } from 'src/app/entities/number-filter-param/number-filter-param';
-import { RentACarServiceComboBox } from 'src/app/entities/rent-a-car-service-combo-box/rent-a-car-service-combo-box';
 import { Friend } from 'src/app/entities/regular-user-entities/friend/friend';
 import { Flight } from 'src/app/entities/avio-entities/flight/flight';
 import { Ticket } from 'src/app/entities/avio-entities/ticket/ticket';
@@ -14,7 +13,9 @@ import { Ticket } from 'src/app/entities/avio-entities/ticket/ticket';
   providedIn: 'root'
 })
 export class RegularUserService {
-  readonly BaseURI = 'http://localhost:57382/api';
+  //readonly BaseURI = 'https://localhost:44319/api';
+  readonly BaseURI = 'http://localhost:80/api';
+  //readonly BaseURI = 'https://kubernetes.docker.internal:6443'
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
@@ -100,43 +101,17 @@ export class RegularUserService {
     return filteredAirlines;
   }
   //#endregion
-  //#region 5 - Metode za filtriranje rent-a-car servisa
-  checkAirlineRentACarNameFilter(rentACarService: RentACarServiceComboBox, filterParam: AbstractFilterParam): boolean {
-    return filterParam instanceof StringFilterParam && filterParam.getFilterParamName() === 'rentACarServiceNameFilter' && !rentACarService.carServiceName.toLowerCase().includes(filterParam.getFilterParamValue().toLowerCase());
-  }
-  
-  checkRentACarRatingFilter(rentACarService: RentACarServiceComboBox, filterParam: AbstractFilterParam): boolean {
-    return filterParam instanceof NumberFilterParam && filterParam.getFilterParamName() === 'rentACarServiceRatingFilter' && !(Number(rentACarService.carServiceRating) == filterParam.getFilterParamValue());
-  }
-
-  filterRentACarService(rentACarServices: RentACarServiceComboBox[], filterParams: AbstractFilterParam[]): RentACarServiceComboBox[] {
-    let filteredServices = new Array<RentACarServiceComboBox>();
-    for (const service of rentACarServices) {
-      let addService = true;
-      for (const filterParam of filterParams) {
-        if (this.checkAirlineRentACarNameFilter(service, filterParam) || this.checkRentACarRatingFilter(service, filterParam)){
-          addService = false;
-        }
-      }
-
-      if (addService){
-        filteredServices.push(service);
-      }
-    }
-    return filteredServices;
-  }
-  //#endregion
-  //#region 6 - Forma za slanje zahteva za prijateljstvo
+  //#region 5 - Forma za slanje zahteva za prijateljstvo
   sendRequestForm = this.fb.group({
     Username: ['', Validators.required]
   });
   //#endregion
-  //#region 7 - Metoda za ucitavanje zahteva
+  //#region 6 - Metoda za ucitavanje zahteva
   loadRequestsMethod(username: string, typeOfLoad: string){
     return this.http.get(this.BaseURI + '/RegularUser/GetRequests/' + username + "/" + typeOfLoad);
   }
   //#endregion
-  //#region 8 - Metoda za slanje zahteva
+  //#region 7 - Metoda za slanje zahteva
   sendRequestMethod(myUserName: string) {
     var body = {
       Username: this.sendRequestForm.value.Username,
@@ -144,27 +119,27 @@ export class RegularUserService {
     return this.http.post(this.BaseURI + '/RegularUser/SendRequest/' + myUserName, body);
   }
   //#endregion
-  //#region 9 - Metoda za odustajanje od mog zahteva
+  //#region 8 - Metoda za odustajanje od mog zahteva
   deleteRequest(myUsername: string, friendUsername: string) {
     return this.http.delete(this.BaseURI + '/RegularUser/DeleteMyRequest/' + myUsername + '/' + friendUsername);
   }
   //#endregion
-  //#region 10 - Metoda za potvrdu zahteva
+  //#region 9 - Metoda za potvrdu zahteva
   confirmRequest(myUsername: string, friendUsername: string) {
     return this.http.get(this.BaseURI + '/RegularUser/ConfirmRequest/' + myUsername + '/' + friendUsername);
   }
   //#endregion
-  //#region 11 - Metoda za odbijanje zahteva
+  //#region 10 - Metoda za odbijanje zahteva
   rejectRequest(myUsername: string, friendUsername: string) {
     return this.http.delete(this.BaseURI + '/RegularUser/DeleteMyRequest/' + myUsername + '/' + friendUsername);
   }
   //#endregion
-  //#region 12 - Metoda za ucitavanje prijatelja
+  //#region 11 - Metoda za ucitavanje prijatelja
   loadMyFriends(myUserName){
     return this.http.get(this.BaseURI + '/RegularUser/LoadMyFriends/' + myUserName);
   }
   //#endregion
-  //#region 13 - Metode za filtriranje prijatelja
+  //#region 12 - Metode za filtriranje prijatelja
   checkFriendFirstNameFilter(friend: Friend, filterParam: AbstractFilterParam): boolean {
     return filterParam instanceof StringFilterParam && filterParam.getFilterParamName() === 'firstNameFilter' && !friend.firstname.toLowerCase().includes(filterParam.getFilterParamValue().toLowerCase());
   }
@@ -190,19 +165,19 @@ export class RegularUserService {
     return filteredFriends;
   }
   //#endregion
-  //#region 14 - Metoda za brisanje prijatelja
+  //#region 13 - Metoda za brisanje prijatelja
   deleteFriend(myUsername: string, friendUsername: string){
     return this.http.delete(this.BaseURI + '/RegularUser/DeleteFriend/' + myUsername + '/' + friendUsername);
   }
   //#endregion
-  //#region 15 - Forma za pretragu letova
+  //#region 14 - Forma za pretragu letova
   searchFlightForm = this.fb.group({
     StartLocation: [''],
     EndLocation: [''],
     StartTime: ['']
   });
   //#endregion
-  //#region 16 - Metode za filtriranje prijatelja
+  //#region 15 - Metode za filtriranje prijatelja
   checkFlightLaguageWeightFilter(flight: Flight, filterParam: AbstractFilterParam): boolean {
     return filterParam instanceof NumberFilterParam && filterParam.getFilterParamName() === 'laguageWeightFilter' && !(Number(flight.laguageWeight) == filterParam.getFilterParamValue());
   }
@@ -233,7 +208,7 @@ export class RegularUserService {
     return filteredFlights;
   }
   //#endregion
-  //#region 17 - Forma za biranje prijatelja,za rezervaciju i metoda za proveru broja pasosa
+  //#region 16 - Forma za biranje prijatelja,za rezervaciju i metoda za proveru broja pasosa
   chooseFriendForm = this.fb.group({
     Friend: ['', Validators.required],
     FriendPassport: ['', [Validators.required, Validators.pattern("[0-9]{9}")]]
@@ -243,12 +218,12 @@ export class RegularUserService {
     return this.http.get(this.BaseURI + '/RegularUser/CheckPassport/' + username + "/" + passportNumber);
   }
   //#endregion
-  //#region 18 - Metoda za rezervaciju leta (bez prijatelja)
+  //#region 17 - Metoda za rezervaciju leta (bez prijatelja)
   bookFlight(username: string, ticketID: string){
     return this.http.get(this.BaseURI + '/RegularUser/BookAFlight/' + username + "/" + ticketID)
   }
   //#endregion
-  //#region 19 - Metoda za rezervaciju leta (sa prijateljima)
+  //#region 18 - Metoda za rezervaciju leta (sa prijateljima)
   bookingFlightForFriendAndMe(username: string, chosenFriends: Array<Friend>, selectedSeats: Array<Ticket>){
     var friendsName = "";
     var ticketIDs = "";
@@ -275,27 +250,27 @@ export class RegularUserService {
     return this.http.post(this.BaseURI + '/RegularUser/FriendAndMeBookingFlight', body);
   }
   //#endregion
-  //#region 20 - Metoda za izmenu karte pri potvrdi/odbijanju rezervacije eta od strane prijatelja
+  //#region 19 - Metoda za izmenu karte pri potvrdi/odbijanju rezervacije eta od strane prijatelja
   changeTicket(ticketID: string, typeChange: string){
     return this.http.get(this.BaseURI + '/RegularUser/ChangeReservationTicket/' + ticketID + "/" + typeChange);
   }
   //#endregion
-  //#region 21 - Metoda za ucitavanje aktivnih/proslih rezervacija odredjenog korisnika
+  //#region 20 - Metoda za ucitavanje aktivnih/proslih rezervacija odredjenog korisnika
   loadReservations(username: string, loadType: string){
     return this.http.get(this.BaseURI + '/RegularUser/LoadReservations/' + username + '/' + loadType);
   }
   //#endregion
-  //#region 22 - Metoda za otkazivanje aktivnih rezervacija
+  //#region 21 - Metoda za otkazivanje aktivnih rezervacija
   deleteReservation(username: string, ticketID: string){
     return this.http.delete(this.BaseURI + '/RegularUser/DeleteReservation/' + username + '/' + ticketID);
   }
   //#endregion
-  //#region 23 - Metoda za ocenjivanje leta, odrejdene rezervacije
+  //#region 22 - Metoda za ocenjivanje leta, odrejdene rezervacije
   ratingFlight(ticketID: string, rating: string){
     return this.http.get(this.BaseURI + '/RegularUser/RatingFlight/' + ticketID + '/' + rating);
   }
   //#endregion
-  //#region 24 - Metoda za ucitavanje svih letova tj mestau njima koja su za brzu rezervaciju
+  //#region 23 - Metoda za ucitavanje svih letova tj mestau njima koja su za brzu rezervaciju
   loadQuickReservations(username: string){
     return this.http.get(this.BaseURI + '/RegularUser/LoadQuickReservations/' + username);
   }

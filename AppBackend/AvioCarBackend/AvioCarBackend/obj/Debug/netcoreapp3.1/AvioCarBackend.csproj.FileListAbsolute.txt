@@ -133,9 +133,6 @@ C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\A
 C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.AssemblyInfoInputs.cache
 C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.AssemblyInfo.cs
-C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.csproj.CoreCompileInputs.cache
-C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.RazorTargetAssemblyInfo.cache
 C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.csproj.CopyComplete
 C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\staticwebassets\AvioCarBackend.StaticWebAssets.Manifest.cache
@@ -144,3 +141,6 @@ C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\A
 C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.pdb
 C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.genruntimeconfig.cache
 C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.csprojAssemblyReference.cache
+C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.csproj.CoreCompileInputs.cache
+C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\milek\OneDrive\Desktop\Avio_Car_Application\AppBackend\AvioCarBackend\AvioCarBackend\obj\Debug\netcoreapp3.1\AvioCarBackend.MvcApplicationPartsAssemblyInfo.cache

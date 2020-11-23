@@ -7,7 +7,6 @@
         </div>
         <div>
             <a class="fa fa-plane fa-lg" style="color:white" type="button" (click)="methodOption1()"> Airline Registration</a>
-            <a class="fa fa-car fa-lg" type="button" style="margin-left :25px; color: white;" (click)="methodOption2()"> Rent-a-car Registration</a>
             <a class="fa fa-user fa-lg" type="button" style="margin-left :25px; color: white;" (click)="methodOption3()"> Administrator Registration</a>
             <a class="fas fa-percent fa-lg" type="button" style="margin-left :25px; color: white;" (click)="methodOption4()"> Discounts Settings</a>
         </div>
@@ -19,7 +18,6 @@
           </div>
     </div>
 </nav>
-<div *ngIf="defaultComponent===1"><app-airline-registration></app-airline-registration></div> 
-<div *ngIf="defaultComponent===2"><app-rent-a-car-registration></app-rent-a-car-registration></div>
+<div *ngIf="defaultComponent===1"><app-airline-registration></app-airline-registration></div>
 <div *ngIf="defaultComponent===3"><app-administrators-registration></app-administrators-registration></div>
 <div *ngIf="defaultComponent===4"><app-discount-settings></app-discount-settings></div>

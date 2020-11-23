@@ -10,7 +10,9 @@ import { NumberFilterParam } from 'src/app/entities/number-filter-param/number-f
   providedIn: 'root'
 })
 export class FlightService {
-  readonly BaseURI = 'http://localhost:57382/api';
+  //readonly BaseURI = 'https://localhost:44319/api';
+  readonly BaseURI = 'http://localhost:80/api';
+  //readonly BaseURI = 'https://kubernetes.docker.internal:6443'
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 

@@ -313,21 +313,11 @@ namespace AvioCarBackend.Controllers
 
                 var result = await _userManager.CreateAsync(registeredUser, model.Password);
 
-                if (model.AdminType.Equals("avio"))
-                {
-                    await _userManager.AddClaimAsync(registeredUser, new Claim(ClaimTypes.Role, "avio_admin"));
-                    await _userManager.AddClaimAsync(registeredUser, new Claim(ClaimTypes.PrimarySid, registeredUser.Id));
+                await _userManager.AddClaimAsync(registeredUser, new Claim(ClaimTypes.Role, "avio_admin"));
+                await _userManager.AddClaimAsync(registeredUser, new Claim(ClaimTypes.PrimarySid, registeredUser.Id));
 
-                    await _userManager.AddToRoleAsync(registeredUser, "avio_admin");
-                }
-                else
-                {
-                    await _userManager.AddClaimAsync(registeredUser, new Claim(ClaimTypes.Role, "car_admin"));
-                    await _userManager.AddClaimAsync(registeredUser, new Claim(ClaimTypes.PrimarySid, registeredUser.Id));
-
-                    await _userManager.AddToRoleAsync(registeredUser, "car_admin");
-                }
-
+                await _userManager.AddToRoleAsync(registeredUser, "avio_admin");
+                
                 return Ok(result);
             }
             else
@@ -391,43 +381,6 @@ namespace AvioCarBackend.Controllers
             try
             {
                 await _context.Airlines.AddAsync(airline);
-                _context.SaveChanges();
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-        #endregion
-        #region 10 - Metoda za registraciju novog rent-a-car servisa
-        [HttpPost]
-        [Route("RentACarRegistration")]
-        public async Task<Object> RentACarRegistration(NewModel model)
-        {
-            var carServices = _context.RentACarServices;
-            foreach (var service in carServices)
-            {
-                if (model.Name.Equals(service.CarServiceName))
-                {
-                    return BadRequest("Please enter a different rent-a-car name.");
-                }
-            }
-
-            RentACarService rentACarService = new RentACarService()
-            {
-                CarServiceName = model.Name,
-                CarServiceAddress = model.Address,
-                CarServicePromotionDescription = model.PromotionDescription,
-                CarServicePrice = 0,
-                NumberOfCarServiceGrades = 0,
-                ServicePriceList = model.PriceList,
-                ServiceEarnings = 0
-            };
-
-            try
-            {
-                await _context.RentACarServices.AddAsync(rentACarService);
                 _context.SaveChanges();
                 return Ok();
             }
